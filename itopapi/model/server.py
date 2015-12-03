@@ -35,7 +35,8 @@ class ItopapiServer(ItopapiPrototype):
             {'id': 'oslicence_id', 'name': 'oslicence_name', 'table': 'OSLicence'},
             {'id': 'powerA_id', 'name': 'powerA_name', 'table': 'TODO'},
             {'id': 'powerB_id', 'name': 'powerB_name', 'table': 'TODO'},
-        ]
+        ],
+        'list_types': {'contacts_list': 'Person'},
     }
 
     @staticmethod

@@ -26,6 +26,7 @@ from itopapi.model.enclosure import ItopapiEnclosure
 from itopapi.model.brand import ItopapiBrand
 from itopapi.model.model import ItopapiModel
 from itopapi.model.applicationSolution import ItopapiApplicationSolution
+from itopapi.model.person import ItopapiPerson
 
 # TODO partial list of missing classes, with no particular order: Peripheral, MobilePhone, Printer, PC, Phone, IPPhone,
 # Tablet, TapeLibrary, SANSwitchNAS, PDU, PowerSource, DatabaseSchema, OtherSoftware
