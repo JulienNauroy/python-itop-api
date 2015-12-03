@@ -27,7 +27,7 @@ class ItopapiVLAN(ItopapiPrototype):
 
     @staticmethod
     def find(key):
-        """ Retrieve one or more instance of PhysicalInterface with the given key or criteria """
+        """ Retrieve one or more instance of VLAN with the given key or criteria """
         return ItopapiPrototype.find(ItopapiVLAN, key)
 
     @staticmethod
@@ -36,11 +36,11 @@ class ItopapiVLAN(ItopapiPrototype):
 
     @staticmethod
     def find_all():
-        """ Retrieve all instance of PhysicalInterface """
+        """ Retrieve all instance of VLAN """
         return ItopapiPrototype.find_all(ItopapiVLAN)
 
     """
-    ItopapiPhysicalInterface is an object that represents a PhysicalInterface from iTop
+    ItopapiVLAN is an object that represents a VLAN from iTop
     """
     def __init__(self, data=None):
         super(ItopapiVLAN, self).__init__(data)
