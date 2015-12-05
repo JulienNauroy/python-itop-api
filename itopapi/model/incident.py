@@ -23,7 +23,8 @@ class ItopapiIncident(ItopapiPrototype):
             {'id': 'team_id', 'name': 'team_name', 'table': 'Team'},
         ],
         'list_types': {
-            'functionalcis_list': 'functionalci_id_finalclass_recall'
+            'functionalcis_list': 'functionalci_id_finalclass_recall',
+            'contacts_list': 'contact_id_finalclass_recall'
         },
     }
 

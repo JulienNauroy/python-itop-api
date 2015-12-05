@@ -25,7 +25,10 @@ class ItopapiVirtualMachine(ItopapiPrototype):
             {'id': 'osfamily_id', 'name': 'osfamily_name', 'table': 'OSFamily'},
             {'id': 'osversion_id', 'name': 'osversion_name', 'table': 'OSVersion'},
             {'id': 'oslicence_id', 'name': 'oslicence_name', 'table': 'OSLicence'},
-        ]
+        ],
+        'list_types': {
+            'contacts_list': 'contact_id_finalclass_recall'
+        },
     }
 
     @staticmethod

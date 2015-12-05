@@ -74,7 +74,6 @@ class ItopapiPerson(ItopapiPrototype):
         self.organization_name = None
         self.function = None
         self.first_name = None
-        self.name = None
         self.email = None
         self.mobile_phone = None
         self.phone = None

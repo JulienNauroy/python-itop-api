@@ -60,7 +60,6 @@ class ItopapiTeam(ItopapiPrototype):
         self.status = None
         self.phone = None
         self.notify = None
-        self.name = None
         self.function = None
         self.email = None
         ##################################

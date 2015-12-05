@@ -19,7 +19,10 @@ class ItopapiDeliveryModel(ItopapiPrototype):
         'save': ['name', 'description'],
         'foreign_keys': [
             {'id': 'organization_id', 'name': 'organization_name', 'table': 'Organization'},
-        ]
+        ],
+        'list_types': {
+            'contacts_list': 'contact_id_finalclass_recall'
+        },
     }
 
     @staticmethod

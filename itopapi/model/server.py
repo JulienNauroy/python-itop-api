@@ -36,7 +36,10 @@ class ItopapiServer(ItopapiPrototype):
             {'id': 'powerA_id', 'name': 'powerA_name', 'table': 'TODO'},
             {'id': 'powerB_id', 'name': 'powerB_name', 'table': 'TODO'},
         ],
-        'list_types': {'contacts_list': 'Person'},
+        'list_types': {
+            'contacts_list': 'Person',
+            'contacts_list': 'contact_id_finalclass_recall'
+        },
     }
 
     @staticmethod

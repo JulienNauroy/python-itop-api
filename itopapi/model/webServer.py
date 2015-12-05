@@ -27,7 +27,10 @@ class ItopapiWebServer(ItopapiPrototype):
             {'id': 'system_id', 'name': 'system_id_friendlyname', 'table': 'Server'},
             {'id': 'software_id', 'name': 'software_name', 'table': 'Software'},
             {'id': 'softwarelicence_id', 'name': 'softwarelicence_name', 'table': 'SoftwareLicence'},
-        ]
+        ],
+        'list_types': {
+            'contacts_list': 'contact_id_finalclass_recall'
+        },
     }
 
     @staticmethod

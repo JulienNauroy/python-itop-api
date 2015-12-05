@@ -25,7 +25,10 @@ class ItopapiRack(ItopapiPrototype):
         'foreign_keys': [
             {'id': 'org_id', 'name': 'organization_name', 'table': 'Organization'},
             {'id': 'location_id', 'name': 'location_name', 'table': 'Location'},
-        ]
+        ],
+        'list_types': {
+            'contacts_list': 'contact_id_finalclass_recall'
+        },
     }
 
     @staticmethod

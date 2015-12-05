@@ -27,7 +27,10 @@ class ItopapiWebApplication(ItopapiPrototype):
             {'id': 'org_id', 'name': 'organization_name', 'table': 'Organization'},
             {'id': 'webserver_id', 'name': 'webserver_name', 'table': 'WebServer'},
         ],
-        'list_types': {'services_list': 'Service'}
+        'list_types': {
+            'services_list': 'Service',
+            'contacts_list': 'contact_id_finalclass_recall'
+        },
     }
 
     @staticmethod

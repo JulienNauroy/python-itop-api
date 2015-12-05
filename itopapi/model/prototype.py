@@ -245,6 +245,8 @@ class ItopapiPrototype(object):
                 # For each element, find its type given by the "finalclass" attribute
                 # and instantiate the corresponding object. In case there's no "finalclass", the class should provide
                 # the type in itop["list_types"]
+                print key
+                print value
                 for element in value:
                     if "finalclass" in element:
                         element_class = ItopapiPrototype.get_itop_class(element["finalclass"])
