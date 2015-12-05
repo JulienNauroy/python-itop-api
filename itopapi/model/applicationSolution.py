@@ -72,3 +72,11 @@ class ItopapiApplicationSolution(ItopapiPrototype):
         self.services_list = None
         self.contacts_list = None
         self.providercontracts_list = None
+
+    def find_organization(self):
+        """
+        Retrieve the parent ItopapiOrganization
+        """
+        if self.org_id is not None:
+            ItopapiPrototype.get_itop_class('Organization').find(self.org_id)
+        return None
