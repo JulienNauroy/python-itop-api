@@ -249,9 +249,13 @@ class ItopapiPrototype(object):
                     if "finalclass" in element:
                         element_class = ItopapiPrototype.get_itop_class(element["finalclass"])
                     else:
-                        class_name = self.__class__.itop["list_types"][key]
-                        if class_name is not None:
-                            element_class = ItopapiPrototype.get_itop_class(class_name)
+                        # class_key can be either the class name itself, or the variable pointing to the class name
+                        class_key = self.__class__.itop["list_types"][key]
+                        if class_key is not None:
+                            if class_key in element:
+                                element_class = ItopapiPrototype.get_itop_class(element[class_key])
+                            else:
+                                element_class = ItopapiPrototype.get_itop_class(class_key)
                         else:
                             element_class = None
                     if element_class is not None:
