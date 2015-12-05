@@ -22,7 +22,8 @@ class ItopapiApplicationSolution(ItopapiPrototype):
             {'id': 'org_id', 'name': 'organization_name', 'table': 'Organization'},
         ],
         'list_types': {
-            'functionalcis_list': 'functionalci_id_finalclass_recall'
+            'functionalcis_list': 'functionalci_id_finalclass_recall',
+            'contacts_list': 'contact_id_finalclass_recall'
         },
     }
 
