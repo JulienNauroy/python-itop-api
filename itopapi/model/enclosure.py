@@ -21,7 +21,7 @@ class ItopapiEnclosure(ItopapiPrototype):
                  'move2production', 'purchase_date', 'end_of_warranty', 'description'],
         'foreign_keys': [
             {'id': 'org_id', 'name': 'organization_name', 'table': 'Organization'},
-            {'id': 'location_id', 'name': 'location_name', 'table': 'Localization'},
+            {'id': 'location_id', 'name': 'location_name', 'table': 'Location'},
             {'id': 'rack_id', 'name': 'rack_name', 'table': 'Rack'},
             {'id': 'brand_id', 'name': 'brand_name', 'table': 'Brand'},
             {'id': 'model_id', 'name': 'model_name', 'table': 'Model'},

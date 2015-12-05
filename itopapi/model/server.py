@@ -25,7 +25,7 @@ class ItopapiServer(ItopapiPrototype):
                  'purchase_date', 'end_of_warranty', 'description'],
         'foreign_keys': [
             {'id': 'org_id', 'name': 'organization_name', 'table': 'Organization'},
-            {'id': 'location_id', 'name': 'location_name', 'table': 'Localization'},
+            {'id': 'location_id', 'name': 'location_name', 'table': 'Location'},
             {'id': 'rack_id', 'name': 'rack_name', 'table': 'Rack'},
             {'id': 'enclosure_id', 'name': 'enclosure_name', 'table': 'Enclosure'},
             {'id': 'brand_id', 'name': 'brand_name', 'table': 'Brand'},
