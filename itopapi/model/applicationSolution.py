@@ -20,7 +20,10 @@ class ItopapiApplicationSolution(ItopapiPrototype):
         'save': ['name', 'status', 'business_criticity', 'move2production', 'description'],
         'foreign_keys': [
             {'id': 'org_id', 'name': 'organization_name', 'table': 'Organization'},
-        ]
+        ],
+        'list_types': {
+            'functionalcis_list': 'functionalci_id_finalclass_recall'
+        },
     }
 
     @staticmethod

@@ -22,7 +22,9 @@ class ItopapiService(ItopapiPrototype):
             {'id': 'servicefamily_id', 'name': 'servicefamily_name', 'table': 'ServiceFamily'},
             {'id': 'org_id', 'name': 'organization_name', 'table': 'Organization'},
         ],
-        'list_types': {'functionalcis_list': None},
+        'list_types': {
+            'functionalcis_list': 'functionalci_id_finalclass_recall'
+        },
     }
 
     @staticmethod
