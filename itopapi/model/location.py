@@ -47,9 +47,9 @@ class ItopapiLocation(ItopapiPrototype):
         # Location's organization id. Call find_organization to get the full information or just
         #  use org_id_friendlyname and organization_name
         self.org_id = None
-        # Server's organization friendly name. Not sure the difference with organization_name
+        # Location's organization friendly name. Not sure the difference with organization_name
         self.org_id_friendlyname = None
-        # Server's organization name
+        # Location's organization name
         self.organization_name = None
         # Location's street address. Generally multiline
         self.address = None
