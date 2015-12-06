@@ -30,6 +30,7 @@ from itopapi.model.person import ItopapiPerson
 from itopapi.model.team import ItopapiTeam
 from itopapi.model.incident import ItopapiIncident
 from itopapi.model.othersoftware import ItopapiOtherSoftware
+from itopapi.model.dbserver import ItopapiDBServer
 
 # TODO partial list of missing classes, with no particular order: Peripheral, MobilePhone, Printer, PC, Phone, IPPhone,
 # Tablet, TapeLibrary, SANSwitchNAS, PDU, PowerSource, DatabaseSchema, OtherSoftware
