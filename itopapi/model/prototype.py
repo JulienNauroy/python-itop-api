@@ -282,7 +282,10 @@ class ItopapiPrototype(object):
         itop_class = itop_class.lower()
         # Populate the list of classes if need be
         if len(ItopapiPrototype.__classes) == 0:
-            for c in ItopapiPrototype.__subclasses__():
+            def all_subclasses(cls):
+                return cls.__subclasses__() + [g for s in cls.__subclasses__()
+                                               for g in all_subclasses(s)]
+            for c in all_subclasses(ItopapiPrototype):
                 ItopapiPrototype.__classes[c.itop["name"].lower()] = c
 
         # Retrieve the proper class depending on the name
