@@ -83,7 +83,7 @@ def main():
     controller = ItopapiController()
 
 
-    ######################
+    #####################
     # Synchronize Teams #
     #####################
     print "Synchronizing Itop teams..."
@@ -92,7 +92,6 @@ def main():
     for team in itop_teams:
         group_exists = False
         for contact_group in centreon_contact_groups:
-            # TODO contact_group.name or description? e.g.: "Guest" VS "Guest Group"
             if team.name == contact_group['name']: group_exists = True
         if not group_exists:
             print u"adding team {0} as a contact group".format(team.friendlyname.format('utf-8'))
@@ -126,6 +125,40 @@ def main():
         run_clapi_action_command('contact', 'setParam', [contact_alias, 'hostnotifopt', 'd,u,r'])
         run_clapi_action_command('contact', 'setParam', [contact_alias, 'svcnotifcmd', 'service-notify-by-email'])
         run_clapi_action_command('contact', 'setParam', [contact_alias, 'servicenotifopt', 'w,u,c,r,f'])
+
+
+    #######################
+    # Synchronize Servers #
+    #######################
+    print "Synchronizing Itop servers..."
+    centreon_hosts = run_clapi_list_command("HOST")
+    itop_servers = ItopapiServer.find_all()
+    for server in itop_servers:
+        if server.managementip is None or server.managementip == '':
+            continue
+        server_exists = False
+        for host in centreon_hosts:
+            if server.name == host['name']: server_exists = True
+        if not server_exists:
+            print u"adding server {0} as a host".format(server.name.format('utf-8'))
+            run_clapi_action_command('HOST', 'add', [server.name, server.name, server.name, 'generic-host', 'central', ''])
+    # TODO remove servers not in Itop
+
+    ###############################
+    # Synchronize VirtualMachines #
+    ###############################
+    print "Synchronizing Itop VMs..."
+    itop_vms = ItopapiVirtualMachine.find_all()
+    for vm in itop_vms:
+        if vm.managementip is None or vm.managementip == '':
+            continue
+        vm_exists = False
+        for host in centreon_hosts:
+            if vm.name == host['name']: vm_exists = True
+        if not vm_exists:
+            print u"adding virtualmachne {0} as a host".format(vm.name.format('utf-8'))
+            run_clapi_action_command('HOST', 'add', [vm.name, vm.description, vm.managementip, 'generic-host', 'central', ''])
+    # TODO remove vms not in Itop
 
 
 
