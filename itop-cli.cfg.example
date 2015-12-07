@@ -19,3 +19,11 @@ prevent_duplicates: False
 organization:
 # Default virtualhost when adding VMs
 virtualhost:
+
+[centreon]
+# Centreon CLAPI username
+username: admin
+# Centreon CLAPI password
+password: pass
+# Centreon CLAPI executable
+clapi_path: /usr/bin/centreon

@@ -31,6 +31,12 @@ class ItopapiConfig(object):
     simulate_deletes = False
     # Prevent duplicate names when adding new items
     prevent_duplicates = False
+    """
+    Centreon variables
+    """
+    centreon_username = None
+    centreon_password = None
+    centreon_clapi_path = None
 
     @staticmethod
     def read_config(config_file):
@@ -88,5 +94,18 @@ class ItopapiConfig(object):
             prevent_duplicates = config_parser.get('main', 'prevent_duplicates')
             if prevent_duplicates.lower() == "true":
                 ItopapiConfig.prevent_duplicates = True
+        except ConfigParser.NoOptionError:
+            pass
+
+        try:
+            ItopapiConfig.centreon_username = config_parser.get('centreon', 'username')
+        except ConfigParser.NoOptionError:
+            pass
+        try:
+            ItopapiConfig.centreon_password = config_parser.get('centreon', 'password')
+        except ConfigParser.NoOptionError:
+            pass
+        try:
+            ItopapiConfig.centreon_clapi_path = config_parser.get('centreon', 'clapi_path')
         except ConfigParser.NoOptionError:
             pass
