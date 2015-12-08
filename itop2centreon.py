@@ -96,7 +96,16 @@ def main():
         if not group_exists:
             print u"adding team {0} as a contact group".format(team.friendlyname.format('utf-8'))
             run_clapi_action_command('CG', 'add', [team.name, team.name + ' (from Itop)'])
-    # TODO remove groups not in Itop and delete removed contacts (complete resync?)
+
+    ###################################
+    # Cleanup Centreon Contact Groups #
+    ###################################
+    print "Cleaning up Centreon contact groups..."
+    all_contact_group_names = map(lambda s: s.name, itop_teams)
+    for contact_group in centreon_contact_groups:
+        if contact_group['name'] not in all_contact_group_names and contact_group['name'] != 'Supervisors':
+            print u"deleting contact group {0} as is is not defined in itop".format(contact_group['name'].format('utf-8'))
+            run_clapi_action_command('CG', 'DEL', [contact_group['name']])
 
     #######################
     # Synchronize Persons #
@@ -126,6 +135,16 @@ def main():
         run_clapi_action_command('contact', 'setParam', [contact_alias, 'svcnotifcmd', 'service-notify-by-email'])
         run_clapi_action_command('contact', 'setParam', [contact_alias, 'servicenotifopt', 'w,u,c,r,f'])
 
+    #############################
+    # Cleanup Centreon Contacts #
+    #############################
+    print "Cleaning up Centreon contacts..."
+    all_contact_aliases = map(lambda s: '' if s.email is None else s.email.split('@')[0], itop_persons)
+    for contact in centreon_contacts:
+        if contact['alias'] not in all_contact_aliases and contact['alias'] != 'admin':
+            print u"deleting contact {0} as is is not defined in itop".format(contact['alias'].format('utf-8'))
+            run_clapi_action_command('contact', 'DEL', [contact['alias']])
+
     def sync_servers(servers, centreon_hosts):
         for server in servers:
             if server.managementip is None or server.managementip == '':
@@ -145,6 +164,7 @@ def main():
                     run_clapi_action_command('HOST', 'addContactGroup', [server.name, contact.contact_name])
                 else:
                     run_clapi_action_command('HOST', 'addContact', [server.name, contact.contact_id_friendlyname])
+
     #######################
     # Synchronize Servers #
     #######################
@@ -152,7 +172,6 @@ def main():
     centreon_hosts = run_clapi_list_command("HOST")
     itop_servers = ItopapiServer.find_all()
     sync_servers(itop_servers, centreon_hosts)
-    # TODO remove servers not in Itop
 
     ###############################
     # Synchronize VirtualMachines #
@@ -160,8 +179,16 @@ def main():
     print "Synchronizing Itop VMs..."
     itop_vms = ItopapiVirtualMachine.find_all()
     sync_servers(itop_vms, centreon_hosts)
-    # TODO remove vms not in Itop
 
+    ##########################
+    # Cleanup Centreon Hosts #
+    ##########################
+    print "Cleaning up Centreon hosts..."
+    all_servers_names = map(lambda s: s.name, itop_servers + itop_vms)
+    for host in centreon_hosts:
+        if host['name'] not in all_servers_names:
+            print u"deleting host {0} as is is not defined in itop".format(host['name'].format('utf-8'))
+            run_clapi_action_command('HOST', 'DEL', [host['name']])
 
 
 
