@@ -36,11 +36,11 @@ def run_clapi_list_command(object):
     return csv_to_dict(out)
 
 
-def run_clapi_action_command(object, action, values):
+def run_clapi_action_command(obj, action, values):
     out, err = subprocess.Popen([ItopapiConfig.centreon_clapi_path,
                                  '-u', ItopapiConfig.centreon_username,
                                  '-p', ItopapiConfig.centreon_password,
-                                 '-o', object,
+                                 '-o', obj,
                                  '-a', action,
                                  '-v', ';'.join(str(x.encode('utf-8')) for x in values)],
                                 stderr=subprocess.STDOUT, stdout=subprocess.PIPE).communicate()
@@ -103,7 +103,7 @@ def main():
     #######################
     print "Synchronizing Itop persons..."
     centreon_contacts = run_clapi_list_command("contact")
-    # Can't get persons from teamps since their email is not listed in team.persons_list
+    # Can't get persons from teams since their email is not listed in team.persons_list
     itop_persons = ItopapiPerson.find_all()
     for person in itop_persons:
         # All persons should have an email
@@ -119,29 +119,39 @@ def main():
             run_clapi_action_command('contact', 'add', [person.friendlyname, contact_alias, person.email, '', '0', '1', 'en_US', 'ldap'])
         # In all cases, add the contact to the contacts list and set various parameters
         for team in person.team_list:
-            run_clapi_action_command('CG', 'addcontact', [team.team_name, person.email.split('@')[0]])
+            run_clapi_action_command('CG', 'addcontact', [team.team_name, contact_alias])
         run_clapi_action_command('contact', 'setParam', [contact_alias, 'enable_notifications', '1'])
         run_clapi_action_command('contact', 'setParam', [contact_alias, 'hostnotifcmd', 'host-notify-by-email'])
         run_clapi_action_command('contact', 'setParam', [contact_alias, 'hostnotifopt', 'd,u,r'])
         run_clapi_action_command('contact', 'setParam', [contact_alias, 'svcnotifcmd', 'service-notify-by-email'])
         run_clapi_action_command('contact', 'setParam', [contact_alias, 'servicenotifopt', 'w,u,c,r,f'])
 
-
+    def sync_servers(servers, centreon_hosts):
+        for server in servers:
+            if server.managementip is None or server.managementip == '':
+                continue
+            server_exists = False
+            for host in centreon_hosts:
+                if server.name == host['name']: server_exists = True
+            if not server_exists:
+                print u"adding {0} as a host".format(server.name.format('utf-8'))
+                run_clapi_action_command('HOST', 'add', [server.name, server.description, server.managementip,
+                                                         'generic-host', 'central', ''])
+            # Set the server parameters
+            run_clapi_action_command('HOST', 'setParam', [server.name, 'check_period', '24x7'])
+            # Set the contacts
+            for contact in server.contacts_list:
+                if type(contact) is ItopapiTeam:
+                    run_clapi_action_command('HOST', 'addContactGroup', [server.name, contact.contact_name])
+                else:
+                    run_clapi_action_command('HOST', 'addContact', [server.name, contact.contact_id_friendlyname])
     #######################
     # Synchronize Servers #
     #######################
     print "Synchronizing Itop servers..."
     centreon_hosts = run_clapi_list_command("HOST")
     itop_servers = ItopapiServer.find_all()
-    for server in itop_servers:
-        if server.managementip is None or server.managementip == '':
-            continue
-        server_exists = False
-        for host in centreon_hosts:
-            if server.name == host['name']: server_exists = True
-        if not server_exists:
-            print u"adding server {0} as a host".format(server.name.format('utf-8'))
-            run_clapi_action_command('HOST', 'add', [server.name, server.name, server.name, 'generic-host', 'central', ''])
+    sync_servers(itop_servers, centreon_hosts)
     # TODO remove servers not in Itop
 
     ###############################
@@ -149,15 +159,7 @@ def main():
     ###############################
     print "Synchronizing Itop VMs..."
     itop_vms = ItopapiVirtualMachine.find_all()
-    for vm in itop_vms:
-        if vm.managementip is None or vm.managementip == '':
-            continue
-        vm_exists = False
-        for host in centreon_hosts:
-            if vm.name == host['name']: vm_exists = True
-        if not vm_exists:
-            print u"adding virtualmachne {0} as a host".format(vm.name.format('utf-8'))
-            run_clapi_action_command('HOST', 'add', [vm.name, vm.description, vm.managementip, 'generic-host', 'central', ''])
+    sync_servers(itop_vms, centreon_hosts)
     # TODO remove vms not in Itop
 
 
