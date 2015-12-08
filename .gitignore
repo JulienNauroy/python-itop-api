@@ -6,3 +6,4 @@ dist
 build
 Makefile
 python_itop_api.egg-info
+pylint.bat
