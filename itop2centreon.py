@@ -152,10 +152,18 @@ def main():
             server_exists = False
             for host in centreon_hosts:
                 if server.name == host['name']: server_exists = True
+            if server.status != 'production':
+                if server_exists:
+                    # Remove servers no longer in production
+                    print u"removing {0} as a host as its status is {1}".format(server.name.format('utf-8'), server.status)
+                    run_clapi_action_command('HOST', 'DEL', [server.name])
+                continue
+
             if not server_exists:
                 print u"adding {0} as a host".format(server.name.format('utf-8'))
-                run_clapi_action_command('HOST', 'add', [server.name, server.description, server.managementip,
+                run_clapi_action_command('HOST', 'ADD', [server.name, server.description, server.managementip,
                                                          'generic-host', 'central', ''])
+
             # Set the server parameters
             run_clapi_action_command('HOST', 'setParam', [server.name, 'check_period', '24x7'])
             # Set the contacts
