@@ -86,7 +86,7 @@ def main():
     #####################
     # Synchronize Teams #
     #####################
-    print "Synchronizing Itop teams..."
+    print "Synchronizing Itop teams / Centreon contact groups..."
     centreon_contact_groups = run_clapi_list_command("CG")
     itop_teams = ItopapiTeam.find_all()
     for team in itop_teams:
@@ -110,7 +110,7 @@ def main():
     #######################
     # Synchronize Persons #
     #######################
-    print "Synchronizing Itop persons..."
+    print "Synchronizing Itop persons / Centreon contacts..."
     centreon_contacts = run_clapi_list_command("contact")
     # Can't get persons from teams since their email is not listed in team.persons_list
     itop_persons = ItopapiPerson.find_all()
@@ -176,7 +176,7 @@ def main():
     #######################
     # Synchronize Servers #
     #######################
-    print "Synchronizing Itop servers..."
+    print "Synchronizing Itop servers / Centreon hosts..."
     centreon_hosts = run_clapi_list_command("HOST")
     itop_servers = ItopapiServer.find_all()
     sync_servers(itop_servers, centreon_hosts)
@@ -184,7 +184,7 @@ def main():
     ###############################
     # Synchronize VirtualMachines #
     ###############################
-    print "Synchronizing Itop VMs..."
+    print "Synchronizing Itop VMs / Centreon hosts..."
     itop_vms = ItopapiVirtualMachine.find_all()
     sync_servers(itop_vms, centreon_hosts)
 
