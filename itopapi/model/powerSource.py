@@ -99,7 +99,7 @@ class ItopapiPowerSource(ItopapiPrototype):
         Retrieve the ItopapiOrganization corresponding to this server
         """
         if self.org_id is not None:
-            ItopapiPrototype.get_itop_class('Organization').find(self.org_id)
+            return ItopapiPrototype.get_itop_class('Organization').find(self.org_id)
         return None
 
     def find_location(self):
@@ -107,7 +107,7 @@ class ItopapiPowerSource(ItopapiPrototype):
         Retrieve the ItopapiLocation related to this instance
         """
         if self.location_id is not None:
-            ItopapiPrototype.get_itop_class('Location').find(self.location_id)
+            return ItopapiPrototype.get_itop_class('Location').find(self.location_id)
         return None
 
     def find_brand(self):
@@ -115,7 +115,7 @@ class ItopapiPowerSource(ItopapiPrototype):
         Retrieve the ItopapiBrand corresponding to this instance
         """
         if self.brand_id is not None:
-            ItopapiPrototype.get_itop_class('Brand').find(self.brand_id)
+            return ItopapiPrototype.get_itop_class('Brand').find(self.brand_id)
         return None
 
     def find_model(self):
@@ -123,5 +123,5 @@ class ItopapiPowerSource(ItopapiPrototype):
         Retrieve the ItopapiModel corresponding to this instance
         """
         if self.model_id is not None:
-            ItopapiPrototype.get_itop_class('Model').find(self.model_id)
+            return ItopapiPrototype.get_itop_class('Model').find(self.model_id)
         return None

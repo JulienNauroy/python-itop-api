@@ -237,7 +237,7 @@ class ItopapiServer(ItopapiPrototype):
         Retrieve the ItopapiRack corresponding to this server
         """
         if self.rack_id is not None:
-            ItopapiPrototype.get_itop_class('Rack').find(self.rack_id)
+            return ItopapiPrototype.get_itop_class('Rack').find(self.rack_id)
         return None
 
     def find_organization(self):
@@ -245,7 +245,7 @@ class ItopapiServer(ItopapiPrototype):
         Retrieve the ItopapiOrganization corresponding to this server
         """
         if self.org_id is not None:
-            ItopapiPrototype.get_itop_class('Organization').find(self.org_id)
+            return ItopapiPrototype.get_itop_class('Organization').find(self.org_id)
         return None
 
     def find_location(self):
@@ -253,7 +253,7 @@ class ItopapiServer(ItopapiPrototype):
         Retrieve the ItopapiLocation related to this instance
         """
         if self.location_id is not None:
-            ItopapiPrototype.get_itop_class('Location').find(self.location_id)
+            return ItopapiPrototype.get_itop_class('Location').find(self.location_id)
         return None
 
     def find_enclosure(self):
@@ -261,7 +261,7 @@ class ItopapiServer(ItopapiPrototype):
         Retrieve the ItopapiEnclosure corresponding to this server
         """
         if self.enclosure_id is not None:
-            ItopapiPrototype.get_itop_class('Enclosure').find(self.enclosure_id)
+            return ItopapiPrototype.get_itop_class('Enclosure').find(self.enclosure_id)
         return None
 
     def find_brand(self):
@@ -269,7 +269,7 @@ class ItopapiServer(ItopapiPrototype):
         Retrieve the ItopapiBrand corresponding to this server
         """
         if self.brand_id is not None:
-            ItopapiPrototype.get_itop_class('Brand').find(self.brand_id)
+            return ItopapiPrototype.get_itop_class('Brand').find(self.brand_id)
         return None
 
     def find_model(self):
@@ -277,7 +277,7 @@ class ItopapiServer(ItopapiPrototype):
         Retrieve the ItopapiModel corresponding to this server
         """
         if self.model_id is not None:
-            ItopapiPrototype.get_itop_class('Model').find(self.model_id)
+            return ItopapiPrototype.get_itop_class('Model').find(self.model_id)
         return None
 
     def find_os_family(self):
@@ -285,7 +285,7 @@ class ItopapiServer(ItopapiPrototype):
         Retrieve the ItopapiOSFamily corresponding to this server
         """
         if self.osfamily_id is not None:
-            ItopapiPrototype.get_itop_class('OSFamily').find(self.osfamily_id)
+            return ItopapiPrototype.get_itop_class('OSFamily').find(self.osfamily_id)
         return None
 
     def find_os_version(self):
@@ -293,7 +293,7 @@ class ItopapiServer(ItopapiPrototype):
         Retrieve the ItopapiOSVersion corresponding to this server
         """
         if self.osversion_id is not None:
-            ItopapiPrototype.get_itop_class('OSVersion').find(self.osfamily_id)
+            return ItopapiPrototype.get_itop_class('OSVersion').find(self.osfamily_id)
         return None
 
     def find_os_licence(self):
@@ -301,7 +301,7 @@ class ItopapiServer(ItopapiPrototype):
         Retrieve the ItopapiOSLicence corresponding to this server
         """
         if self.oslicence_id is not None:
-            ItopapiPrototype.get_itop_class('OSLicence').find(self.osfamily_id)
+            return ItopapiPrototype.get_itop_class('OSLicence').find(self.osfamily_id)
         return None
 
     def find_power_a(self):

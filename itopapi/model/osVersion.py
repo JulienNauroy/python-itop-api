@@ -52,5 +52,5 @@ class ItopapiOSVersion(ItopapiPrototype):
         Retrieve the ItopapiOSFamily corresponding to this server
         """
         if self.osfamily_id is not None:
-            ItopapiPrototype.get_itop_class('OSFamily').find(self.osfamily_id)
+            return ItopapiPrototype.get_itop_class('OSFamily').find(self.osfamily_id)
         return None

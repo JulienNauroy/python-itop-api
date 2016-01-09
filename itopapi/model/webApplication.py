@@ -121,7 +121,7 @@ class ItopapiWebApplication(ItopapiPrototype):
         Retrieve the ItopapiOrganization related to this instance
         """
         if self.org_id is not None:
-            ItopapiPrototype.get_itop_class('Organization').find(self.org_id)
+            return ItopapiPrototype.get_itop_class('Organization').find(self.org_id)
         return None
 
     def find_web_server(self):
@@ -129,5 +129,5 @@ class ItopapiWebApplication(ItopapiPrototype):
         Retrieve the ItopapiWebServer corresponding to this WebApplication
         """
         if self.webserver_id is not None:
-            ItopapiPrototype.get_itop_class('WebServer').find(self.webserver_id)
+            return ItopapiPrototype.get_itop_class('WebServer').find(self.webserver_id)
         return None

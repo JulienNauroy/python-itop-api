@@ -172,7 +172,7 @@ class ItopapiVirtualMachine(ItopapiPrototype):
         Retrieve the ItopapiOrganization related to this instance
         """
         if self.org_id is not None:
-            ItopapiPrototype.get_itop_class('Organization').find(self.org_id)
+            return ItopapiPrototype.get_itop_class('Organization').find(self.org_id)
         return None
 
     def find_os_family(self):
@@ -180,7 +180,7 @@ class ItopapiVirtualMachine(ItopapiPrototype):
         Retrieve the ItopapiOSFamily corresponding to this VirtualMachine
         """
         if self.osfamily_id is not None:
-            ItopapiPrototype.get_itop_class('OSFamily').find(self.osfamily_id)
+            return ItopapiPrototype.get_itop_class('OSFamily').find(self.osfamily_id)
         return None
 
     def find_os_version(self):
@@ -188,7 +188,7 @@ class ItopapiVirtualMachine(ItopapiPrototype):
         Retrieve the ItopapiOSVersion corresponding to this server
         """
         if self.osversion_id is not None:
-            ItopapiPrototype.get_itop_class('OSVersion').find(self.osfamily_id)
+            return ItopapiPrototype.get_itop_class('OSVersion').find(self.osfamily_id)
         return None
 
     def find_os_licence(self):
@@ -196,5 +196,5 @@ class ItopapiVirtualMachine(ItopapiPrototype):
         Retrieve the ItopapiOSLicence corresponding to this server
         """
         if self.oslicence_id is not None:
-            ItopapiPrototype.get_itop_class('OSLicence').find(self.osfamily_id)
+            return ItopapiPrototype.get_itop_class('OSLicence').find(self.osfamily_id)
         return None

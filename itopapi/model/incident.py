@@ -86,6 +86,6 @@ class ItopapiIncident(ItopapiPrototype):
         Retrieve the ItopapiOrganization corresponding to this server
         """
         if self.org_id is not None:
-            ItopapiPrototype.get_itop_class('Organization').find(self.org_id)
+            return ItopapiPrototype.get_itop_class('Organization').find(self.org_id)
         return None
 

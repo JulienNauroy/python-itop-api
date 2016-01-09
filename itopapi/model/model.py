@@ -57,5 +57,5 @@ class ItopapiModel(ItopapiPrototype):
         Retrieve the ItopapiBrand corresponding to this server
         """
         if self.brand_id is not None:
-            ItopapiPrototype.get_itop_class('Brand').find(self.brand_id)
+            return ItopapiPrototype.get_itop_class('Brand').find(self.brand_id)
         return None
