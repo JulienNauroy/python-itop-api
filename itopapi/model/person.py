@@ -94,7 +94,7 @@ class ItopapiPerson(ItopapiPrototype):
         Retrieve the ItopapiLocation related to this instance
         """
         if self.location_id is not None:
-            ItopapiPrototype.get_itop_class('Location').find(self.location_id)
+            return ItopapiPrototype.get_itop_class('Location').find(self.location_id)
         return None
 
     def find_organization(self):
@@ -102,5 +102,5 @@ class ItopapiPerson(ItopapiPrototype):
         Retrieve the parent ItopapiOrganization
         """
         if self.org_id is not None:
-            ItopapiPrototype.get_itop_class('Organization').find(self.org_id)
+            return ItopapiPrototype.get_itop_class('Organization').find(self.org_id)
         return None

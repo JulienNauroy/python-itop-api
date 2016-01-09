@@ -168,7 +168,7 @@ class ItopapiWebServer(ItopapiPrototype):
         Retrieve the ItopapiOrganization related to this instance
         """
         if self.org_id is not None:
-            ItopapiPrototype.get_itop_class('Organization').find(self.org_id)
+            return ItopapiPrototype.get_itop_class('Organization').find(self.org_id)
         return None
 
     def find_system(self):
@@ -176,7 +176,7 @@ class ItopapiWebServer(ItopapiPrototype):
         Retrieve the System (Server or VirtualMachine) corresponding to this WebServer
         """
         if self.system_id is not None:
-            # TODO
+            # TODO define System
             raise ItopapiUnimplementedMethod()
         return None
 
@@ -185,7 +185,7 @@ class ItopapiWebServer(ItopapiPrototype):
         Retrieve the Software corresponding to this WebServer
         """
         if self.software_id is not None:
-            # TODO
+            # TODO define Software
             raise ItopapiUnimplementedMethod()
         return None
 
@@ -194,6 +194,6 @@ class ItopapiWebServer(ItopapiPrototype):
         Retrieve the Software Licence corresponding to this WebServer
         """
         if self.software_licence_id is not None:
-            # TODO
+            # TODO define SoftwareLicense
             raise ItopapiUnimplementedMethod()
         return None

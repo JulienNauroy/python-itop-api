@@ -71,7 +71,7 @@ class ItopapiOSLicence(ItopapiPrototype):
         Retrieve the ItopapiOSVersion corresponding to this server
         """
         if self.osversion_id is not None:
-            ItopapiPrototype.get_itop_class('OSVersion').find(self.osfamily_id)
+            return ItopapiPrototype.get_itop_class('OSVersion').find(self.osfamily_id)
         return None
 
     def find_organization(self):
@@ -79,5 +79,5 @@ class ItopapiOSLicence(ItopapiPrototype):
         Retrieve the ItopapiOrganization corresponding to this server
         """
         if self.org_id is not None:
-            ItopapiPrototype.get_itop_class('Organization').find(self.org_id)
+            return ItopapiPrototype.get_itop_class('Organization').find(self.org_id)
         return None
