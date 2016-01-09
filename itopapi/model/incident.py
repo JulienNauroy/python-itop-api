@@ -20,6 +20,7 @@ class ItopapiIncident(ItopapiPrototype):
         'save': ['title', 'description', 'ref', 'start_date', 'end_date', 'close_date', 'last_update'],
         'foreign_keys': [
             {'id': 'org_id', 'name': 'organization_name', 'table': 'Organization'},
+            {'id': 'agent_id', 'name': 'agent_name', 'table': 'Person'},
             {'id': 'team_id', 'name': 'team_name', 'table': 'Team'},
         ],
         'list_types': {
@@ -63,7 +64,7 @@ class ItopapiIncident(ItopapiPrototype):
         # Incident's organization name
         self.organization_name = None
 
-        # TODO what is it? Must be related to some foreign key
+        # Foreign key to a Person
         self.agent_id = None
         self.agent_name = None
 
