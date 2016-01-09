@@ -309,8 +309,7 @@ class ItopapiServer(ItopapiPrototype):
         Retrieve the ItopapiPowerA corresponding to this server
         """
         if self.powerA_id is not None:
-            # TODO define ItopapiPowerA return ItopapiOPowerA.find(self.powerA_id)
-            raise ItopapiUnimplementedMethod()
+            return ItopapiPrototype.get_itop_class('PowerSource').find(self.powerA_id)
         return None
 
     def find_power_b(self):
@@ -318,6 +317,5 @@ class ItopapiServer(ItopapiPrototype):
         Retrieve the ItopapiPowerB corresponding to this server
         """
         if self.powerB_id is not None:
-            # TODO define ItopapiPowerB return ItopapiOPowerB.find(self.powerB_id)
-            raise ItopapiUnimplementedMethod()
+            return ItopapiPrototype.get_itop_class('PowerSource').find(self.powerB_id)
         return None
