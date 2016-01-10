@@ -11,7 +11,7 @@ __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.Fr>']
 from itopapi import ItopapiController, ItopapiConfig, UnsupportedImportFormat
 from itopcli import load_configuration_cli, ItopcliConfig, NeedMoreArgs
 from itopapi.model import *
-import subprocess;
+import subprocess
 
 
 def csv_to_dict(csv):
