@@ -37,6 +37,13 @@ class ItopapiConfig(object):
     centreon_username = None
     centreon_password = None
     centreon_clapi_path = None
+    """
+    VCenter variables
+    """
+    vcenter_host = None
+    vcenter_port = None
+    vcenter_username = None
+    vcenter_password = None
 
     @staticmethod
     def read_config(config_file):
@@ -107,5 +114,27 @@ class ItopapiConfig(object):
             pass
         try:
             ItopapiConfig.centreon_clapi_path = config_parser.get('centreon', 'clapi_path')
+        except ConfigParser.NoOptionError:
+            pass
+
+        try:
+            ItopapiConfig.vcenter_host = config_parser.get('vcenter', 'host')
+        except ConfigParser.NoOptionError:
+            pass
+        try:
+            ItopapiConfig.vcenter_port = config_parser.get('vcenter', 'port')
+        except ConfigParser.NoOptionError:
+            pass
+        try:
+            ItopapiConfig.vcenter_username = config_parser.get('vcenter', 'username')
+        except ConfigParser.NoOptionError:
+            pass
+        try:
+            ItopapiConfig.vcenter_password = config_parser.get('vcenter', 'password')
+        except ConfigParser.NoOptionError:
+            pass
+        try:
+            unsecure = config_parser.get('vcenter', 'unsecure')
+            ItopapiConfig.vcenter_unsecure = (unsecure.lower() == "true" or unsecure == "1")
         except ConfigParser.NoOptionError:
             pass

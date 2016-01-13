@@ -198,6 +198,7 @@ def main():
             print u"deleting host {0} as is is not defined in itop".format(host['name'].format('utf-8'))
             run_clapi_action_command('HOST', 'DEL', [host['name']])
 
+    return 0
 
 
 if __name__ == "__main__":

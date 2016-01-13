@@ -27,3 +27,13 @@ username: admin
 password: pass
 # Centreon CLAPI executable
 clapi_path: /usr/bin/centreon
+
+[vcenter]
+# VCenter host
+host: localhost
+# VCenter port. HTTPS (443) is the default
+port: 443
+# User allowed to log in to the VCenter
+username: admin
+# Associated password (strongly discouraged ; prefer leaving blank and entering it when promped)
+password:

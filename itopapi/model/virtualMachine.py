@@ -91,8 +91,6 @@ class ItopapiVirtualMachine(ItopapiPrototype):
 
         self.cpu = None
         self.ram = None
-        # Rack units
-        self.nb_u = None
 
         ##################################
         #        Properties/Date         #

@@ -274,7 +274,6 @@ class ItopapiPrototype(object):
     def get_itop_class(itop_class):
         """
         Associate the string passed as an argument to the corresponding Itop class
-        Maybe move it to ItopapiPrototype someday
         :param itop_class: iTop class
         """
         itop_class = itop_class.lower()
