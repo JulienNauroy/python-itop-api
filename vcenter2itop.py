@@ -85,13 +85,10 @@ def main():
     # Retrieve the default organization if need be
     organization = None
     if "add" in ItopapiConfig.vcenter_vm_sync_mode:
-        find_organization = ItopapiOrganization.find_by_name(ItopapiConfig.organization)
-        if find_organization is None:
+        organization = ItopapiOrganization.find_by_name(ItopapiConfig.organization)
+        if organization is None:
             print "Error: Default organization \"{}\"not found".format(ItopapiConfig.vcenter_vm_sync_mode)
             exit(1)
-        else:
-            # Only one result
-            organization = find_organization[0]
 
     controller = ItopapiController()
 
@@ -120,8 +117,20 @@ def main():
         print("Caught vmodl fault : " + error.msg)
         return -1
 
-    # TODO physical and storage servers, if possible
-    # TODO in the configuration, have the choice between add,update,delete to define the synchronization level
+    #######################
+    #  Synchronize Hosts  #
+    #######################
+    print "Synchronizing VCenter Hosts with Itop Farms..."
+    # Retrieve existing Itop Farms
+    itop_farms = dict((farm.name, farm) for farm in ItopapiFarm.find_all())
+    # Get data from VCenter
+    container_view = vcenter_content.viewManager.CreateContainerView(
+        vcenter_content.rootFolder, [vim.ClusterComputeResource], True) # TODO HostSystem ?
+    children = container_view.view
+    for child in children:
+        # TODO
+        print child
+    exit(666)
 
     #####################
     #  Synchronize VMS  #
@@ -135,29 +144,31 @@ def main():
     itop_os_versions = ItopapiOSVersion.find_all()
     # TODO create OS families and versions if not exist and update VMs
     # Get data from VCenter
-    container = vcenter_content.rootFolder  # starting point to look into
-    view_type = [vim.VirtualMachine]  # object types to look for
-    recursive = True  # whether we should look into it recursively
     container_view = vcenter_content.viewManager.CreateContainerView(
-        container, view_type, recursive)
+        vcenter_content.rootFolder, [vim.VirtualMachine], True)
 
+    # vm_names will be used for deleting vms
+    vm_names = {}
     children = container_view.view
     for child in children:
         vm_name = child.config.name
+        vm_names.append(vm_name)
         itop_vm = itop_vms.get(vm_name)
         if itop_vm is not None:
             if "update" in ItopapiConfig.vcenter_vm_sync_mode:
                 # TODO Update VM
-                2+2
+                print "Updated VM %s" % vm.name
         elif "add" in ItopapiConfig.vcenter_vm_sync_mode:
             # Create the VM
+            # TODO does not save because the cluster is not defined.
             vm = create_itop_vm(child, organization)
-            # TODO does not save?
             vm.save()
             print "Added VM %s" % vm_name
     if "delete" in ItopapiConfig.vcenter_vm_sync_mode:
-        # TODO
-        2+2
+        for vm in itop_vms:
+            if vm.name not in vm_names:
+                vm.delete()
+                print "Deleted VM %s" % vm.name
 
     return 0
 
