@@ -40,4 +40,4 @@ password:
 # Allow unsecure HTTPS connections (e.g. with a self-signed certificate). Thanks PEP 466.
 unsecure = 0
 # Synchronization modes for VM. The list can only contain add (add VMs not found in VCenter), update and delete
-vm_sync_mode = ['add', 'update', 'delete']
+vm_sync_mode = ["add", "update", "delete"]
