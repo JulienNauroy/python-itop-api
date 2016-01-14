@@ -37,3 +37,5 @@ port: 443
 username: admin
 # Associated password (strongly discouraged ; prefer leaving blank and entering it when promped)
 password:
+# Allow unsecure HTTPS connections (e.g. with a self-signed certificate). Thanks PEP 466.
+unsecure = 0
