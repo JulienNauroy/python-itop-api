@@ -8,6 +8,7 @@ __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 import ConfigParser
+import json
 
 
 class ItopapiConfig(object):
@@ -44,6 +45,7 @@ class ItopapiConfig(object):
     vcenter_port = None
     vcenter_username = None
     vcenter_password = None
+    vcenter_vm_sync_mode = None
 
     @staticmethod
     def read_config(config_file):
@@ -136,5 +138,11 @@ class ItopapiConfig(object):
         try:
             unsecure = config_parser.get('vcenter', 'unsecure')
             ItopapiConfig.vcenter_unsecure = (unsecure.lower() == "true" or unsecure == "1")
+        except ConfigParser.NoOptionError:
+            pass
+        try:
+            print config_parser.get('vcenter', 'vm_sync_mode')
+            vm_sync_mode = json.loads(config_parser.get('vcenter', 'vm_sync_mode'))
+            ItopapiConfig.vcenter_vm_sync_mode = vm_sync_mode
         except ConfigParser.NoOptionError:
             pass

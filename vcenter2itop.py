@@ -57,6 +57,7 @@ def main():
     if ItopapiConfig.vcenter_password is None or ItopapiConfig.vcenter_password == "":
         ItopapiConfig.vcenter_password = getpass.getpass()
 
+
     ####################
     # Some value check #
     ####################
@@ -64,12 +65,18 @@ def main():
             or ItopapiConfig.password is None:
         print "Error: Itop Username/Password missing"
         exit(1)
+
     if ItopapiConfig.vcenter_username is None\
             or ItopapiConfig.vcenter_password is None\
             or ItopapiConfig.vcenter_host is None\
             or ItopapiConfig.vcenter_port is None:
         print "Error: VCenter Host/Port/Username/Password missing"
         exit(1)
+
+    for m in ItopapiConfig.vcenter_vm_sync_mode:
+        if m not in ["add", "update", "delete"]:
+            print "Error: unsupported vm sync mode {}".format(m)
+            exit(1)
 
     controller = ItopapiController()
 
