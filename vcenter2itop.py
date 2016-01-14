@@ -19,12 +19,18 @@ import ssl
 import getpass
 import atexit
 
-def create_itop_vm(virtual_machine):
+
+def create_itop_vm(virtual_machine, organization):
     # Retrieve the relevant information from the virtual_machine
     config = virtual_machine.config
     guest = virtual_machine.guest
     # Create the ItopVirtualMachine instance
     vm = ItopapiVirtualMachine()
+    # Set the organization
+    vm.org_id = organization.instance_id
+    vm.org_id_friendlyname = organization.friendlyname
+    vm.organization_name = organization.name
+    # Set other fields
     # TODO check all values
     vm.name = config.name
     vm.managementip = guest.ipAddress
@@ -54,10 +60,6 @@ def main():
         print "Error: {}".format(e.message)
         exit(1)
 
-    if ItopapiConfig.vcenter_password is None or ItopapiConfig.vcenter_password == "":
-        ItopapiConfig.vcenter_password = getpass.getpass()
-
-
     ####################
     # Some value check #
     ####################
@@ -67,16 +69,29 @@ def main():
         exit(1)
 
     if ItopapiConfig.vcenter_username is None\
-            or ItopapiConfig.vcenter_password is None\
             or ItopapiConfig.vcenter_host is None\
             or ItopapiConfig.vcenter_port is None:
-        print "Error: VCenter Host/Port/Username/Password missing"
+        print "Error: VCenter Host/Port/Username missing"
         exit(1)
 
     for m in ItopapiConfig.vcenter_vm_sync_mode:
         if m not in ["add", "update", "delete"]:
             print "Error: unsupported vm sync mode {}".format(m)
             exit(1)
+    if ItopapiConfig.organization is None or ItopapiConfig.organization == "" \
+            and "add" in ItopapiConfig.vcenter_vm_sync_mode:
+        print "Error: Default organization missing"
+        exit(1)
+    # Retrieve the default organization if need be
+    organization = None
+    if "add" in ItopapiConfig.vcenter_vm_sync_mode:
+        find_organization = ItopapiOrganization.find_by_name(ItopapiConfig.organization)
+        if find_organization is None:
+            print "Error: Default organization \"{}\"not found".format(ItopapiConfig.vcenter_vm_sync_mode)
+            exit(1)
+        else:
+            # Only one result
+            organization = find_organization[0]
 
     controller = ItopapiController()
 
@@ -89,6 +104,8 @@ def main():
     vcenter_content = None
 
     try:
+        if ItopapiConfig.vcenter_password is None or ItopapiConfig.vcenter_password == "":
+            ItopapiConfig.vcenter_password = getpass.getpass()
         service_instance = connect.SmartConnect(sslContext=ssl_context,
                                                 host=ItopapiConfig.vcenter_host,
                                                 user=ItopapiConfig.vcenter_username,
@@ -129,14 +146,18 @@ def main():
         vm_name = child.config.name
         itop_vm = itop_vms.get(vm_name)
         if itop_vm is not None:
-            # TODO Update VM
-            2+2
-        else:
+            if "update" in ItopapiConfig.vcenter_vm_sync_mode:
+                # TODO Update VM
+                2+2
+        elif "add" in ItopapiConfig.vcenter_vm_sync_mode:
             # Create the VM
-            vm = create_itop_vm(child)
+            vm = create_itop_vm(child, organization)
             # TODO does not save?
             vm.save()
             print "Added VM %s" % vm_name
+    if "delete" in ItopapiConfig.vcenter_vm_sync_mode:
+        # TODO
+        2+2
 
     return 0
 
