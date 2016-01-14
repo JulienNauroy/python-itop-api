@@ -116,7 +116,7 @@ class ItopapiController(object):
             else:
                 instance = model.find_by_name(id_instance)
             if instance is not None:
-                self.data.extend(instance)
+                self.data.append(instance)
 
     def delete(self):
         """

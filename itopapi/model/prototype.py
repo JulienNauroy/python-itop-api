@@ -112,7 +112,11 @@ class ItopapiPrototype(object):
         :param name: string
         :return: Itopapi*
         """
-        return ItopapiPrototype.find(itop_class, {'name': name})
+        found = ItopapiPrototype.find(itop_class, {'name': name})
+        # find_by_name can have only one result. In this case, return an object, not a list.
+        if found is not None:
+            return found[0]
+        return None
 
     @staticmethod
     def find(itop_class, key):
