@@ -141,7 +141,6 @@ class ItopapiConfig(object):
         except ConfigParser.NoOptionError:
             pass
         try:
-            print config_parser.get('vcenter', 'vm_sync_mode')
             vm_sync_mode = json.loads(config_parser.get('vcenter', 'vm_sync_mode'))
             ItopapiConfig.vcenter_vm_sync_mode = vm_sync_mode
         except ConfigParser.NoOptionError:
