@@ -17,6 +17,7 @@ from itopapi.model.powerSource import ItopapiPowerSource
 from itopapi.model.vlan import ItopapiVLAN
 from itopapi.model.subnet import ItopapiSubnet
 from itopapi.model.physicalInterface import ItopapiPhysicalInterface
+from itopapi.model.hypervisor import ItopapiHypervisor
 from itopapi.model.farm import ItopapiFarm
 from itopapi.model.virtualMachine import ItopapiVirtualMachine
 from itopapi.model.webServer import ItopapiWebServer
