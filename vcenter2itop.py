@@ -18,6 +18,64 @@ from pyVmomi import vim
 import ssl
 import getpass
 import atexit
+import sys
+
+
+# TODO I don't like this. Is there a more pythonic way?
+itop_os_families = None
+itop_os_versions = None
+# TODO by default consider virtual host is a farm but it could also be an hypervisor
+itop_farms = None
+
+
+# Retrieve the os family or create it if it doesn't exist
+def get_os_family(os_family_name):
+    if os_family_name is None or os_family_name == "":
+        os_family_name = "Unknown"
+
+    global itop_os_families
+    os_family = itop_os_families.get(os_family_name)
+    if os_family is None:
+        os_family = ItopapiOSFamily()
+        os_family.name = os_family_name
+        os_family.save()
+        itop_os_families[os_family_name] = os_family
+    return os_family
+
+
+# Retrieve the os version or create it if it doesn't exist
+def get_os_version(os_family_id, os_version_name):
+    if os_version_name is None or os_version_name == "":
+        os_version_name = "Unknown"
+
+    global itop_os_versions
+    os_version = itop_os_versions.get((os_family_id, os_version_name))
+    if os_version is None:
+        os_version = ItopapiOSVersion()
+        os_version.name = os_version_name
+        os_version.osfamily_id = os_family_id
+        os_version.save()
+        itop_os_families[(os_family_id, os_version_name)] = os_version
+    return os_version
+
+
+# Retrieve the virtualhost (Farm) or create it if it doesn't exist
+def get_virtualhost(virtualhost_name, organization):
+    if virtualhost_name is None or virtualhost_name == "":
+        virtualhost_name = "Unknown"
+
+    global itop_farms
+    farm = itop_farms.get(virtualhost_name)
+    if farm is None:
+        farm = ItopapiFarm()
+        farm.name = virtualhost_name
+        # Set the organization
+        farm.org_id = organization.instance_id
+        farm.org_id_friendlyname = organization.friendlyname
+        farm.organization_name = organization.name
+        farm.save()
+        itop_farms[virtualhost_name] = farm
+    return farm
 
 
 def create_itop_vm(virtual_machine, organization):
@@ -30,18 +88,31 @@ def create_itop_vm(virtual_machine, organization):
     vm.org_id = organization.instance_id
     vm.org_id_friendlyname = organization.friendlyname
     vm.organization_name = organization.name
+    # Set the OS family
+    os_family = get_os_family(guest.guestFamily)
+    vm.osfamily_id = os_family.instance_id
+    vm.osfamily_id_friendlyname = os_family.friendlyname
+    vm.osfamily_name = os_family.name
+    # Set the OS version
+    os_version = get_os_version(vm.osfamily_id, guest.guestFullName)
+    vm.osversion_id = os_version.instance_id
+    vm.osversion_id_friendlyname = os_version.friendlyname
+    vm.osversion_name = os_version.name
+    # Set the virtual host (Farm)
+    virtualhost = get_virtualhost(None, organization) # TODO use virtual_machine.runtime.host.config.name
+    vm.virtualhost_id = virtualhost.instance_id
+    vm.virtualhost_id_friendlyname = virtualhost.friendlyname
+    vm.virtualhost_name = virtualhost.name
+
     # Set other fields
     # TODO check all values
     vm.name = config.name
     vm.managementip = guest.ipAddress
     # TODO vm.status => implementation, obsolete, production, stock depending on ???
-    # TODO OS Licence
     # TODO use instanceUuid in description?
+    # TODO 'move2production', 'description'
     vm.cpu = config.hardware.numCPU * (config.hardware.numCPU if config.hardware.numCPU else 1)
     vm.ram = config.hardware.memoryMB
-    # TODO get or create guest.guestFamily (windowsGuest, linuxGuest or None) and guest.guestFullName
-    #print guest.guestFullName
-    # TODO 'move2production', 'description'
 
     return vm
 
@@ -92,9 +163,14 @@ def main():
 
     controller = ItopapiController()
 
-    #####################
-    #    Connection     #
-    #####################
+    # First get the OS families and versions
+    global itop_os_families, itop_os_versions
+    itop_os_families = dict((os_family.name, os_family) for os_family in ItopapiOSFamily.find_all())
+    itop_os_versions = dict(((os_version.osfamily_id, os_version.name), os_version) for os_version in ItopapiOSVersion.find_all())
+
+    ###############################
+    #    Connection to VCenter    #
+    ###############################
     ssl_context = None
     if ItopapiConfig.vcenter_unsecure:
         ssl_context = ssl._create_unverified_context()
@@ -122,6 +198,7 @@ def main():
     #######################
     print "Synchronizing VCenter Hosts with Itop Farms..."
     # Retrieve existing Itop Farms
+    global itop_farms
     itop_farms = dict((farm.name, farm) for farm in ItopapiFarm.find_all())
     # Get data from VCenter
     container_view = vcenter_content.viewManager.CreateContainerView(
@@ -130,7 +207,6 @@ def main():
     for child in children:
         # TODO
         print child
-    exit(666)
 
     #####################
     #  Synchronize VMS  #
@@ -139,31 +215,33 @@ def main():
     # Retrieve existing Itop VMs
     itop_vms = dict((vm.name, vm) for vm in ItopapiVirtualMachine.find_all())
 
-    # First get the OS families and versions
-    itop_os_families = ItopapiOSFamily.find_all()
-    itop_os_versions = ItopapiOSVersion.find_all()
     # TODO create OS families and versions if not exist and update VMs
     # Get data from VCenter
     container_view = vcenter_content.viewManager.CreateContainerView(
         vcenter_content.rootFolder, [vim.VirtualMachine], True)
 
     # vm_names will be used for deleting vms
-    vm_names = {}
+    vm_names = set()
     children = container_view.view
     for child in children:
+        # Do not take templates into consideration
+        if child.config.template:
+            continue
+
         vm_name = child.config.name
-        vm_names.append(vm_name)
+        vm_names.add(vm_name)
         itop_vm = itop_vms.get(vm_name)
         if itop_vm is not None:
             if "update" in ItopapiConfig.vcenter_vm_sync_mode:
                 # TODO Update VM
-                print "Updated VM %s" % vm.name
+                print "Updated VM %s" % vm_name
         elif "add" in ItopapiConfig.vcenter_vm_sync_mode:
             # Create the VM
             # TODO does not save because the cluster is not defined.
             vm = create_itop_vm(child, organization)
-            vm.save()
-            print "Added VM %s" % vm_name
+            if vm is not None:
+                vm.save()
+                print "Added VM %s" % vm_name
     if "delete" in ItopapiConfig.vcenter_vm_sync_mode:
         for vm in itop_vms:
             if vm.name not in vm_names:

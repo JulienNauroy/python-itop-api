@@ -203,6 +203,7 @@ class ItopapiPrototype(object):
         if (result['code'] == '0') and (self.instance_id is None):
             objects = result['objects']
             self.instance_id = objects[objects.keys()[0]].id
+            self.friendlyname = objects[objects.keys()[0]].friendlyname
 
         return result
 
