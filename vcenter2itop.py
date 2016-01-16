@@ -24,8 +24,8 @@ import sys
 # TODO I don't like this. Is there a more pythonic way?
 itop_os_families = None
 itop_os_versions = None
-# TODO by default consider virtual host is a farm but it could also be an hypervisor
 itop_farms = None
+itop_hypervisors = None
 
 
 # Retrieve the os family or create it if it doesn't exist
@@ -59,22 +59,28 @@ def get_os_version(os_family_id, os_version_name):
     return os_version
 
 
-# Retrieve the virtualhost (Farm) or create it if it doesn't exist
+# Retrieve the virtualhost (Hypervisor or Farm) or create it if it doesn't exist
 def get_virtualhost(virtualhost_name, organization):
     if virtualhost_name is None or virtualhost_name == "":
         virtualhost_name = "Unknown"
 
-    global itop_farms
+    global itop_farms, itop_hypervisors
     farm = itop_farms.get(virtualhost_name)
-    if farm is None:
-        farm = ItopapiFarm()
-        farm.name = virtualhost_name
-        # Set the organization
-        farm.org_id = organization.instance_id
-        farm.org_id_friendlyname = organization.friendlyname
-        farm.organization_name = organization.name
-        farm.save()
-        itop_farms[virtualhost_name] = farm
+    if farm is not None:
+        return farm
+    hypervisor = itop_hypervisors.get(virtualhost_name)
+    if hypervisor is not None:
+        return hypervisor
+    # By default, create a farm and not an hypervisor.
+    # Maybe add a configuration option somewhere
+    farm = ItopapiFarm()
+    farm.name = virtualhost_name
+    # Set the organization
+    farm.org_id = organization.instance_id
+    farm.org_id_friendlyname = organization.friendlyname
+    farm.organization_name = organization.name
+    farm.save()
+    itop_farms[virtualhost_name] = farm
     return farm
 
 
@@ -98,7 +104,7 @@ def create_itop_vm(virtual_machine, organization):
     vm.osversion_id = os_version.instance_id
     vm.osversion_id_friendlyname = os_version.friendlyname
     vm.osversion_name = os_version.name
-    # Set the virtual host (Farm)
+    # Set the virtual host (Hypervisor or Farm)
     virtualhost = get_virtualhost(None, organization) # TODO use virtual_machine.runtime.host.config.name
     vm.virtualhost_id = virtualhost.instance_id
     vm.virtualhost_id_friendlyname = virtualhost.friendlyname
@@ -198,8 +204,9 @@ def main():
     #######################
     print "Synchronizing VCenter Hosts with Itop Farms..."
     # Retrieve existing Itop Farms
-    global itop_farms
+    global itop_farms, itop_hypervisors
     itop_farms = dict((farm.name, farm) for farm in ItopapiFarm.find_all())
+    itop_hypervisors = dict((hyervisor.name, hyervisor) for hyervisor in ItopapiHypervisor.find_all())
     # Get data from VCenter
     container_view = vcenter_content.viewManager.CreateContainerView(
         vcenter_content.rootFolder, [vim.ClusterComputeResource], True) # TODO HostSystem ?
