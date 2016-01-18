@@ -45,7 +45,9 @@ class ItopapiConfig(object):
     vcenter_port = None
     vcenter_username = None
     vcenter_password = None
-    vcenter_vm_sync_mode = None
+    vcenter_cluster_sync_mode = []
+    vcenter_host_sync_mode = []
+    vcenter_vm_sync_mode = []
 
     @staticmethod
     def read_config(config_file):
@@ -138,6 +140,16 @@ class ItopapiConfig(object):
         try:
             unsecure = config_parser.get('vcenter', 'unsecure')
             ItopapiConfig.vcenter_unsecure = (unsecure.lower() == "true" or unsecure == "1")
+        except ConfigParser.NoOptionError:
+            pass
+        try:
+            host_cluster_mode = json.loads(config_parser.get('vcenter', 'cluster_sync_mode'))
+            ItopapiConfig.vcenter_cluster_sync_mode = host_cluster_mode
+        except ConfigParser.NoOptionError:
+            pass
+        try:
+            host_sync_mode = json.loads(config_parser.get('vcenter', 'host_sync_mode'))
+            ItopapiConfig.vcenter_host_sync_mode = host_sync_mode
         except ConfigParser.NoOptionError:
             pass
         try:

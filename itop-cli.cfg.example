@@ -39,5 +39,9 @@ username: admin
 password:
 # Allow unsecure HTTPS connections (e.g. with a self-signed certificate). Thanks PEP 466.
 unsecure = 0
-# Synchronization modes for VM. The list can only contain add (add VMs not found in VCenter), update and delete
-vm_sync_mode = ["add", "update", "delete"]
+# Synchronization modes for Clusters (iTop Farms). The list can only contain add (add Cluster not found in iTop), update and delete
+cluster_sync_mode = ["add", "update"]
+# Synchronization modes for Hosts (iTop Servers). The list can only contain add (add Hosts not found in iTop), update and delete
+host_sync_mode = ["add", "update"]
+# Synchronization modes for VMs. The list can only contain add (add VMs not found in iTop), update and delete
+vm_sync_mode = ["add", "update"]
