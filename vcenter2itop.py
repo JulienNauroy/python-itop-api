@@ -21,13 +21,14 @@ import atexit
 import sys
 
 
-# TODO I don't like this. Is there a more pythonic way?
+# Global variables called here and there
 itop_os_families = None
 itop_os_versions = None
 itop_farms = None
 itop_hypervisors = None
 # Link between a Host in VCenter and a Farm in iTop
 host_to_farm = {}
+
 
 # Retrieve the os family or create it if it doesn't exist
 def get_os_family(os_family_name):
@@ -85,111 +86,138 @@ def get_virtualhost(virtualhost_name, organization):
     return farm
 
 
-def create_itop_farm(cluster, organization):
+# Fill data of a VCenter's Cluster into an ItopapiFarm instance
+# Return true if anything changed, else return false
+def get_farm_params(itop_farm, vcenter_cluster, organization):
     # Retrieve the relevant information from the cluster
 
-    # Create the ItopapiFarm instance
-    farm = ItopapiFarm()
+    # Recall if there was a change in the params
+    has_changed = False
     # Set the organization
-    farm.org_id = organization.instance_id
-    farm.org_id_friendlyname = organization.friendlyname
-    farm.organization_name = organization.name
-    # TODO where to get the ESXi version installed?
+    if itop_farm.org_id != organization.instance_id:
+        has_changed = True
+        itop_farm.org_id = organization.instance_id
+        itop_farm.org_id_friendlyname = organization.friendlyname
+        itop_farm.organization_name = organization.name
     # Set other fields
-    farm.name = cluster.name
-    # farm.status = "production"
-    return farm
+    if itop_farm.name != vcenter_cluster.name:
+        has_changed = True
+        itop_farm.name = vcenter_cluster.name
+        # farm.status = "production"
+    return has_changed
 
 
-def create_itop_server(host, organization):
+# Fill data of a VCenter's Host into an ItopapiServer instance
+# Return true if anything changed, else return false
+def get_server_params(itop_server, vcenter_host, organization):
     # Retrieve the relevant information from the host
-    config = host.summary.config
-    hardware = host.hardware
+    config = vcenter_host.summary.config
+    hardware = vcenter_host.hardware
 
-    # Create the ItopapiServer
-    server = ItopapiServer()
+    # Recall if there was a change in the params
+    has_changed = False
     # Set the organization
-    server.org_id = organization.instance_id
-    server.org_id_friendlyname = organization.friendlyname
-    server.organization_name = organization.name
+    if itop_server.org_id != organization.instance_id:
+        has_changed = True
+        itop_server.org_id = organization.instance_id
+        itop_server.org_id_friendlyname = organization.friendlyname
+        itop_server.organization_name = organization.name
     # Set the OS family
     os_family = get_os_family("VMWare ESXi")
-    server.osfamily_id = os_family.instance_id
-    server.osfamily_id_friendlyname = os_family.friendlyname
-    server.osfamily_name = os_family.name
+    if itop_server.osfamily_id != os_family.instance_id:
+        has_changed = True
+        itop_server.osfamily_id = os_family.instance_id
+        itop_server.osfamily_id_friendlyname = os_family.friendlyname
+        itop_server.osfamily_name = os_family.name
     # TODO where to get the ESXi version installed?
     # Set other fields
-    server.name = host.name
-    server.cpu = hardware.cpuInfo.numCpuCores # or numCpuThreads
-    server.ram = hardware.memorySize / 1048576
-    # TODO summary.hardware.vendor and summary.hardware.model for brand and model
-    # server.status = "production"
-    return server
+    if itop_server.name != vcenter_host.name \
+            or int(itop_server.cpu) !=int( hardware.cpuInfo.numCpuCores) \
+            or int(itop_server.ram) != int(hardware.memorySize / 1048576):
+        has_changed = True
+        itop_server.name = vcenter_host.name
+        itop_server.cpu = int(hardware.cpuInfo.numCpuCores) # or numCpuThreads
+        itop_server.ram = int(hardware.memorySize / 1048576)
+        # TODO summary.hardware.vendor and summary.hardware.model for brand and model
+        # server.status = "production"
+    return has_changed
 
 
-def create_itop_hypervisor(server):
+# Set params of an ItoapiHypervisor using data from the ItopapiServer.
+# By convention, the hypervisor will have the same name.
+def get_hypervisor_params(itop_hypervisor, itop_server):
     global host_to_farm
-    # Create the ItopapiHypervisor
-    hypervisor = ItopapiHypervisor()
     # Set the organization. Same at the server's one
-    hypervisor.org_id = server.org_id
-    hypervisor.org_id_friendlyname = server.friendlyname
-    hypervisor.organization_name = server.name
+    itop_hypervisor.org_id = itop_server.org_id
+    itop_hypervisor.org_id_friendlyname = itop_server.friendlyname
+    itop_hypervisor.organization_name = itop_server.name
     # Set the server
-    hypervisor.server_id = server.instance_id
-    hypervisor.server_id_friendlyname = server.friendlyname
-    hypervisor.server_name = server.name
+    itop_hypervisor.server_id = itop_server.instance_id
+    itop_hypervisor.server_id_friendlyname = itop_server.friendlyname
+    itop_hypervisor.server_name = itop_server.name
     # Set the farm if possible
-    farm = host_to_farm.get(server.name)
+    farm = host_to_farm.get(itop_server.name)
     if farm is not None:
-        hypervisor.farm_id = farm.instance_id
-        hypervisor.farm_id_friendlyname = farm.friendlyname
-        hypervisor.farm_name = farm.name
+        itop_hypervisor.farm_id = farm.instance_id
+        itop_hypervisor.farm_id_friendlyname = farm.friendlyname
+        itop_hypervisor.farm_name = farm.name
     # Set other fields
-    hypervisor.name = server.name
+    itop_hypervisor.name = itop_server.name
 
-    return hypervisor
+    return itop_hypervisor
 
 
-def create_itop_vm(virtual_machine, organization):
+# Fill data of a VCenter's VirtualMachine into an ItopapiVirtualMachine instance
+# Return true if anything changed, else return false
+def get_vm_params(itop_vm, vcenter_vm, organization):
     # Retrieve the relevant information from the virtual_machine
-    config = virtual_machine.config
-    guest = virtual_machine.guest
-
-    # Create the ItopapiVirtualMachine instance
-    vm = ItopapiVirtualMachine()
-    # Set the organization
-    vm.org_id = organization.instance_id
-    vm.org_id_friendlyname = organization.friendlyname
-    vm.organization_name = organization.name
-    # Set the OS family
+    config = vcenter_vm.config
+    guest = vcenter_vm.guest
     os_family = get_os_family(guest.guestFamily)
-    vm.osfamily_id = os_family.instance_id
-    vm.osfamily_id_friendlyname = os_family.friendlyname
-    vm.osfamily_name = os_family.name
-    # Set the OS version
-    os_version = get_os_version(vm.osfamily_id, guest.guestFullName)
-    vm.osversion_id = os_version.instance_id
-    vm.osversion_id_friendlyname = os_version.friendlyname
-    vm.osversion_name = os_version.name
-    # Set the virtual host (Hypervisor or Farm)
-    host_name = virtual_machine.runtime.host.name
+    os_version = get_os_version(itop_vm.osfamily_id, guest.guestFullName)
+    host_name = vcenter_vm.runtime.host.name
     virtualhost = get_virtualhost(host_name, organization)
-    vm.virtualhost_id = virtualhost.instance_id
-    vm.virtualhost_id_friendlyname = virtualhost.friendlyname
-    vm.virtualhost_name = virtualhost.name
+
+    # Recall if there was a change in the params
+    has_changed = itop_vm.org_id != organization.instance_id \
+                    or itop_vm.osfamily_id != os_family.instance_id \
+                    or itop_vm.osversion_id != os_version.instance_id \
+                    or itop_vm.virtualhost_id != virtualhost.instance_id
+    # Set the organization
+    itop_vm.org_id = organization.instance_id
+    itop_vm.org_id_friendlyname = organization.friendlyname
+    itop_vm.organization_name = organization.name
+    # Set the OS family
+    itop_vm.osfamily_id = os_family.instance_id
+    itop_vm.osfamily_id_friendlyname = os_family.friendlyname
+    itop_vm.osfamily_name = os_family.name
+    # Set the OS version
+    itop_vm.osversion_id = os_version.instance_id
+    itop_vm.osversion_id_friendlyname = os_version.friendlyname
+    itop_vm.osversion_name = os_version.name
+    # Set the virtual host (Hypervisor or Farm)
+    itop_vm.virtualhost_id = virtualhost.instance_id
+    itop_vm.virtualhost_id_friendlyname = virtualhost.friendlyname
+    itop_vm.virtualhost_name = virtualhost.name
 
     # Set other fields
-    # TODO check all values
-    vm.name = virtual_machine.name
-    vm.managementip = guest.ipAddress
-    # TODO vm.status => implementation, obsolete, production, stock depending on ???
-    # TODO use instanceUuid in description?
-    # TODO 'move2production', 'description'
-    vm.cpu = config.hardware.numCPU * (config.hardware.numCPU if config.hardware.numCPU else 1)
-    vm.ram = config.hardware.memoryMB
+    config_cpu = int(config.hardware.numCPU * (config.hardware.numCPU if config.hardware.numCPU else 1))
+    ip_address = guest.ipAddress if guest.ipAddress is not None else ""
 
-    return vm
+    if itop_vm.name != vcenter_vm.name \
+            or itop_vm.managementip != ip_address \
+            or int(itop_vm.cpu) != config_cpu \
+            or int(itop_vm.ram) != int(config.hardware.memoryMB):
+        has_changed = True
+        itop_vm.name = vcenter_vm.name
+        itop_vm.managementip = ip_address
+        # TODO vm.status => implementation, obsolete, production, stock depending on ???
+        # TODO use instanceUuid in description?
+        # TODO 'move2production', 'description'
+        itop_vm.cpu = config_cpu
+        itop_vm.ram = config.hardware.memoryMB
+
+    return has_changed
 
 
 def main():
@@ -291,30 +319,43 @@ def main():
     # vim.ResourcePool, vim.ComputeResource, vim.ClusterComputeResource, vim.
     container_view = vcenter_content.viewManager.CreateContainerView(
         vcenter_content.rootFolder, [vim.ClusterComputeResource], True)
-    children = container_view.view
-    for child in children:
-        cluster_name = child.name
+    for vcenter_cluster in container_view.view:
+        cluster_name = vcenter_cluster.name
         cluster_names.add(cluster_name)
         itop_farm = itop_farms.get(cluster_name)
         if itop_farm is not None:
             if "update" in ItopapiConfig.vcenter_cluster_sync_mode:
-                # TODO Update cluster
-                print "Updated cluster %s" % cluster_name
+                has_changed = get_farm_params(itop_farm, vcenter_cluster, organization)
+                if has_changed:
+                    ret = itop_farm.save()
+                    if ret['code'] == 0:
+                        print "Updated cluster %s" % cluster_name
+                    else:
+                        print "ERROR: cluster %s could not be updated. Check the return code below." % cluster_name
+                        print ret
         elif "add" in ItopapiConfig.vcenter_cluster_sync_mode:
-            # Create the Farm
-            itop_farm = create_itop_farm(child, organization)
-            if itop_farm is not None:
-                itop_farm.save()
+            itop_farm = ItopapiFarm()
+            get_farm_params(itop_farm, vcenter_cluster, organization)
+            ret = itop_farm.save()
+            if ret['code'] == 0:
                 print "Added cluster %s" % cluster_name
+            else:
+                print "ERROR: cluster %s could not be added. Check the return code below." % cluster_name
+                print ret
+
         # Fill the host_to_farm dict with this cluster's hosts
-        for host in child.host:
+        for host in vcenter_cluster.host:
             host_to_farm[host.name] = itop_farm
     if "delete" in ItopapiConfig.vcenter_cluster_sync_mode:
         for farm_name in itop_farms.keys():
             if farm_name not in cluster_names:
-                itop_farms[farm_name].delete()
+                ret = itop_farms[farm_name].delete()
                 itop_farms.pop(farm_name)
-                print "Deleted cluster %s" % farm_name
+                if ret['code'] == 0:
+                    print "Deleted cluster %s" % farm_name
+                else:
+                    print "ERROR: cluster %s could not be deleted. Check the return code below." % farm_name
+                    print ret
 
     #######################
     #  Synchronize Hosts  #
@@ -326,29 +367,47 @@ def main():
     # Get data from VCenter
     container_view = vcenter_content.viewManager.CreateContainerView(
         vcenter_content.rootFolder, [vim.HostSystem], True)
-    children = container_view.view
-    for child in children:
-        host_name = child.name
+    for vcenter_host in container_view.view:
+        host_name = vcenter_host.name
         host_names.add(host_name)
         itop_server = itop_servers.get(host_name)
         if itop_server is not None:
             if "update" in ItopapiConfig.vcenter_host_sync_mode:
-                # TODO Update server
-                print "Updated server %s" % host_name
+                has_changed = get_server_params(itop_server, vcenter_host, organization)
+                if has_changed:
+                    ret = itop_server.save()
+                    if ret['code'] == 0:
+                        print "Updated server %s" % host_name
+                    else:
+                        print "ERROR: server %s could not be updated. Check the return code below." % host_name
+                        print ret
         elif "add" in ItopapiConfig.vcenter_host_sync_mode:
-            # Create the Server and Hyervisor
-            server = create_itop_server(child, organization)
-            if server is not None:
-                server.save()
-                hypervisor = create_itop_hypervisor(server)
-                hypervisor.save()
-                print "Added server %s" % host_name
+            # Create the Server and Hypervisor
+            itop_server = ItopapiServer()
+            get_server_params(itop_server, vcenter_host, organization)
+            ret = itop_server.save()
+            if ret['code'] == 0:
+                itop_hypervisor = ItopapiHypervisor()
+                get_hypervisor_params(itop_hypervisor, itop_server)
+                ret = itop_hypervisor.save()
+                if ret['code'] == 0:
+                    print "Added server %s" % host_name
+                else:
+                    print "ERROR: hypervisor %s could not be created. Check the return code below." % host_name
+            else:
+                print "ERROR: server %s could not be created. Check the return code below." % host_name
+                print ret
     if "delete" in ItopapiConfig.vcenter_host_sync_mode:
         for server_name in itop_servers.keys():
             if server_name not in host_names:
-                itop_servers[server_name].delete()
+                ret = itop_servers[server_name].delete()
                 itop_servers.pop(server_name)
-                print "Deleted server %s" % server_name
+                if ret['code'] == 0:
+                    print "Deleted server %s" % server_name
+                else:
+                    print "ERROR: server %s could not be deleted. Check the return code below." % server_name
+                    print ret
+
 
     #####################
     #  Synchronize VMS  #
@@ -360,31 +419,42 @@ def main():
     # Get data from VCenter
     container_view = vcenter_content.viewManager.CreateContainerView(
         vcenter_content.rootFolder, [vim.VirtualMachine], True)
-    children = container_view.view
-    for child in children:
+    for vcenter_vm in container_view.view:
         # Do not take templates into consideration
-        if child.config.template:
+        if vcenter_vm.config.template:
             continue
 
-        vm_name = child.name
+        vm_name = vcenter_vm.name
         vm_names.add(vm_name)
         itop_vm = itop_vms.get(vm_name)
         if itop_vm is not None:
             if "update" in ItopapiConfig.vcenter_vm_sync_mode:
-                # TODO Update VM
-                print "Updated VM %s" % vm_name
+                has_changed = get_vm_params(itop_vm, vcenter_vm, organization)
+                if has_changed:
+                    ret = itop_vm.save()
+                    if ret['code'] == 0:
+                        print "Updated VM %s" % vm_name
+                    else:
+                        print "ERROR: VM %s could not be updated. Check the return code below." % vm_name
+                        print ret
         elif "add" in ItopapiConfig.vcenter_vm_sync_mode:
-            # Create the VM
-            # TODO does not save because the cluster is not defined.
-            vm = create_itop_vm(child, organization)
-            if vm is not None:
-                vm.save()
+            itop_vm = ItopapiVirtualMachine()
+            get_vm_params(itop_vm, vcenter_vm, organization)
+            ret = itop_vm.save()
+            if ret['code'] == 0:
                 print "Added VM %s" % vm_name
+            else:
+                print "ERROR: VM %s could not be created. Check the return code below." % vm_name
+                print ret
     if "delete" in ItopapiConfig.vcenter_vm_sync_mode:
         for vm_name in itop_vms.keys():
             if vm_name not in vm_names:
-                itop_vms[vm_name].delete()
-                print "Deleted VM %s" % vm_name
+                ret = itop_vms[vm_name].delete()
+                if ret['code'] == 0:
+                    print "Deleted VM %s" % vm_name
+                else:
+                    print "ERROR: VM %s could not be deleted. Check the return code below." % vm_name
+                    print ret
 
     return 0
 
