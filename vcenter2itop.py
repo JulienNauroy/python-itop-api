@@ -26,6 +26,8 @@ itop_os_families = None
 itop_os_versions = None
 itop_farms = None
 itop_hypervisors = None
+itop_brands = None
+itop_models = None
 # Link between a Host in VCenter and a Farm in iTop
 host_to_farm = {}
 
@@ -46,19 +48,58 @@ def get_os_family(os_family_name):
 
 
 # Retrieve the os version or create it if it doesn't exist
-def get_os_version(os_family_id, os_version_name):
+def get_os_version(os_family, os_version_name):
     if os_version_name is None or os_version_name == "":
         os_version_name = "Unknown"
 
     global itop_os_versions
-    os_version = itop_os_versions.get((os_family_id, os_version_name))
+    os_version = itop_os_versions.get((os_family.instance_id, os_version_name))
     if os_version is None:
         os_version = ItopapiOSVersion()
         os_version.name = os_version_name
-        os_version.osfamily_id = os_family_id
-        os_version.save()
-        itop_os_families[(os_family_id, os_version_name)] = os_version
+        os_version.osfamily_id = os_family.instance_id
+        os_version.osfamily_name = os_family.name
+        os_version.osfamily_id_friendlyname = os_family.friendlyname
+        ret = os_version.save()
+        if ret['code'] != 0:
+            print ret
+            exit(0)
+        itop_os_versions[(os_family.instance_id, os_version.name)] = os_version
     return os_version
+
+
+# Retrieve the brand or create it if it doesn't exist
+def get_brand(brand_name):
+    if brand_name is None or brand_name == "":
+        brand_name = "Unknown"
+
+    global itop_brands
+    itop_brand = itop_brands.get(brand_name)
+    if itop_brand is None:
+        itop_brand = ItopapiBrand()
+        itop_brand.name = brand_name
+        itop_brand.save()
+        itop_brands[brand_name] = itop_brand
+    return itop_brand
+
+
+# Retrieve the model or create it if it doesn't exist
+def get_model(brand, model_name, model_type):
+    if model_name is None or model_name == "":
+        model_name = "Unknown"
+
+    global itop_models
+    itop_model = itop_models.get((brand.instance_id, model_name))
+    if itop_model is None:
+        itop_model = ItopapiModel()
+        itop_model.name = model_name
+        itop_model.type = model_type
+        itop_model.brand_id = brand.instance_id
+        itop_model.brand_id_friendlyname = brand.friendlyname
+        itop_model.brand_name = brand.name
+        print itop_model.save()
+        itop_models[(brand.instance_id, model_name)] = itop_model
+    return itop_model
 
 
 # Retrieve the virtualhost (Hypervisor or Farm) or create it if it doesn't exist
@@ -111,7 +152,8 @@ def get_farm_params(itop_farm, vcenter_cluster, organization):
 # Return true if anything changed, else return false
 def get_server_params(itop_server, vcenter_host, organization):
     # Retrieve the relevant information from the host
-    config = vcenter_host.summary.config
+    summary = vcenter_host.summary
+    # config = summary.config
     hardware = vcenter_host.hardware
 
     # Recall if there was a change in the params
@@ -129,6 +171,20 @@ def get_server_params(itop_server, vcenter_host, organization):
         itop_server.osfamily_id = os_family.instance_id
         itop_server.osfamily_id_friendlyname = os_family.friendlyname
         itop_server.osfamily_name = os_family.name
+    # Set the brand
+    itop_brand = get_brand(summary.hardware.vendor)
+    if itop_server.brand_id != itop_brand.instance_id:
+        has_changed = True
+        itop_server.brand_id = itop_brand.instance_id
+        itop_server.brand_id_friendlyname = itop_brand.friendlyname
+        itop_server.brand_name = itop_brand.name
+    # Set the model
+    itop_model = get_model(itop_brand, summary.hardware.model, "Server")
+    if itop_server.model_id != itop_model.instance_id:
+        has_changed = True
+        itop_server.model_id = itop_model.instance_id
+        itop_server.model_id_friendlyname = itop_model.friendlyname
+        itop_server.model_name = itop_model.name
     # TODO where to get the ESXi version installed?
     # Set other fields
     if itop_server.name != vcenter_host.name \
@@ -138,7 +194,6 @@ def get_server_params(itop_server, vcenter_host, organization):
         itop_server.name = vcenter_host.name
         itop_server.cpu = int(hardware.cpuInfo.numCpuCores) # or numCpuThreads
         itop_server.ram = int(hardware.memorySize / 1048576)
-        # TODO summary.hardware.vendor and summary.hardware.model for brand and model
         # server.status = "production"
     return has_changed
 
@@ -174,7 +229,7 @@ def get_vm_params(itop_vm, vcenter_vm, organization):
     config = vcenter_vm.config
     guest = vcenter_vm.guest
     os_family = get_os_family(guest.guestFamily)
-    os_version = get_os_version(itop_vm.osfamily_id, guest.guestFullName)
+    os_version = get_os_version(os_family, guest.guestFullName)
     host_name = vcenter_vm.runtime.host.name
     virtualhost = get_virtualhost(host_name, organization)
 
@@ -225,7 +280,7 @@ def main():
     Main function
     """
 
-    global itop_farms, itop_hypervisors, host_to_farm
+    global itop_farms, itop_hypervisors, host_to_farm, itop_brands, itop_models, itop_os_families, itop_os_versions
 
     ######################################
     # Load Itop & pyvmomi configuration #
@@ -266,13 +321,6 @@ def main():
             print "Error: Default organization \"{}\"not found".format(ItopapiConfig.vcenter_vm_sync_mode)
             exit(1)
 
-    controller = ItopapiController()
-
-    # First get the OS families and versions
-    global itop_os_families, itop_os_versions
-    itop_os_families = dict((os_family.name, os_family) for os_family in ItopapiOSFamily.find_all())
-    itop_os_versions = dict(((os_version.osfamily_id, os_version.name), os_version) for os_version in ItopapiOSVersion.find_all())
-
     ###############################
     #    Connection to VCenter    #
     ###############################
@@ -307,6 +355,10 @@ def main():
     itop_hypervisors = dict((hypervisor.name, hypervisor) for hypervisor in ItopapiHypervisor.find_all())
     itop_vms = dict((vm.name, vm) for vm in ItopapiVirtualMachine.find_all())
     itop_servers = dict((server.name, server) for server in ItopapiServer.find_all())
+    itop_os_families = dict((os_family.name, os_family) for os_family in ItopapiOSFamily.find_all())
+    itop_os_versions = dict(((os_version.osfamily_id, os_version.name), os_version) for os_version in ItopapiOSVersion.find_all())
+    itop_brands = dict((brand.name, brand) for brand in ItopapiBrand.find_all())
+    itop_models = dict(((model.brand_id, model.name), model) for model in ItopapiModel.find({"type": "Server"}))
 
     ##########################
     #  Synchronize Clusters  #
