@@ -18,7 +18,34 @@ from pyVmomi import vim
 import ssl
 import getpass
 import atexit
-import sys
+import json
+
+# TODO a bug remains when creating a new OS Version ?!?
+
+
+# Helper function to cleanup everything the script is supposed to add
+# Do not use it in a mixed configuration
+def cleanup():
+    for x in ItopapiVirtualMachine.find_all():
+        x.delete()
+    for x in ItopapiHypervisor.find_all():
+        x.delete()
+    for x in ItopapiServer.find_all():
+        x.delete()
+    for x in ItopapiModel.find_all():
+        x.delete()
+    for x in ItopapiBrand.find_all():
+        x.delete()
+    for x in ItopapiOSVersion.find_all():
+        x.delete()
+    for x in ItopapiOSFamily.find_all():
+        x.delete()
+    exit(0)
+
+
+# Helper function to get read of None values
+def xstr(s):
+    return u'' if s is None else (s if type(s) is unicode else unicode(s, "utf-8"))
 
 
 # Global variables called here and there
@@ -34,7 +61,7 @@ host_to_farm = {}
 
 # Retrieve the os family or create it if it doesn't exist
 def get_os_family(os_family_name):
-    if os_family_name is None or os_family_name == "":
+    if xstr(os_family_name) == "":
         os_family_name = "Unknown"
 
     global itop_os_families
@@ -49,7 +76,7 @@ def get_os_family(os_family_name):
 
 # Retrieve the os version or create it if it doesn't exist
 def get_os_version(os_family, os_version_name):
-    if os_version_name is None or os_version_name == "":
+    if xstr(os_version_name) == "":
         os_version_name = "Unknown"
 
     global itop_os_versions
@@ -61,16 +88,13 @@ def get_os_version(os_family, os_version_name):
         os_version.osfamily_name = os_family.name
         os_version.osfamily_id_friendlyname = os_family.friendlyname
         ret = os_version.save()
-        if ret['code'] != 0:
-            print ret
-            exit(0)
         itop_os_versions[(os_family.instance_id, os_version.name)] = os_version
     return os_version
 
 
 # Retrieve the brand or create it if it doesn't exist
 def get_brand(brand_name):
-    if brand_name is None or brand_name == "":
+    if xstr(brand_name) == "":
         brand_name = "Unknown"
 
     global itop_brands
@@ -85,7 +109,7 @@ def get_brand(brand_name):
 
 # Retrieve the model or create it if it doesn't exist
 def get_model(brand, model_name, model_type):
-    if model_name is None or model_name == "":
+    if xstr(model_name) == "":
         model_name = "Unknown"
 
     global itop_models
@@ -97,14 +121,14 @@ def get_model(brand, model_name, model_type):
         itop_model.brand_id = brand.instance_id
         itop_model.brand_id_friendlyname = brand.friendlyname
         itop_model.brand_name = brand.name
-        print itop_model.save()
+        itop_model.save()
         itop_models[(brand.instance_id, model_name)] = itop_model
     return itop_model
 
 
 # Retrieve the virtualhost (Hypervisor or Farm) or create it if it doesn't exist
 def get_virtualhost(virtualhost_name, organization):
-    if virtualhost_name is None or virtualhost_name == "":
+    if xstr(virtualhost_name) == "":
         virtualhost_name = "Unknown"
 
     global itop_farms, itop_hypervisors
@@ -155,9 +179,15 @@ def get_server_params(itop_server, vcenter_host, organization):
     summary = vcenter_host.summary
     # config = summary.config
     hardware = vcenter_host.hardware
+    product = vcenter_host.config.product
 
     # Recall if there was a change in the params
     has_changed = False
+    # Set the management IP
+    management_ip = xstr(summary.managementServerIp)
+    if itop_server.managementip != management_ip:
+        has_changed = True
+        itop_server.managementip = management_ip
     # Set the organization
     if itop_server.org_id != organization.instance_id:
         has_changed = True
@@ -165,12 +195,19 @@ def get_server_params(itop_server, vcenter_host, organization):
         itop_server.org_id_friendlyname = organization.friendlyname
         itop_server.organization_name = organization.name
     # Set the OS family
-    os_family = get_os_family("VMWare ESXi")
+    os_family = get_os_family(product.name)
     if itop_server.osfamily_id != os_family.instance_id:
         has_changed = True
         itop_server.osfamily_id = os_family.instance_id
         itop_server.osfamily_id_friendlyname = os_family.friendlyname
         itop_server.osfamily_name = os_family.name
+    # Set the OS version
+    os_version = get_os_version(os_family, product.fullName)
+    if itop_server.osversion_id != os_version.instance_id:
+        has_changed = True
+        itop_server.osversion_id = os_version.instance_id
+        itop_server.osversion_id_friendlyname = os_version.friendlyname
+        itop_server.osversion_name = os_version.name
     # Set the brand
     itop_brand = get_brand(summary.hardware.vendor)
     if itop_server.brand_id != itop_brand.instance_id:
@@ -187,14 +224,15 @@ def get_server_params(itop_server, vcenter_host, organization):
         itop_server.model_name = itop_model.name
     # TODO where to get the ESXi version installed?
     # Set other fields
+    cpu_count = int(hardware.cpuInfo.numCpuCores * hardware.cpuInfo.numCpuPackages)
     if itop_server.name != vcenter_host.name \
-            or int(itop_server.cpu) !=int( hardware.cpuInfo.numCpuCores) \
+            or int(itop_server.cpu) != cpu_count \
             or int(itop_server.ram) != int(hardware.memorySize / 1048576):
         has_changed = True
         itop_server.name = vcenter_host.name
-        itop_server.cpu = int(hardware.cpuInfo.numCpuCores) # or numCpuThreads
+        itop_server.cpu = cpu_count
         itop_server.ram = int(hardware.memorySize / 1048576)
-        # server.status = "production"
+
     return has_changed
 
 
@@ -256,8 +294,8 @@ def get_vm_params(itop_vm, vcenter_vm, organization):
     itop_vm.virtualhost_name = virtualhost.name
 
     # Set other fields
-    config_cpu = int(config.hardware.numCPU * (config.hardware.numCPU if config.hardware.numCPU else 1))
-    ip_address = guest.ipAddress if guest.ipAddress is not None else ""
+    config_cpu = int(config.hardware.numCPU)
+    ip_address = xstr(guest.ipAddress)
 
     if itop_vm.name != vcenter_vm.name \
             or itop_vm.managementip != ip_address \
@@ -266,11 +304,25 @@ def get_vm_params(itop_vm, vcenter_vm, organization):
         has_changed = True
         itop_vm.name = vcenter_vm.name
         itop_vm.managementip = ip_address
-        # TODO vm.status => implementation, obsolete, production, stock depending on ???
-        # TODO use instanceUuid in description?
-        # TODO 'move2production', 'description'
         itop_vm.cpu = config_cpu
         itop_vm.ram = config.hardware.memoryMB
+
+    # Set extra values as a JSON array inside the description field
+    current_desc = {}
+    try:
+        current_desc = json.loads(xstr(itop_vm.description))
+    except ValueError as e:
+        pass
+    vcenter_hostname = xstr(vcenter_vm.guest.hostName)
+    if xstr(current_desc.get("hostname")) != vcenter_hostname:
+        has_changed = True
+        current_desc['hostname'] = vcenter_hostname
+    vcenter_annotation = xstr(vcenter_vm.config.annotation)
+    if xstr(current_desc.get("annotation")) != vcenter_annotation:
+        has_changed = True
+        current_desc['annotation'] = vcenter_annotation
+
+    itop_vm.description = json.dumps(current_desc)
 
     return has_changed
 
@@ -327,10 +379,11 @@ def main():
     ssl_context = None
     if ItopapiConfig.vcenter_unsecure:
         ssl_context = ssl._create_unverified_context()
+
     vcenter_content = None
 
     try:
-        if ItopapiConfig.vcenter_password is None or ItopapiConfig.vcenter_password == "":
+        if xstr(ItopapiConfig.vcenter_password) == "":
             ItopapiConfig.vcenter_password = getpass.getpass()
         service_instance = connect.SmartConnect(sslContext=ssl_context,
                                                 host=ItopapiConfig.vcenter_host,
