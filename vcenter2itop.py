@@ -2,8 +2,8 @@
 # -*- coding: utf8 -*-fr
 # pylint: disable=invalid-name
 """
-vcenter2itop is a basic CLI interface to export vcenter data into itop.
-uses pyvmomi
+vcenter2itop is a basic CLI interface to export vcenter data into iTop.
+requires pyVmomi
 """
 
 __version__ = '1.0'
@@ -20,27 +20,32 @@ import getpass
 import atexit
 import json
 
-# TODO a bug remains when creating a new OS Version ?!?
-
 
 # Helper function to cleanup everything the script is supposed to add
 # Do not use it in a mixed configuration
 def cleanup():
+    print "Deleting all virtual machines"
     for x in ItopapiVirtualMachine.find_all():
         x.delete()
+    print "Deleting all hypervisors"
     for x in ItopapiHypervisor.find_all():
         x.delete()
+    print "Deleting all servers"
     for x in ItopapiServer.find_all():
         x.delete()
+    print "Deleting all models"
     for x in ItopapiModel.find_all():
         x.delete()
+    print "Deleting all brands"
     for x in ItopapiBrand.find_all():
         x.delete()
+    print "Deleting all OS versions"
     for x in ItopapiOSVersion.find_all():
         x.delete()
+    print "Deleting all OS families"
     for x in ItopapiOSFamily.find_all():
         x.delete()
-    exit(0)
+    print "All done"
 
 
 # Helper function to get read of None values
@@ -89,6 +94,7 @@ def get_os_version(os_family, os_version_name):
         os_version.osfamily_id_friendlyname = os_family.friendlyname
         ret = os_version.save()
         itop_os_versions[(os_family.instance_id, os_version.name)] = os_version
+        # print "Added new OS version %s" % os_version_name
     return os_version
 
 
@@ -102,8 +108,9 @@ def get_brand(brand_name):
     if itop_brand is None:
         itop_brand = ItopapiBrand()
         itop_brand.name = brand_name
-        itop_brand.save()
+        ret = itop_brand.save()
         itop_brands[brand_name] = itop_brand
+        # print "Added new brand %s" % brand_name
     return itop_brand
 
 
@@ -132,12 +139,19 @@ def get_virtualhost(virtualhost_name, organization):
         virtualhost_name = "Unknown"
 
     global itop_farms, itop_hypervisors
+    # Check if the virtualhost is a farm (shouldn't be directly)
     farm = itop_farms.get(virtualhost_name)
     if farm is not None:
         return farm
+    # Check if the virtualhost is an hypervisor
     hypervisor = itop_hypervisors.get(virtualhost_name)
     if hypervisor is not None:
-        return hypervisor
+        # If the hypervisor is within a farm, then return the farm
+        farm = itop_farms.get(hypervisor.farm_name)
+        if farm is not None:
+            return farm
+        else:
+            return hypervisor
     # By default, create a farm and not an hypervisor.
     # Maybe add a configuration option somewhere
     farm = ItopapiFarm()
@@ -222,7 +236,6 @@ def get_server_params(itop_server, vcenter_host, organization):
         itop_server.model_id = itop_model.instance_id
         itop_server.model_id_friendlyname = itop_model.friendlyname
         itop_server.model_name = itop_model.name
-    # TODO where to get the ESXi version installed?
     # Set other fields
     cpu_count = int(hardware.cpuInfo.numCpuCores * hardware.cpuInfo.numCpuPackages)
     if itop_server.name != vcenter_host.name \
@@ -266,8 +279,10 @@ def get_vm_params(itop_vm, vcenter_vm, organization):
     # Retrieve the relevant information from the virtual_machine
     config = vcenter_vm.config
     guest = vcenter_vm.guest
-    os_family = get_os_family(guest.guestFamily)
-    os_version = get_os_version(os_family, guest.guestFullName)
+
+    summary_config = vcenter_vm.summary.config
+    os_family = get_os_family(summary_config.guestId)
+    os_version = get_os_version(os_family, summary_config.guestFullName)
     host_name = vcenter_vm.runtime.host.name
     virtualhost = get_virtualhost(host_name, organization)
 
@@ -381,7 +396,6 @@ def main():
         ssl_context = ssl._create_unverified_context()
 
     vcenter_content = None
-
     try:
         if xstr(ItopapiConfig.vcenter_password) == "":
             ItopapiConfig.vcenter_password = getpass.getpass()
@@ -390,14 +404,13 @@ def main():
                                                 user=ItopapiConfig.vcenter_username,
                                                 pwd=ItopapiConfig.vcenter_password,
                                                 port=ItopapiConfig.vcenter_port)
-
         atexit.register(connect.Disconnect, service_instance)
-
         vcenter_content = service_instance.RetrieveContent()
-
     except vmodl.MethodFault as error:
         print("Caught vmodl fault : " + error.msg)
         return -1
+
+    # cleanup()
 
     ########################
     #  Get data from Itop  #
@@ -492,10 +505,12 @@ def main():
             get_server_params(itop_server, vcenter_host, organization)
             ret = itop_server.save()
             if ret['code'] == 0:
+                itop_servers[itop_server.name] = itop_server
                 itop_hypervisor = ItopapiHypervisor()
                 get_hypervisor_params(itop_hypervisor, itop_server)
                 ret = itop_hypervisor.save()
                 if ret['code'] == 0:
+                    itop_hypervisors[itop_hypervisor.name] = itop_hypervisor
                     print "Added server %s" % host_name
                 else:
                     print "ERROR: hypervisor %s could not be created. Check the return code below." % host_name
@@ -547,6 +562,7 @@ def main():
             get_vm_params(itop_vm, vcenter_vm, organization)
             ret = itop_vm.save()
             if ret['code'] == 0:
+                itop_vms[itop_vm.name] = itop_vm
                 print "Added VM %s" % vm_name
             else:
                 print "ERROR: VM %s could not be created. Check the return code below." % vm_name
