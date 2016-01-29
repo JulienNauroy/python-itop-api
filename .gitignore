@@ -1,6 +1,6 @@
 .idea
 *.pyc
-itop-cli.cfg
+python-itop-api.cfg
 MANIFEST
 dist
 build

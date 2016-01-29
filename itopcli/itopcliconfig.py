@@ -61,7 +61,7 @@ def load_configuration_cli():
     # CLI specific argument #
     #########################
     cli_group = parser.add_argument_group('cli')
-    cli_group.add_argument('--config', dest='config_file', default='./itop-cli.cfg',
+    cli_group.add_argument('--config', dest='config_file', default='./python-itop-api.cfg',
                            help='configuration file CLI must use'
                                 ' (default = %(default)s)')
     cli_group.add_argument('--classes', dest='classes', nargs='*', metavar='ITOP-CLASS',

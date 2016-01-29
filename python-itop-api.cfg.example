@@ -1,4 +1,4 @@
-# This is an example configuration file. copy or rename it to 'itop-cli.cfg' and edit the values.
+# This is an example configuration file. copy or rename it to 'python-itop-api.cfg' and edit the values.
 # At least hostname, username and password will have to be changed.
 # Make sure to leave 'form' as an allowed login type within Itop's configuration.
 [main]
