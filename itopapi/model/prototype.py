@@ -9,7 +9,7 @@ import json
 from itopapi.itopapiconfig import ItopapiConfig
 
 __version__ = '1.0'
-__authors__ = ['Guillaume Philippon <guillaume.philippon@lal.in2p3.fr>']
+__authors__ = ['Guillaume Philippon <guillaume.philippon@lal.in2p3.fr>', 'Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
 class UnknownItopClass(Exception):

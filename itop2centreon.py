@@ -6,7 +6,7 @@ itop2centreon is a basic CLI interface to export itop data into centreon
 """
 
 __version__ = '1.0'
-__authors__ = ['Julien Nauroy <julien.nauroy@u-psud.Fr>']
+__authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 from itopapi import ItopapiController, ItopapiConfig, UnsupportedImportFormat
 from itopcli import load_configuration_cli, ItopcliConfig, NeedMoreArgs
