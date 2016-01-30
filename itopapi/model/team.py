@@ -12,7 +12,7 @@ __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 class ItopapiTeam(ItopapiPrototype):
     """
-    ItopapiTeam is a object that represents a Team from iTop
+    ItopapiTeam is an object that represents a Team from iTop
     """
 
     """ Configuration specific to itop """

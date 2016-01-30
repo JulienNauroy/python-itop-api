@@ -13,7 +13,7 @@ __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 class ItopapiOtherSoftware(ItopapiPrototype):
     """
-    ItopapiOtherSoftware is a object that represents a OtherSoftware from iTop
+    ItopapiOtherSoftware is an object that represents a OtherSoftware from iTop
     """
 
     """ Configuration specific to itop """

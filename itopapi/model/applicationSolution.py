@@ -42,7 +42,7 @@ class ItopapiApplicationSolution(ItopapiPrototype):
         return ItopapiPrototype.find_all(ItopapiApplicationSolution)
 
     """
-    ItopapiApplicationSolution is a object that represents an Application Solution from iTop
+    ItopapiApplicationSolution is an object that represents an Application Solution from iTop
     """
     def __init__(self, data=None):
         super(ItopapiApplicationSolution, self).__init__(data)

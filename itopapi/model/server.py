@@ -12,7 +12,7 @@ __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 class ItopapiServer(ItopapiPrototype):
     """
-    ItopapiServers is a object that represents a Servers from iTop
+    ItopapiServers is an object that represents a Servers from iTop
     """
 
     # Configuration specific to itop

@@ -13,7 +13,7 @@ __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 class ItopapiDBServer(ItopapiOtherSoftware):
     """
-    ItopapiDBServer is a object that represents a DBServer from iTop
+    ItopapiDBServer is an object that represents a DBServer from iTop
     It has the same attributes as ItopapiOtherSoftware
     """
 

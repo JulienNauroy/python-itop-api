@@ -13,7 +13,7 @@ __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 class ItopapiWebApplication(ItopapiPrototype):
     """
-    ItopapiWebApplication is a object that represents a WebApplication from iTop
+    ItopapiWebApplication is an object that represents a WebApplication from iTop
     """
 
     # Configuration specific to itop

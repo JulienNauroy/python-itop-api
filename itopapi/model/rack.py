@@ -12,7 +12,7 @@ __authors__ = ['Guillaume Philippon <guillaume.philippon@lal.in2p3.fr>', 'Julien
 
 class ItopapiRack(ItopapiPrototype):
     """
-    ItopapiRack is a object that represents a Rack from iTop
+    ItopapiRack is an object that represents a Rack from iTop
     """
 
     """ Configuration specific to itop """
