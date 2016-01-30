@@ -5,12 +5,13 @@ ItopapiService is a abstraction of Service representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype
+from itopapi.model.features.hasOrganization import HasOrganization
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiService(ItopapiPrototype):
+class ItopapiService(ItopapiPrototype, HasOrganization):
 
     # Configuration specific to itop
     itop = {
@@ -19,8 +20,8 @@ class ItopapiService(ItopapiPrototype):
         # Define which fields to save when creating or updating from the python API
         'save': ['name', 'description', 'status'],
         'foreign_keys': [
+            HasOrganization.foreign_key,
             {'id': 'servicefamily_id', 'name': 'servicefamily_name', 'table': 'ServiceFamily'},
-            {'id': 'org_id', 'name': 'organization_name', 'table': 'Organization'},
         ],
         'list_types': {
             'functionalcis_list': 'functionalci_id_finalclass_recall',
@@ -47,10 +48,6 @@ class ItopapiService(ItopapiPrototype):
     """
     def __init__(self, data=None):
         super(ItopapiService, self).__init__(data)
-        # Note: the Organization is called "Provider" for Services
-        self.org_id = None
-        self.org_id_friendlyname = None
-        self.organization_name = None
         # Service Family
         self.servicefamily_id = None
         self.servicefamily_id_friendlyname = None
@@ -66,11 +63,3 @@ class ItopapiService(ItopapiPrototype):
         self.customercontracts_list = None
         self.providercontracts_list = None
         self.functionalcis_list = None
-
-    def find_organization(self):
-        """
-        Retrieve the ItopapiOrganization corresponding to this server
-        """
-        if self.org_id is not None:
-            return ItopapiPrototype.get_itop_class('Organization').find(self.org_id)
-        return None

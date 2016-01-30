@@ -140,29 +140,27 @@ def get_virtualhost(virtualhost_name, organization):
 
     global itop_farms, itop_hypervisors
     # Check if the virtualhost is a farm (shouldn't be directly)
-    farm = itop_farms.get(virtualhost_name)
-    if farm is not None:
-        return farm
+    itop_farm = itop_farms.get(virtualhost_name)
+    if itop_farm is not None:
+        return itop_farm
     # Check if the virtualhost is an hypervisor
     hypervisor = itop_hypervisors.get(virtualhost_name)
     if hypervisor is not None:
         # If the hypervisor is within a farm, then return the farm
-        farm = itop_farms.get(hypervisor.farm_name)
-        if farm is not None:
-            return farm
+        itop_farm = itop_farms.get(hypervisor.farm_name)
+        if itop_farm is not None:
+            return itop_farm
         else:
             return hypervisor
     # By default, create a farm and not an hypervisor.
     # Maybe add a configuration option somewhere
-    farm = ItopapiFarm()
-    farm.name = virtualhost_name
+    itop_farm = ItopapiFarm()
+    itop_farm.name = virtualhost_name
     # Set the organization
-    farm.org_id = organization.instance_id
-    farm.org_id_friendlyname = organization.friendlyname
-    farm.organization_name = organization.name
-    farm.save()
-    itop_farms[virtualhost_name] = farm
-    return farm
+    itop_farm.set_organization(organization)
+    itop_farm.save()
+    itop_farms[virtualhost_name] = itop_farm
+    return itop_farm
 
 
 # Fill data of a VCenter's Cluster into an ItopapiFarm instance
@@ -175,9 +173,7 @@ def get_farm_params(itop_farm, vcenter_cluster, organization):
     # Set the organization
     if itop_farm.org_id != organization.instance_id:
         has_changed = True
-        itop_farm.org_id = organization.instance_id
-        itop_farm.org_id_friendlyname = organization.friendlyname
-        itop_farm.organization_name = organization.name
+        itop_farm.set_organization(organization)
     # Set other fields
     if itop_farm.name != vcenter_cluster.name:
         has_changed = True
@@ -205,9 +201,7 @@ def get_server_params(itop_server, vcenter_host, organization):
     # Set the organization
     if itop_server.org_id != organization.instance_id:
         has_changed = True
-        itop_server.org_id = organization.instance_id
-        itop_server.org_id_friendlyname = organization.friendlyname
-        itop_server.organization_name = organization.name
+        itop_server.set_organization(organization)
     # Set the OS family
     os_family = get_os_family(product.name)
     if itop_server.osfamily_id != os_family.instance_id:
@@ -255,8 +249,8 @@ def get_hypervisor_params(itop_hypervisor, itop_server):
     global host_to_farm
     # Set the organization. Same at the server's one
     itop_hypervisor.org_id = itop_server.org_id
-    itop_hypervisor.org_id_friendlyname = itop_server.friendlyname
-    itop_hypervisor.organization_name = itop_server.name
+    itop_hypervisor.org_id_friendlyname = itop_server.org_id_friendlyname
+    itop_hypervisor.organization_name = itop_server.organization_name
     # Set the server
     itop_hypervisor.server_id = itop_server.instance_id
     itop_hypervisor.server_id_friendlyname = itop_server.friendlyname
@@ -292,9 +286,7 @@ def get_vm_params(itop_vm, vcenter_vm, organization):
                     or itop_vm.osversion_id != os_version.instance_id \
                     or itop_vm.virtualhost_id != virtualhost.instance_id
     # Set the organization
-    itop_vm.org_id = organization.instance_id
-    itop_vm.org_id_friendlyname = organization.friendlyname
-    itop_vm.organization_name = organization.name
+    itop_vm.set_organization(organization)
     # Set the OS family
     itop_vm.osfamily_id = os_family.instance_id
     itop_vm.osfamily_id_friendlyname = os_family.friendlyname

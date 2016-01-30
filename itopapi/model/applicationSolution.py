@@ -5,12 +5,17 @@ ItopapiApplicationSolution is a abstraction of Application Solution representati
 """
 
 from itopapi.model.prototype import ItopapiPrototype
+from itopapi.model.features.hasOrganization import HasOrganization
+
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
-""" TODO not completed and tested yet, created as a dependency of TiopapiRack """
-class ItopapiApplicationSolution(ItopapiPrototype):
+
+class ItopapiApplicationSolution(ItopapiPrototype, HasOrganization):
+    """
+    TODO not completed and tested yet, created as a dependency of TiopapiRack. Probably missing redundancy
+    """
 
     # Configuration specific to itop
     itop = {
@@ -19,6 +24,7 @@ class ItopapiApplicationSolution(ItopapiPrototype):
         # Define which fields to save when creating or updating from the python API
         'save': ['name', 'status', 'business_criticity', 'move2production', 'description'],
         'foreign_keys': [
+            HasOrganization.foreign_key,
             {'id': 'org_id', 'name': 'organization_name', 'table': 'Organization'},
         ],
         'list_types': {
@@ -49,13 +55,6 @@ class ItopapiApplicationSolution(ItopapiPrototype):
         ##################################
         #           Properties           #
         ##################################
-        # Application Solution's organization id. Call find_organization to get the full information or just use
-        #  org_id_friendlyname and organization_name
-        self.org_id = None
-        # Application Solution's organization friendly name. Not sure the difference with organization_name
-        self.org_id_friendlyname = None
-        # Application Solution's organization name
-        self.organization_name = None
         # Application Solution's status. Values within [inactive, active]
         self.status = None
         # Application Solution's business criticity. Values within [high, medium, low]
@@ -76,11 +75,3 @@ class ItopapiApplicationSolution(ItopapiPrototype):
         self.services_list = None
         self.contacts_list = None
         self.providercontracts_list = None
-
-    def find_organization(self):
-        """
-        Retrieve the parent ItopapiOrganization
-        """
-        if self.org_id is not None:
-            return ItopapiPrototype.get_itop_class('Organization').find(self.org_id)
-        return None

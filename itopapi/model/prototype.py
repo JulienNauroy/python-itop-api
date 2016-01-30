@@ -35,6 +35,7 @@ class ItopapiPrototype(object):
     itop = {'name': '', 'save': [], 'foreign_keys': [], 'list_types': {}}
 
     def __init__(self, data=None):
+        super(ItopapiPrototype, self).__init__()
         self.instance_id = None
         # Every instance should have an unique ID
         self.name = None

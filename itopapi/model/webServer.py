@@ -53,13 +53,6 @@ class ItopapiWebServer(ItopapiPrototype):
         ##################################
         # Properties/General Information #
         ##################################
-        # WebServer's organization id. Call find_organization to get the full information or just
-        #  use org_id_friendlyname and organization_name
-        self.org_id = None
-        # WebServer's organization friendly name. Not sure the difference with organization_name
-        self.org_id_friendlyname = None
-        # WebServer's organization name
-        self.organization_name = None
         # WebServer's status. Values within [implementation, obsolete, production, stock]
         self.status = None
         # WebServer's business criticity. Values within [high, medium, low]
@@ -162,14 +155,6 @@ class ItopapiWebServer(ItopapiPrototype):
         :param json_quattor: json
         """
         pass
-
-    def find_organization(self):
-        """
-        Retrieve the ItopapiOrganization related to this instance
-        """
-        if self.org_id is not None:
-            return ItopapiPrototype.get_itop_class('Organization').find(self.org_id)
-        return None
 
     def find_system(self):
         """

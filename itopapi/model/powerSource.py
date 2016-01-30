@@ -5,12 +5,13 @@ ItopapiPowerSource is a abstraction of PowerSource representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype
+from itopapi.model.features.hasOrganization import HasOrganization
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiPowerSource(ItopapiPrototype):
+class ItopapiPowerSource(ItopapiPrototype, HasOrganization):
 
     # Configuration specific to itop
     itop = {
@@ -20,7 +21,7 @@ class ItopapiPowerSource(ItopapiPrototype):
         'save': ['name', 'status', 'business_criticity', 'serialnumber', 'asset_number',
                  'move2production', 'purchase_date', 'end_of_warranty', 'description'],
         'foreign_keys': [
-            {'id': 'org_id', 'name': 'organization_name', 'table': 'Organization'},
+            HasOrganization.foreign_key,
             {'id': 'location_id', 'name': 'location_name', 'table': 'Location'},
             {'id': 'brand_id', 'name': 'brand_name', 'table': 'Brand'},
             {'id': 'model_id', 'name': 'model_name', 'table': 'Model'},
@@ -47,13 +48,6 @@ class ItopapiPowerSource(ItopapiPrototype):
     def __init__(self, data=None):
         super(ItopapiPowerSource, self).__init__(data)
 
-        # PowerSource's organization id. Call find_organization to get the full information or just
-        #  use org_id_friendlyname and organization_name
-        self.org_id = None
-        # PowerSource's organization friendly name. Not sure the difference with organization_name
-        self.org_id_friendlyname = None
-        # PowerSource's organization name
-        self.organization_name = None
         # PowerSource's status. Values within [implementation, obsolete, production, stock]
         self.status = None
         # PowerSource's business criticity. Values within [high, medium, low]
@@ -93,14 +87,6 @@ class ItopapiPowerSource(ItopapiPrototype):
         self.tickets_list = {}
         self.providercontracts_list = {}
         self.pdus_list = {}
-
-    def find_organization(self):
-        """
-        Retrieve the ItopapiOrganization corresponding to this server
-        """
-        if self.org_id is not None:
-            return ItopapiPrototype.get_itop_class('Organization').find(self.org_id)
-        return None
 
     def find_location(self):
         """

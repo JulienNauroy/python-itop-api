@@ -3,15 +3,15 @@
 """
 ItopapiOtherSoftware is a abstraction of OtherSoftware representation on iTop
 """
-# TODO represent the hierarchy of software classes: PC Software, Middleware, DB server, Web Server, Other Software
 
 from itopapi.model.prototype import ItopapiPrototype
+from itopapi.model.features.hasOrganization import HasOrganization
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiOtherSoftware(ItopapiPrototype):
+class ItopapiOtherSoftware(ItopapiPrototype, HasOrganization):
     """
     ItopapiOtherSoftware is an object that represents a OtherSoftware from iTop
     """
@@ -23,7 +23,7 @@ class ItopapiOtherSoftware(ItopapiPrototype):
         # Define which fields to save when creating or updating from the python API
         'save': ['move2production', 'description', 'status', 'name', 'business_criticity', 'path'],
         'foreign_keys': [
-            {'id': 'org_id', 'name': 'organization_name', 'table': 'Organization'},
+            HasOrganization.foreign_key,
             {'id': 'software_id', 'name': 'software_name', 'table': 'Software'},
             {'id': 'softwarelicence_id', 'name': 'softwarelicence_name', 'table': 'SoftwareLicence'},
         ],
@@ -52,13 +52,6 @@ class ItopapiOtherSoftware(ItopapiPrototype):
         ##################################
         #           Properties           #
         ##################################
-        # OtherSoftware's organization id. Call find_organization to get the full information or just
-        #  use org_id_friendlyname and organization_name
-        self.org_id = None
-        # OtherSoftware's organization friendly name. Not sure the difference with organization_name
-        self.org_id_friendlyname = None
-        # OtherSoftware's organization name
-        self.organization_name = None
         # OtherSoftware's software (good job!)
         self.software_id = None
         self.software_id_friendlyname = None
@@ -88,11 +81,3 @@ class ItopapiOtherSoftware(ItopapiPrototype):
         self.contacts_list = {}
         self.providercontracts_list = {}
         self.applicationsolution_list = {}
-
-    def find_organization(self):
-        """
-        Retrieve the ItopapiOrganization related to this instance
-        """
-        if self.org_id is not None:
-            return ItopapiPrototype.get_itop_class('Organization').find(self.org_id)
-        return None

@@ -5,12 +5,13 @@ ItopapiTeam is a abstraction of Team representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype
+from itopapi.model.features.hasOrganization import HasOrganization
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiTeam(ItopapiPrototype):
+class ItopapiTeam(ItopapiPrototype, HasOrganization):
     """
     ItopapiTeam is an object that represents a Team from iTop
     """
@@ -22,7 +23,7 @@ class ItopapiTeam(ItopapiPrototype):
         # Define which fields to save when creating or updating from the python API
         'save': ['status', 'phone', 'notify', 'name', 'function', 'email'],
         'foreign_keys': [
-            {'id': 'org_id', 'name': 'organization_name', 'table': 'Organization'},
+            HasOrganization.foreign_key,
         ],
         'list_types': {
             'persons_list': 'Person',
@@ -50,13 +51,6 @@ class ItopapiTeam(ItopapiPrototype):
         ##################################
         #           Properties           #
         ##################################
-        # Team's organization id. Call find_organization to get the full information or just use
-        # org_id_friendlyname and organization_name
-        self.org_id = None
-        # Team's organization friendly name. Not sure the difference with organization_name
-        self.org_id_friendlyname = None
-        # Team's organization name
-        self.organization_name = None
         self.status = None
         self.phone = None
         self.notify = None
@@ -68,11 +62,3 @@ class ItopapiTeam(ItopapiPrototype):
         self.cis_list = None
         self.tickets_list = None
         self.persons_list = None
-
-    def find_organization(self):
-        """
-        Retrieve the ItopapiOrganization related to this instance
-        """
-        if self.org_id is not None:
-            return ItopapiPrototype.get_itop_class('Organization').find(self.org_id)
-        return None

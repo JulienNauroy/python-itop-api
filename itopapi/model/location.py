@@ -5,12 +5,13 @@ ItopapiLocation is a abstraction of a Location representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype
+from itopapi.model.features.hasOrganization import HasOrganization
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiLocation(ItopapiPrototype):
+class ItopapiLocation(ItopapiPrototype, HasOrganization):
 
     # Configuration specific to itop
     itop = {
@@ -19,8 +20,8 @@ class ItopapiLocation(ItopapiPrototype):
         # Define which fields to save when creating or updating from the python API
         'save': ['name', 'status', 'address', 'postal_code', 'city', 'country'],
         'foreign_keys': [
-            {'id': 'org_id', 'name': 'organization_name', 'table': 'Organization'},
-        ]
+            HasOrganization.foreign_key,
+        ],
     }
 
     @staticmethod
@@ -44,13 +45,6 @@ class ItopapiLocation(ItopapiPrototype):
         super(ItopapiLocation, self).__init__(data)
         # Location's status. Values within [inactive, active]
         self.status = None
-        # Location's organization id. Call find_organization to get the full information or just
-        #  use org_id_friendlyname and organization_name
-        self.org_id = None
-        # Location's organization friendly name. Not sure the difference with organization_name
-        self.org_id_friendlyname = None
-        # Location's organization name
-        self.organization_name = None
         # Location's street address. Generally multiline
         self.address = None
         self.postal_code = None
@@ -59,12 +53,3 @@ class ItopapiLocation(ItopapiPrototype):
         # Lists
         self.person_list = {}
         self.physicaldevice_list = {}
-
-
-    def find_organization(self):
-        """
-        Retrieve the ItopapiOrganization corresponding to this server
-        """
-        if self.org_id is not None:
-            return ItopapiPrototype.get_itop_class('Organization').find(self.org_id)
-        return None

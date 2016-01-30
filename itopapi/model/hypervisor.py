@@ -5,12 +5,13 @@ ItopapiHypervisor is a abstraction of a virtual servers Hypervisor representatio
 """
 
 from itopapi.model.prototype import ItopapiPrototype
+from itopapi.model.features.hasOrganization import HasOrganization
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiHypervisor(ItopapiPrototype):
+class ItopapiHypervisor(ItopapiPrototype, HasOrganization):
 
     # Configuration specific to itop
     itop = {
@@ -19,7 +20,7 @@ class ItopapiHypervisor(ItopapiPrototype):
         # Define which fields to save when creating or updating from the python API
         'save': ['name', 'status', 'business_criticity', 'move2production', 'description'],
         'foreign_keys': [
-            {'id': 'org_id', 'name': 'organization_name', 'table': 'Organization'},
+            HasOrganization.foreign_key,
             {'id': 'server_id', 'name': 'server_name', 'table': 'Server'},
             {'id': 'farm_id', 'name': 'farm_name', 'table': 'Farm'},
         ],
@@ -47,13 +48,6 @@ class ItopapiHypervisor(ItopapiPrototype):
     """
     def __init__(self, data=None):
         super(ItopapiHypervisor, self).__init__(data)
-        # Hypervisor's organization id. Call find_organization to get the full information or just use
-        #  org_id_friendlyname and organization_name
-        self.org_id = None
-        # Hypervisor's organization friendly name. Not sure the difference with organization_name
-        self.org_id_friendlyname = None
-        # Hypervisor's organization name
-        self.organization_name = None
         # Hypervisor's status. Values within [inactive, active]
         self.status = None
         # Hypervisor's business criticity. Values within [high, medium, low]
@@ -81,12 +75,3 @@ class ItopapiHypervisor(ItopapiPrototype):
         self.documents_list = None
         self.contacts_list = None
         self.logicalvolumes_list = None
-
-
-    def find_organization(self):
-        """
-        Retrieve the parent ItopapiOrganization
-        """
-        if self.org_id is not None:
-            return ItopapiPrototype.get_itop_class('Organization').find(self.org_id)
-        return None

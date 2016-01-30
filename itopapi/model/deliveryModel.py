@@ -5,11 +5,12 @@ ItopapiDeliveryModel is a abstraction of Organization representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype
+from itopapi.model.features.hasOrganization import HasOrganization
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
-class ItopapiDeliveryModel(ItopapiPrototype):
+class ItopapiDeliveryModel(ItopapiPrototype, HasOrganization):
 
     # Configuration specific to itop
     itop = {
@@ -18,7 +19,7 @@ class ItopapiDeliveryModel(ItopapiPrototype):
         # Define which fields to save when creating or updating from the python API
         'save': ['name', 'description'],
         'foreign_keys': [
-            {'id': 'organization_id', 'name': 'organization_name', 'table': 'Organization'},
+            HasOrganization.foreign_key,
         ],
         'list_types': {
             'contacts_list': 'contact_id_finalclass_recall'
@@ -46,20 +47,9 @@ class ItopapiDeliveryModel(ItopapiPrototype):
         super(ItopapiDeliveryModel, self).__init__(data)
 
         self.description = None
-        self.org_id = None
-        self.organization_name = None
-        self.org_id_friendlyname = None
 
         ##################################
         #              Lists             #
         ##################################
         self.customers_list = []
         self.contacts_list = []
-
-    def find_organization(self):
-        """
-        Retrieve the parent ItopapiOrganization
-        """
-        if self.org_id is not None:
-            return ItopapiPrototype.get_itop_class('Organization').find(self.org_id)
-        return None

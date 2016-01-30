@@ -6,12 +6,13 @@ Note : VLAN has no finalclass and name. It complicates things...
 """
 
 from itopapi.model.prototype import ItopapiPrototype
+from itopapi.model.features.hasOrganization2 import HasOrganization2
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiVLAN(ItopapiPrototype):
+class ItopapiVLAN(ItopapiPrototype, HasOrganization2):
 
     # Configuration specific to itop
     itop = {
@@ -20,7 +21,7 @@ class ItopapiVLAN(ItopapiPrototype):
         # Define which fields to save when creating or updating from the python API
         'save': ['vlan_tag', 'description'],
         'foreign_keys': [
-            {'id': 'org_id', 'name': 'organization_name', 'table': 'Organization'},
+            HasOrganization2.foreign_key
         ],
         'list_types': {'physicalinterfaces_list': 'PhysicalInterface', 'subnets_list': 'Subnet'},
     }
@@ -46,24 +47,9 @@ class ItopapiVLAN(ItopapiPrototype):
         super(ItopapiVLAN, self).__init__(data)
         # VLAN tag, replaces the "name" value for other classes
         self.vlan_tag = None
-        # VLAN's organization id. Call find_organization to get the full information or just use
-        # org_id_friendlyname and organization_name
-        self.org_id = None
-        # VLAN's organization friendly name. Not sure the difference with organization_name
-        self.org_id_friendlyname = None
-        # VLAN's organization name
-        self.org_name = None
         # VLAN's description
         self.description = None
         # Interfaces
         self.physicalinterfaces_list = None
         # subnets
         self.subnets_list = None
-
-    def find_organization(self):
-        """
-        Retrieve the ItopapiOrganization related to this instance
-        """
-        if self.org_id is not None:
-            return ItopapiPrototype.get_itop_class('Organization').find(self.org_id)
-        return None

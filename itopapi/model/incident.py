@@ -5,12 +5,13 @@ ItopapiIncident is a abstraction of a Incident representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype
+from itopapi.model.features.hasOrganization import HasOrganization
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiIncident(ItopapiPrototype):
+class ItopapiIncident(ItopapiPrototype, HasOrganization):
 
     # Configuration specific to itop
     itop = {
@@ -19,7 +20,7 @@ class ItopapiIncident(ItopapiPrototype):
         # Define which fields to save when creating or updating from the python API
         'save': ['title', 'description', 'ref', 'start_date', 'end_date', 'close_date', 'last_update'],
         'foreign_keys': [
-            {'id': 'org_id', 'name': 'organization_name', 'table': 'Organization'},
+            HasOrganization.foreign_key,
             {'id': 'agent_id', 'name': 'agent_name', 'table': 'Person'},
             {'id': 'team_id', 'name': 'team_name', 'table': 'Team'},
         ],
@@ -56,13 +57,6 @@ class ItopapiIncident(ItopapiPrototype):
         self.end_date = None
         self.close_date = None
         self.last_update = None
-        # Incident's organization id. Call find_organization to get the full information or just
-        #  use org_id_friendlyname and organization_name
-        self.org_id = None
-        # Incident's organization friendly name. Not sure the difference with organization_name
-        self.org_id_friendlyname = None
-        # Incident's organization name
-        self.organization_name = None
 
         # Foreign key to a Person
         self.agent_id = None
@@ -79,13 +73,3 @@ class ItopapiIncident(ItopapiPrototype):
         self.contacts_list = None
         self.workers_list = None
         self.private_log = None
-
-
-    def find_organization(self):
-        """
-        Retrieve the ItopapiOrganization corresponding to this server
-        """
-        if self.org_id is not None:
-            return ItopapiPrototype.get_itop_class('Organization').find(self.org_id)
-        return None
-

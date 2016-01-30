@@ -5,12 +5,13 @@ ItopapiSubnet is a abstraction of Subnet representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype
+from itopapi.model.features.hasOrganization import HasOrganization
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiSubnet(ItopapiPrototype):
+class ItopapiSubnet(ItopapiPrototype, HasOrganization):
 
     # Configuration specific to itop
     itop = {
@@ -19,7 +20,7 @@ class ItopapiSubnet(ItopapiPrototype):
         # Define which fields to save when creating or updating from the python API
         'save': ['ip', 'ip_mask', 'subnet_name', 'description'],
         'foreign_keys': [
-            {'id': 'org_id', 'name': 'organization_name', 'table': 'Organization'},
+            HasOrganization.foreign_key,
         ],
         'list_types': {'vlans_list': 'VLAN'},
     }
@@ -49,23 +50,7 @@ class ItopapiSubnet(ItopapiPrototype):
         self.ip_mask = None
         # Subnet name
         self.subnet_name = None
-        # Subnet's organization id. Call find_organization to get the full information or just use
-        # org_id_friendlyname and organization_name
-        self.org_id = None
-        # Subnet's organization friendly name. Not sure the difference with organization_name
-        self.org_id_friendlyname = None
-        # Subnet's organization name
-        self.org_name = None
         # Subnet's description
         self.description = None
         # VLANs associated with this Subnet
         self.vlans_list = None
-
-
-    def find_organization(self):
-        """
-        Retrieve the ItopapiOrganization related to this instance
-        """
-        if self.org_id is not None:
-            return ItopapiPrototype.get_itop_class('Organization').find(self.org_id)
-        return None

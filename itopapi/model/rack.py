@@ -5,12 +5,13 @@ ItopapiRack is a abstraction of Rack representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype
+from itopapi.model.features.hasOrganization import HasOrganization
 
 __version__ = '1.0'
 __authors__ = ['Guillaume Philippon <guillaume.philippon@lal.in2p3.fr>', 'Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiRack(ItopapiPrototype):
+class ItopapiRack(ItopapiPrototype, HasOrganization):
     """
     ItopapiRack is an object that represents a Rack from iTop
     """
@@ -23,7 +24,7 @@ class ItopapiRack(ItopapiPrototype):
         'save': ['name', 'status', 'business_criticity', 'nb_u',
                  'serialnumber', 'asset_number', 'move2production', 'purchase_date', 'end_of_warranty', 'description'],
         'foreign_keys': [
-            {'id': 'org_id', 'name': 'organization_name', 'table': 'Organization'},
+            HasOrganization.foreign_key,
             {'id': 'location_id', 'name': 'location_name', 'table': 'Location'},
         ],
         'list_types': {
@@ -51,13 +52,6 @@ class ItopapiRack(ItopapiPrototype):
         ##################################
         #           Properties           #
         ##################################
-        # Rack's organization id. Call find_organization to get the full information or just use
-        # org_id_friendlyname and organization_name
-        self.org_id = None
-        # Rack's organization friendly name. Not sure the difference with organization_name
-        self.org_id_friendlyname = None
-        # Rack's organization name
-        self.organization_name = None
         # Rack's status. Values within [implementation, obsolete, production, stock]
         self.status = None
         # Rack's business criticity. Values within [high, medium, low]
@@ -130,14 +124,6 @@ class ItopapiRack(ItopapiPrototype):
         self.applicationsolution_list = None
         self.softwares_list = None
         self.logicalvolumes_list = None
-
-    def find_organization(self):
-        """
-        Retrieve the ItopapiOrganization related to this instance
-        """
-        if self.org_id is not None:
-            return ItopapiPrototype.get_itop_class('Organization').find(self.org_id)
-        return None
 
     def find_location(self):
         """

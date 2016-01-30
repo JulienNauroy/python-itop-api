@@ -5,12 +5,13 @@ ItopapiEnclosure is a abstraction of Rack representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype
+from itopapi.model.features.hasOrganization import HasOrganization
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiEnclosure(ItopapiPrototype):
+class ItopapiEnclosure(ItopapiPrototype, HasOrganization):
 
     # Configuration specific to itop
     itop = {
@@ -20,12 +21,12 @@ class ItopapiEnclosure(ItopapiPrototype):
         'save': ['name', 'status', 'business_criticity', 'nb_u', 'serialnumber', 'asset_number',
                  'move2production', 'purchase_date', 'end_of_warranty', 'description'],
         'foreign_keys': [
-            {'id': 'org_id', 'name': 'organization_name', 'table': 'Organization'},
+            HasOrganization.foreign_key,
             {'id': 'location_id', 'name': 'location_name', 'table': 'Location'},
             {'id': 'rack_id', 'name': 'rack_name', 'table': 'Rack'},
             {'id': 'brand_id', 'name': 'brand_name', 'table': 'Brand'},
             {'id': 'model_id', 'name': 'model_name', 'table': 'Model'},
-        ]
+        ],
     }
     @staticmethod
     def find(key):
@@ -45,13 +46,6 @@ class ItopapiEnclosure(ItopapiPrototype):
     """
     def __init__(self, data=None):
         super(ItopapiEnclosure, self).__init__(data)
-        # Enclosure's organization id. Call find_organization to get the full information or just
-        #  use org_id_friendlyname and organization_name
-        self.org_id = None
-        # Enclosure's organization friendly name. Not sure the difference with organization_name
-        self.org_id_friendlyname = None
-        # Enclosure's organization name
-        self.organization_name = None
         # Enclosure's status. Values within [implementation, obsolete, production, stock]
         self.status = None
         # Enclosure's business criticity. Values within [high, medium, low]
@@ -89,14 +83,6 @@ class ItopapiEnclosure(ItopapiPrototype):
         # Server's end of warranty date
         self.end_of_warranty = None
         self.description = None
-
-    def find_organization(self):
-        """
-        Retrieve the ItopapiOrganization corresponding to this server
-        """
-        if self.org_id is not None:
-            return ItopapiPrototype.get_itop_class('Organization').find(self.org_id)
-        return None
 
     def find_location(self):
         """

@@ -5,12 +5,13 @@ ItopapiFarm is a abstraction of a virtual servers farm representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype
+from itopapi.model.features.hasOrganization import HasOrganization
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiFarm(ItopapiPrototype):
+class ItopapiFarm(ItopapiPrototype, HasOrganization):
 
     # Configuration specific to itop
     itop = {
@@ -19,7 +20,7 @@ class ItopapiFarm(ItopapiPrototype):
         # Define which fields to save when creating or updating from the python API
         'save': ['name', 'status', 'business_criticity', 'move2production', 'description'],
         'foreign_keys': [
-            {'id': 'org_id', 'name': 'organization_name', 'table': 'Organization'},
+            HasOrganization.foreign_key,
         ],
         'list_types': {
             'contacts_list': 'contact_id_finalclass_recall'
@@ -45,13 +46,6 @@ class ItopapiFarm(ItopapiPrototype):
     """
     def __init__(self, data=None):
         super(ItopapiFarm, self).__init__(data)
-        # Farm's organization id. Call find_organization to get the full information or just use
-        #  org_id_friendlyname and organization_name
-        self.org_id = None
-        # Farm's organization friendly name. Not sure the difference with organization_name
-        self.org_id_friendlyname = None
-        # Farm's organization name
-        self.organization_name = None
         # Farm's status. Values within [inactive, active]
         self.status = None
         # Farm's business criticity. Values within [high, medium, low]
@@ -71,12 +65,3 @@ class ItopapiFarm(ItopapiPrototype):
         self.logicalvolumes_list = None
         self.hypervisor_list = None
         self.virtualmachine_list = None
-
-
-    def find_organization(self):
-        """
-        Retrieve the parent ItopapiOrganization
-        """
-        if self.org_id is not None:
-            return ItopapiPrototype.get_itop_class('Organization').find(self.org_id)
-        return None

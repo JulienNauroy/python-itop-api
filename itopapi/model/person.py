@@ -6,12 +6,13 @@ Note : Person has no finalclass and name. It complicates things...
 """
 
 from itopapi.model.prototype import ItopapiPrototype
+from itopapi.model.features.hasOrganization import HasOrganization
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiPerson(ItopapiPrototype):
+class ItopapiPerson(ItopapiPrototype, HasOrganization):
 
     # Configuration specific to itop
     itop = {
@@ -21,8 +22,8 @@ class ItopapiPerson(ItopapiPrototype):
         'save': ['contact_id', 'contact_name', 'function', 'first_name', 'name',
                  'email', 'mobile_phone', 'phone', 'notify', 'employee_number', 'status'],
         'foreign_keys': [
+            HasOrganization.foreign_key,
             {'id': 'location_id', 'name': 'location_name', 'table': 'Location'},
-            {'id': 'org_id', 'name': 'organization_name', 'table': 'Organization'},
             {'id': 'manager_id', 'name': 'manager_name', 'table': 'Person'},
         ],
         'list_types': {
@@ -62,16 +63,9 @@ class ItopapiPerson(ItopapiPrototype):
         self.location_id_friendlyname = None
         # Person's location name
         self.location_name = None
-        # Person's organization id. Call find_organization to get the full information or just use
-        #  org_id_friendlyname and organization_name
-        self.org_id = None
-        # Person's organization friendly name. Not sure the difference with organization_name
-        self.org_id_friendlyname = None
         self.manager_id = None,
         self.manager_id_friendlyname = None,
         self.manager_name = None,
-        # Person's organization name
-        self.organization_name = None
         self.function = None
         self.first_name = None
         self.email = None
@@ -95,12 +89,4 @@ class ItopapiPerson(ItopapiPrototype):
         """
         if self.location_id is not None:
             return ItopapiPrototype.get_itop_class('Location').find(self.location_id)
-        return None
-
-    def find_organization(self):
-        """
-        Retrieve the parent ItopapiOrganization
-        """
-        if self.org_id is not None:
-            return ItopapiPrototype.get_itop_class('Organization').find(self.org_id)
         return None

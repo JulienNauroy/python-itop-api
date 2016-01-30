@@ -5,13 +5,13 @@ ItopapiWebApplication is a abstraction of Rack representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype, ItopapiUnimplementedMethod
-from itopapi.model.rack import ItopapiRack
+from itopapi.model.features.hasOrganization import HasOrganization
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiWebApplication(ItopapiPrototype):
+class ItopapiWebApplication(ItopapiPrototype, HasOrganization):
     """
     ItopapiWebApplication is an object that represents a WebApplication from iTop
     """
@@ -24,7 +24,7 @@ class ItopapiWebApplication(ItopapiPrototype):
         'save': ['name', 'url', 'business_criticity',
                  'move2production', 'description'],
         'foreign_keys': [
-            {'id': 'org_id', 'name': 'organization_name', 'table': 'Organization'},
+            HasOrganization.foreign_key,
             {'id': 'webserver_id', 'name': 'webserver_name', 'table': 'WebServer'},
         ],
         'list_types': {
@@ -53,13 +53,6 @@ class ItopapiWebApplication(ItopapiPrototype):
         ##################################
         # Properties/General Information #
         ##################################
-        # WebApplication's organization id. Call find_organization to get the full information or just
-        #  use org_id_friendlyname and organization_name
-        self.org_id = None
-        # WebApplication's organization friendly name. Not sure the difference with organization_name
-        self.org_id_friendlyname = None
-        # WebApplication's organization name
-        self.organization_name = None
         # WebServer hosting the application
         self.webserver_id = None
         self.webserver_id_friendlyname = None
@@ -115,14 +108,6 @@ class ItopapiWebApplication(ItopapiPrototype):
         :param json_quattor: json
         """
         pass
-
-    def find_organization(self):
-        """
-        Retrieve the ItopapiOrganization related to this instance
-        """
-        if self.org_id is not None:
-            return ItopapiPrototype.get_itop_class('Organization').find(self.org_id)
-        return None
 
     def find_web_server(self):
         """

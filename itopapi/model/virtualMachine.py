@@ -5,12 +5,13 @@ ItopapiVirtualMachine is a abstraction of VLAN representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype, ItopapiUnimplementedMethod
+from itopapi.model.features.hasOrganization import HasOrganization
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiVirtualMachine(ItopapiPrototype):
+class ItopapiVirtualMachine(ItopapiPrototype, HasOrganization):
 
     # Configuration specific to itop
     itop = {
@@ -20,8 +21,8 @@ class ItopapiVirtualMachine(ItopapiPrototype):
                  'managementip', 'oslicence_id', 'cpu', 'ram', 'move2production',
                  'description'],
         'foreign_keys': [
+            HasOrganization.foreign_key,
             {'id': 'virtualhost_id', 'name': 'virtualhost_name', 'table': 'VirtualHost'},
-            {'id': 'org_id', 'name': 'organization_name', 'table': 'Organization'},
             {'id': 'osfamily_id', 'name': 'osfamily_name', 'table': 'OSFamily'},
             {'id': 'osversion_id', 'name': 'osversion_name', 'table': 'OSVersion'},
             {'id': 'oslicence_id', 'name': 'oslicence_name', 'table': 'OSLicence'},
@@ -54,13 +55,6 @@ class ItopapiVirtualMachine(ItopapiPrototype):
         ##################################
         # Properties/General Information #
         ##################################
-        # VirtualMachine's organization id. Call find_organization to get the full information or just
-        #  use org_id_friendlyname and organization_name
-        self.org_id = None
-        # VirtualMachine's organization friendly name. Not sure the difference with organization_name
-        self.org_id_friendlyname = None
-        # VirtualMachine's organization name
-        self.organization_name = None
         # VirtualMachine's status. Values within [implementation, obsolete, production, stock]
         self.status = None
         # VirtualMachine's business criticity. Values within [high, medium, low]
@@ -164,14 +158,6 @@ class ItopapiVirtualMachine(ItopapiPrototype):
         :param json_quattor: json
         """
         pass
-
-    def find_organization(self):
-        """
-        Retrieve the ItopapiOrganization related to this instance
-        """
-        if self.org_id is not None:
-            return ItopapiPrototype.get_itop_class('Organization').find(self.org_id)
-        return None
 
     def find_os_family(self):
         """
