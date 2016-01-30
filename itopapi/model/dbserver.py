@@ -6,12 +6,13 @@ ItopapiDBServer is an abstraction of DBServer representation on iTop
 
 from itopapi.model.prototype import ItopapiPrototype
 from itopapi.model.othersoftware import ItopapiOtherSoftware
+from itopapi.model.features.hasOrganization import HasOrganization
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiDBServer(ItopapiOtherSoftware):
+class ItopapiDBServer(ItopapiOtherSoftware, HasOrganization):
     """
     ItopapiDBServer is an object that represents a DBServer from iTop
     It has the same attributes as ItopapiOtherSoftware
@@ -24,7 +25,7 @@ class ItopapiDBServer(ItopapiOtherSoftware):
         # Define which fields to save when creating or updating from the python API
         'save': ['move2production', 'description', 'status', 'name', 'business_criticity', 'path'],
         'foreign_keys': [
-            {'id': 'org_id', 'name': 'organization_name', 'table': 'Organization'},
+            HasOrganization.foreign_key,
             {'id': 'software_id', 'name': 'software_name', 'table': 'Software'},
             {'id': 'softwarelicence_id', 'name': 'softwarelicence_name', 'table': 'SoftwareLicence'},
         ],

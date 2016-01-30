@@ -5,13 +5,13 @@ ItopapiWebServer is an abstraction of Rack representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype, ItopapiUnimplementedMethod
-from itopapi.model.rack import ItopapiRack
+from itopapi.model.features.hasOrganization import HasOrganization
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiWebServer(ItopapiPrototype):
+class ItopapiWebServer(ItopapiPrototype, HasOrganization):
     """
     ItopapiWebServer is an object that represents a WebServer from iTop
     """
@@ -23,7 +23,7 @@ class ItopapiWebServer(ItopapiPrototype):
         # Define which fields to save when creating or updating from the python API
         'save': ['name', 'status', 'business_criticity', 'path', 'move2production', 'description'],
         'foreign_keys': [
-            {'id': 'org_id', 'name': 'organization_name', 'table': 'Organization'},
+            HasOrganization.foreign_key,
             {'id': 'system_id', 'name': 'system_id_friendlyname', 'table': 'Server'},
             {'id': 'software_id', 'name': 'software_name', 'table': 'Software'},
             {'id': 'softwarelicence_id', 'name': 'softwarelicence_name', 'table': 'SoftwareLicence'},
