@@ -152,13 +152,6 @@ class ItopapiVirtualMachine(ItopapiPrototype, HasOrganization):
         # VirtualMachine's services list
         self.services_list = {}
 
-    def load_from_json_quattor(self, json_quattor):
-        """
-        Create a ItopapiVirtualMachine description based on quattor s JSON output
-        :param json_quattor: json
-        """
-        pass
-
     def find_os_family(self):
         """
         Retrieve the ItopapiOSFamily corresponding to this VirtualMachine

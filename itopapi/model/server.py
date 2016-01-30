@@ -219,13 +219,6 @@ class ItopapiServer(ItopapiPrototype, HasOrganization):
         # Server's services list
         self.services_list = {}
 
-    def load_from_json_quattor(self, json_quattor):
-        """
-        Create a ItopapiServer description based on quattor s JSON output
-        :param json_quattor: json
-        """
-        pass
-
     def find_rack(self):
         """
         Retrieve the ItopapiRack corresponding to this server

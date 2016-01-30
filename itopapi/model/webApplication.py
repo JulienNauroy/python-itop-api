@@ -102,13 +102,6 @@ class ItopapiWebApplication(ItopapiPrototype, HasOrganization):
         # WebApplication's services list
         self.services_list = {}
 
-    def load_from_json_quattor(self, json_quattor):
-        """
-        Create a ItopapiWebApplication description based on quattor s JSON output
-        :param json_quattor: json
-        """
-        pass
-
     def find_web_server(self):
         """
         Retrieve the ItopapiWebServer corresponding to this WebApplication

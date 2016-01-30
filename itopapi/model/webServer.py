@@ -149,13 +149,6 @@ class ItopapiWebServer(ItopapiPrototype):
         # WebServer's services list
         self.services_list = {}
 
-    def load_from_json_quattor(self, json_quattor):
-        """
-        Create a ItopapiWebServer description based on quattor s JSON output
-        :param json_quattor: json
-        """
-        pass
-
     def find_system(self):
         """
         Retrieve the System (Server or VirtualMachine) corresponding to this WebServer
