@@ -13,13 +13,14 @@ from itopapi.model.features.hasOSFamily import HasOSFamily
 from itopapi.model.features.hasOSVersion import HasOSVersion
 from itopapi.model.features.hasOSLicence import HasOSLicence
 from itopapi.model.features.hasRack import HasRack
+from itopapi.model.features.hasEnclosure import HasEnclosure
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
 class ItopapiServer(ItopapiPrototype, HasOrganization, HasLocation, HasBrand, HasModel,
-                    HasOSFamily, HasOSVersion, HasOSLicence, HasRack):
+                    HasOSFamily, HasOSVersion, HasOSLicence, HasRack, HasEnclosure):
     """
     ItopapiServers is an object that represents a Servers from iTop
     """
@@ -41,7 +42,7 @@ class ItopapiServer(ItopapiPrototype, HasOrganization, HasLocation, HasBrand, Ha
             HasOSVersion.foreign_key,
             HasOSLicence.foreign_key,
             HasRack.foreign_key,
-            {'id': 'enclosure_id', 'name': 'enclosure_name', 'table': 'Enclosure'},
+            HasEnclosure.foreign_key,
             {'id': 'powerA_id', 'name': 'powerA_name', 'table': 'TODO'},
             {'id': 'powerB_id', 'name': 'powerB_name', 'table': 'TODO'},
         ],
@@ -68,27 +69,11 @@ class ItopapiServer(ItopapiPrototype, HasOrganization, HasLocation, HasBrand, Ha
     def __init__(self, data=None):
         super(ItopapiServer, self).__init__(data)
 
-        ##################################
-        # Properties/General Information #
-        ##################################
         # Server's status. Values within [implementation, obsolete, production, stock]
         self.status = None
         # Server's business criticity. Values within [high, medium, low]
         self.business_criticity = None
-        # Server's enclosure (chassis) id. Call findEnclosure to get the full information or just
-        # use enclosure_id_friendlyname and enclosure_name
-        self.enclosure_id = None
-        # Server's enclosure id's friendly name. Not sure the difference with enclosure_name
-        self.enclosure_id_friendlyname = None
-        # Server's enclosure name
-        self.enclosure_name = None
-
-        ##################################
-        #  Properties/More Information   #
-        ##################################
-
         self.managementip = None
-
         self.cpu = None
         self.ram = None
         # Rack units
@@ -97,20 +82,12 @@ class ItopapiServer(ItopapiPrototype, HasOrganization, HasLocation, HasBrand, Ha
         self.serialnumber = None
         # Server's asset number
         self.asset_number = None
-
-        ##################################
-        #        Properties/Date         #
-        ##################################
         # Server's move to production date
         self.move2production = None
         # Server's purchase date
         self.purchase_date = None
         # Server's end of warranty date
         self.end_of_warranty = None
-
-        ##################################
-        #  Properties/Other Information  #
-        ##################################
         self.powerA_id = None
         self.powerA_id_finalclass_recall = None
         self.powerA_id_friendlyname = None
@@ -122,85 +99,33 @@ class ItopapiServer(ItopapiPrototype, HasOrganization, HasLocation, HasBrand, Ha
         # Server's description, as a free text
         self.description = None
 
-        ##################################
-        #           Softwares            #
-        ##################################
+        ##############################
+        #           Lists            #
+        ##############################
         # Server's softwares list
         self.softwares_list = {}
-
-        ##################################
-        #            Contacts            #
-        ##################################
         # Server's contacts list
         self.contacts_list = {}
-
-        ##################################
-        #           Documents            #
-        ##################################
         # Server's documents list
         self.documents_list = {}
-
-        ##################################
-        #            Tickets             #
-        ##################################
         # Server's tickets list
         self.tickets_list = {}
-
-        ##################################
-        #     Application solutions      #
-        ##################################
         # Server's application solutions list
         self.applicationsolution_list = {}
-
-        ##################################
-        #       Network interfaces       #
-        ##################################
         # Server's network interfaces list
         self.physicalinterface_list = {}
-
-        ##################################
-        #            FC ports            #
-        ##################################
         # Server's FC ports list
         self.fiberinterfacelist_list = {}
-
-        ##################################
-        #        Network devices         #
-        ##################################
         # Server's network devices list
         self.networkdevice_list = {}
-
-        ##################################
-        #              SANs              #
-        ##################################
         # Server's SANs list
         self.san_list = {}
-
-        ##################################
-        #        Logical volumes         #
-        ##################################
         # Server's logical volumes list
         self.logicalvolumes_list = {}
-
-        ##################################
-        #       Provider contracts       #
-        ##################################
         # Server's provider contracts list
         self.providercontracts_list = {}
-
-        ##################################
-        #            Services            #
-        ##################################
         # Server's services list
         self.services_list = {}
-
-    def find_enclosure(self):
-        """
-        Retrieve the ItopapiEnclosure corresponding to this server
-        """
-        if self.enclosure_id is not None:
-            return ItopapiPrototype.get_itop_class('Enclosure').find(self.enclosure_id)
-        return None
 
     def find_power_a(self):
         """
