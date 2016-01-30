@@ -6,12 +6,13 @@ ItopapiOtherSoftware is an abstraction of OtherSoftware representation on iTop
 
 from itopapi.model.prototype import ItopapiPrototype
 from itopapi.model.features.hasOrganization import HasOrganization
+from itopapi.model.features.hasSoftwareLicence import HasSoftwareLicence
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiOtherSoftware(ItopapiPrototype, HasOrganization):
+class ItopapiOtherSoftware(ItopapiPrototype, HasOrganization, HasSoftwareLicence):
     """
     ItopapiOtherSoftware is an object that represents a OtherSoftware from iTop
     """
@@ -25,7 +26,7 @@ class ItopapiOtherSoftware(ItopapiPrototype, HasOrganization):
         'foreign_keys': [
             HasOrganization.foreign_key,
             {'id': 'software_id', 'name': 'software_name', 'table': 'Software'},
-            {'id': 'softwarelicence_id', 'name': 'softwarelicence_name', 'table': 'SoftwareLicence'},
+            HasSoftwareLicence.foreign_key,
         ],
         'list_types': {
             'contacts_list': 'contact_id_finalclass_recall'
@@ -56,10 +57,6 @@ class ItopapiOtherSoftware(ItopapiPrototype, HasOrganization):
         self.software_id = None
         self.software_id_friendlyname = None
         self.software_name = None
-        # OtherSoftware's software licence
-        self.softwarelicence_id = None
-        self.softwarelicence_id_friendlyname = None
-        self.softwarelicence_name = None
         # OtherSoftware's status. Values within [implementation, obsolete, production, stock]
         self.status = None
         # OtherSoftware's business criticity. Values within [high, medium, low]

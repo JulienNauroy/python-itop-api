@@ -6,12 +6,13 @@ ItopapiWebServer is an abstraction of Rack representation on iTop
 
 from itopapi.model.prototype import ItopapiPrototype, ItopapiUnimplementedMethod
 from itopapi.model.features.hasOrganization import HasOrganization
+from itopapi.model.features.hasSoftwareLicence import HasSoftwareLicence
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiWebServer(ItopapiPrototype, HasOrganization):
+class ItopapiWebServer(ItopapiPrototype, HasOrganization, HasSoftwareLicence):
     """
     ItopapiWebServer is an object that represents a WebServer from iTop
     """
@@ -26,7 +27,7 @@ class ItopapiWebServer(ItopapiPrototype, HasOrganization):
             HasOrganization.foreign_key,
             {'id': 'system_id', 'name': 'system_id_friendlyname', 'table': 'Server'},
             {'id': 'software_id', 'name': 'software_name', 'table': 'Software'},
-            {'id': 'softwarelicence_id', 'name': 'softwarelicence_name', 'table': 'SoftwareLicence'},
+            HasSoftwareLicence.foreign_key,
         ],
         'list_types': {
             'contacts_list': 'contact_id_finalclass_recall'
@@ -66,10 +67,6 @@ class ItopapiWebServer(ItopapiPrototype, HasOrganization):
         self.software_id = None
         self.software_id_friendlyname = None
         self.software_name = None
-        # Web server's software licence
-        self.softwarelicence_id = None
-        self.softwarelicence_id_friendlyname = None
-        self.softwarelicence_name = None
         # Web server's path ?
         self.path = None
         # WebServer's move to production date
@@ -77,75 +74,31 @@ class ItopapiWebServer(ItopapiPrototype, HasOrganization):
         # WebServer's description, as a free text
         self.description = None
 
-        ##################################
-        #            Contacts            #
-        ##################################
+        ###############################
+        #            Lists            #
+        ###############################
         # WebServer's contacts list
         self.contacts_list = {}
-
-        ##################################
-        #           Documents            #
-        ##################################
         # WebServer's documents list
         self.documents_list = {}
-
-        ##################################
-        #            Tickets             #
-        ##################################
         # WebServer's tickets list
         self.tickets_list = {}
-
-        ##################################
-        #     Application solutions      #
-        ##################################
         # WebServer's application solutions list
         self.applicationsolution_list = {}
-
-        ##################################
-        #        Web applications        #
-        ##################################
         # WebServer's web applications list
         self.webapp_list = {}
-
-        ##################################
-        #       Network interfaces       #
-        ##################################
         # WebServer's network interfaces list
         self.physicalinterface_list = {}
-
-        ##################################
-        #            FC ports            #
-        ##################################
         # WebServer's FC ports list
         self.fiberinterfacelist_list = {}
-
-        ##################################
-        #        Network devices         #
-        ##################################
         # WebServer's network devices list
         self.networkdevice_list = {}
-
-        ##################################
-        #              SANs              #
-        ##################################
         # WebServer's SANs list
         self.san_list = {}
-
-        ##################################
-        #        Logical volumes         #
-        ##################################
         # WebServer's logical volumes list
         self.logicalvolumes_list = {}
-
-        ##################################
-        #       Provider contracts       #
-        ##################################
         # WebServer's provider contracts list
         self.providercontracts_list = {}
-
-        ##################################
-        #            Services            #
-        ##################################
         # WebServer's services list
         self.services_list = {}
 
@@ -164,14 +117,5 @@ class ItopapiWebServer(ItopapiPrototype, HasOrganization):
         """
         if self.software_id is not None:
             # TODO define Software
-            raise ItopapiUnimplementedMethod()
-        return None
-
-    def find_software_licence(self):
-        """
-        Retrieve the Software Licence corresponding to this WebServer
-        """
-        if self.software_licence_id is not None:
-            # TODO define SoftwareLicense
             raise ItopapiUnimplementedMethod()
         return None
