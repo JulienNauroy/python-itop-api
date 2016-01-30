@@ -8,12 +8,13 @@ Note : Person has no finalclass and name. It complicates things...
 from itopapi.model.prototype import ItopapiPrototype
 from itopapi.model.features.hasOrganization import HasOrganization
 from itopapi.model.features.hasLocation import HasLocation
+from itopapi.model.features.hasManager import HasManager
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiPerson(ItopapiPrototype, HasOrganization, HasLocation):
+class ItopapiPerson(ItopapiPrototype, HasOrganization, HasLocation, HasManager):
 
     # Configuration specific to itop
     itop = {
@@ -25,7 +26,7 @@ class ItopapiPerson(ItopapiPrototype, HasOrganization, HasLocation):
         'foreign_keys': [
             HasOrganization.foreign_key,
             HasLocation.foreign_key,
-            {'id': 'manager_id', 'name': 'manager_name', 'table': 'Person'},
+            HasManager.foreign_key,
         ],
         'list_types': {
             'team_list': 'Team',
@@ -52,27 +53,21 @@ class ItopapiPerson(ItopapiPrototype, HasOrganization, HasLocation):
     """
     def __init__(self, data=None):
         super(ItopapiPerson, self).__init__(data)
+
         ##################################
         #           Properties           #
         ##################################
-        self.contact_id = None
-        self.contact_name = None
-        self.manager_id = None,
-        self.manager_id_friendlyname = None,
-        self.manager_name = None,
-        self.function = None
         self.first_name = None
+        self.function = None
         self.email = None
         self.mobile_phone = None
         self.phone = None
-        self.organization_name = None
         self.notify = None
         self.employee_number = None
-        self.organization_name = None
         self.status = None
         ##################################
         #             Lists              #
         ##################################
         self.tickets_list = None
-        self.tickets_list = None
-        self.tickets_list = None
+        self.cis_list = None
+        self.team_list = None

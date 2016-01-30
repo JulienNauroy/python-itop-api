@@ -27,3 +27,4 @@ from itopapi.model.features.hasSoftware import HasSoftware
 from itopapi.model.features.hasSoftwareLicence import HasSoftwareLicence
 from itopapi.model.features.hasTeam import HasTeam
 from itopapi.model.features.hasAgent import HasAgent
+from itopapi.model.features.hasManager import HasManager
