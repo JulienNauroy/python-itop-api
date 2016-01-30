@@ -7,6 +7,8 @@ ItopapiDBServer is an abstraction of DBServer representation on iTop
 from itopapi.model.prototype import ItopapiPrototype
 from itopapi.model.othersoftware import ItopapiOtherSoftware
 from itopapi.model.features.hasOrganization import HasOrganization
+from itopapi.model.features.hasSoftware import HasSoftware
+from itopapi.model.features.hasSoftwareLicence import HasSoftwareLicence
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
@@ -26,8 +28,8 @@ class ItopapiDBServer(ItopapiOtherSoftware, HasOrganization):
         'save': ['move2production', 'description', 'status', 'name', 'business_criticity', 'path'],
         'foreign_keys': [
             HasOrganization.foreign_key,
-            {'id': 'software_id', 'name': 'software_name', 'table': 'Software'},
-            {'id': 'softwarelicence_id', 'name': 'softwarelicence_name', 'table': 'SoftwareLicence'},
+            HasSoftware.foreign_key,
+            HasSoftwareLicence.foreign_key,
         ],
         'list_types': {
             'contacts_list': 'contact_id_finalclass_recall'
