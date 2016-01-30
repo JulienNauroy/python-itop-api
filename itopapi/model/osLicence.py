@@ -6,12 +6,13 @@ ItopapiOSLicence is an abstraction of Rack representation on iTop
 
 from itopapi.model.prototype import ItopapiPrototype
 from itopapi.model.features.hasOrganization import HasOrganization
+from itopapi.model.features.hasOSVersion import HasOSVersion
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiOSLicence(ItopapiPrototype, HasOrganization):
+class ItopapiOSLicence(ItopapiPrototype, HasOrganization, HasOSVersion):
 
     # Configuration specific to itop
     itop = {
@@ -21,7 +22,7 @@ class ItopapiOSLicence(ItopapiPrototype, HasOrganization):
         'save': ['name', 'usage_limit', 'description', 'perpetual', 'start_date', 'end_date', 'licence_key'],
         'foreign_keys': [
             HasOrganization.foreign_key,
-            {'id': 'osversion_id', 'name': 'osversion_name', 'table': 'OSVersion'},
+            HasOSVersion.foreign_key,
         ],
     }
 
@@ -44,9 +45,6 @@ class ItopapiOSLicence(ItopapiPrototype, HasOrganization):
     """
     def __init__(self, data=None):
         super(ItopapiOSLicence, self).__init__(data)
-        self.osversion_id = None
-        self.osversion_id_friendlyname = None
-        self.osversion_name = None
         # Number of concurrent users or licences
         self.usage_limit = None
         self.description = None
@@ -59,11 +57,3 @@ class ItopapiOSLicence(ItopapiPrototype, HasOrganization):
         self.documents_list = []
         self.servers_list = []
         self.virtualmachines_list = []
-
-    def find_os_version(self):
-        """
-        Retrieve the ItopapiOSVersion corresponding to this server
-        """
-        if self.osversion_id is not None:
-            return ItopapiPrototype.get_itop_class('OSVersion').find(self.osfamily_id)
-        return None

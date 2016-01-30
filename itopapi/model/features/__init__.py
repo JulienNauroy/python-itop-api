@@ -13,3 +13,4 @@ from itopapi.model.features.hasLocation import HasLocation
 from itopapi.model.features.hasBrand import HasBrand
 from itopapi.model.features.hasModel import HasModel
 from itopapi.model.features.hasOSFamily import HasOSFamily
+from itopapi.model.features.hasOSVersion import HasOSVersion

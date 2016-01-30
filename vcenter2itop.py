@@ -207,9 +207,7 @@ def get_server_params(itop_server, vcenter_host, organization):
     os_version = get_os_version(os_family, product.fullName)
     if itop_server.osversion_id != os_version.instance_id:
         has_changed = True
-        itop_server.osversion_id = os_version.instance_id
-        itop_server.osversion_id_friendlyname = os_version.friendlyname
-        itop_server.osversion_name = os_version.name
+        itop_server.set_osversion(os_version)
     # Set the brand
     itop_brand = get_brand(summary.hardware.vendor)
     if itop_server.brand_id != itop_brand.instance_id:
@@ -280,9 +278,7 @@ def get_vm_params(itop_vm, vcenter_vm, organization):
     # Set the OS family
     itop_vm.set_osfamily(os_family)
     # Set the OS version
-    itop_vm.osversion_id = os_version.instance_id
-    itop_vm.osversion_id_friendlyname = os_version.friendlyname
-    itop_vm.osversion_name = os_version.name
+    itop_vm.set_osversion(os_version)
     # Set the virtual host (Hypervisor or Farm)
     itop_vm.virtualhost_id = virtualhost.instance_id
     itop_vm.virtualhost_id_friendlyname = virtualhost.friendlyname

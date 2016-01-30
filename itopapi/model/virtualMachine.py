@@ -7,12 +7,13 @@ ItopapiVirtualMachine is an abstraction of VLAN representation on iTop
 from itopapi.model.prototype import ItopapiPrototype
 from itopapi.model.features.hasOrganization import HasOrganization
 from itopapi.model.features.hasOSFamily import HasOSFamily
+from itopapi.model.features.hasOSVersion import HasOSVersion
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiVirtualMachine(ItopapiPrototype, HasOrganization, HasOSFamily):
+class ItopapiVirtualMachine(ItopapiPrototype, HasOrganization, HasOSFamily, HasOSVersion):
 
     # Configuration specific to itop
     itop = {
@@ -24,8 +25,8 @@ class ItopapiVirtualMachine(ItopapiPrototype, HasOrganization, HasOSFamily):
         'foreign_keys': [
             HasOrganization.foreign_key,
             HasOSFamily.foreign_key,
+            HasOSVersion.foreign_key,
             {'id': 'virtualhost_id', 'name': 'virtualhost_name', 'table': 'VirtualHost'},
-            {'id': 'osversion_id', 'name': 'osversion_name', 'table': 'OSVersion'},
             {'id': 'oslicence_id', 'name': 'oslicence_name', 'table': 'OSLicence'},
         ],
         'list_types': {
@@ -69,10 +70,6 @@ class ItopapiVirtualMachine(ItopapiPrototype, HasOrganization, HasOSFamily):
         ##################################
         #  Properties/More Information   #
         ##################################
-
-        self.osversion_id = None
-        self.osversion_id_friendlyname = None
-        self.osversion_name = None
 
         self.managementip = None
 
@@ -148,14 +145,6 @@ class ItopapiVirtualMachine(ItopapiPrototype, HasOrganization, HasOSFamily):
         ##################################
         # VirtualMachine's services list
         self.services_list = {}
-
-    def find_os_version(self):
-        """
-        Retrieve the ItopapiOSVersion corresponding to this server
-        """
-        if self.osversion_id is not None:
-            return ItopapiPrototype.get_itop_class('OSVersion').find(self.osfamily_id)
-        return None
 
     def find_os_licence(self):
         """

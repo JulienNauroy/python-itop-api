@@ -10,12 +10,13 @@ from itopapi.model.features.hasLocation import HasLocation
 from itopapi.model.features.hasBrand import HasBrand
 from itopapi.model.features.hasModel import HasModel
 from itopapi.model.features.hasOSFamily import HasOSFamily
+from itopapi.model.features.hasOSVersion import HasOSVersion
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiServer(ItopapiPrototype, HasOrganization, HasLocation, HasBrand, HasModel, HasOSFamily):
+class ItopapiServer(ItopapiPrototype, HasOrganization, HasLocation, HasBrand, HasModel, HasOSFamily, HasOSVersion):
     """
     ItopapiServers is an object that represents a Servers from iTop
     """
@@ -34,9 +35,9 @@ class ItopapiServer(ItopapiPrototype, HasOrganization, HasLocation, HasBrand, Ha
             HasBrand.foreign_key,
             HasModel.foreign_key,
             HasOSFamily.foreign_key,
+            HasOSVersion.foreign_key,
             {'id': 'rack_id', 'name': 'rack_name', 'table': 'Rack'},
             {'id': 'enclosure_id', 'name': 'enclosure_name', 'table': 'Enclosure'},
-            {'id': 'osversion_id', 'name': 'osversion_name', 'table': 'OSVersion'},
             {'id': 'oslicence_id', 'name': 'oslicence_name', 'table': 'OSLicence'},
             {'id': 'powerA_id', 'name': 'powerA_name', 'table': 'TODO'},
             {'id': 'powerB_id', 'name': 'powerB_name', 'table': 'TODO'},
@@ -89,10 +90,6 @@ class ItopapiServer(ItopapiPrototype, HasOrganization, HasLocation, HasBrand, Ha
         ##################################
         #  Properties/More Information   #
         ##################################
-
-        self.osversion_id = None
-        self.osversion_id_friendlyname = None
-        self.osversion_name = None
 
         self.managementip = None
 
@@ -219,14 +216,6 @@ class ItopapiServer(ItopapiPrototype, HasOrganization, HasLocation, HasBrand, Ha
         """
         if self.enclosure_id is not None:
             return ItopapiPrototype.get_itop_class('Enclosure').find(self.enclosure_id)
-        return None
-
-    def find_os_version(self):
-        """
-        Retrieve the ItopapiOSVersion corresponding to this server
-        """
-        if self.osversion_id is not None:
-            return ItopapiPrototype.get_itop_class('OSVersion').find(self.osfamily_id)
         return None
 
     def find_os_licence(self):
