@@ -6,12 +6,13 @@ ItopapiHypervisor is an abstraction of a virtual servers Hypervisor representati
 
 from itopapi.model.prototype import ItopapiPrototype
 from itopapi.model.features.hasOrganization import HasOrganization
+from itopapi.model.features.hasServer import HasServer
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiHypervisor(ItopapiPrototype, HasOrganization):
+class ItopapiHypervisor(ItopapiPrototype, HasOrganization, HasServer):
 
     # Configuration specific to itop
     itop = {
@@ -21,7 +22,7 @@ class ItopapiHypervisor(ItopapiPrototype, HasOrganization):
         'save': ['name', 'status', 'business_criticity', 'move2production', 'description'],
         'foreign_keys': [
             HasOrganization.foreign_key,
-            {'id': 'server_id', 'name': 'server_name', 'table': 'Server'},
+            HasServer.foreign_key,
             {'id': 'farm_id', 'name': 'farm_name', 'table': 'Farm'},
         ],
         'list_types': {
@@ -56,10 +57,6 @@ class ItopapiHypervisor(ItopapiPrototype, HasOrganization):
         self.move2production = None
         # Hypervisor's description, as a free text
         self.description = None
-        # Physical server the hypervisor is running onto
-        self.server_id = None
-        self.server_id_friendlyname = None
-        self.server_name = None
         # Farm the hypervisor belongs to
         self.farm_id = None
         self.farm_id_friendlyname = None

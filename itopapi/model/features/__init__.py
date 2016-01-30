@@ -18,3 +18,4 @@ from itopapi.model.features.hasOSLicence import HasOSLicence
 from itopapi.model.features.hasVirtualHost import HasVirtualHost
 from itopapi.model.features.hasRack import HasRack
 from itopapi.model.features.hasEnclosure import HasEnclosure
+from itopapi.model.features.hasServer import HasServer
