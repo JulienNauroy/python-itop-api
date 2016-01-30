@@ -280,9 +280,7 @@ def get_vm_params(itop_vm, vcenter_vm, organization):
     # Set the OS version
     itop_vm.set_osversion(os_version)
     # Set the virtual host (Hypervisor or Farm)
-    itop_vm.virtualhost_id = virtualhost.instance_id
-    itop_vm.virtualhost_id_friendlyname = virtualhost.friendlyname
-    itop_vm.virtualhost_name = virtualhost.name
+    itop_vm.set_virtualhost(virtualhost)
 
     # Set other fields
     config_cpu = int(config.hardware.numCPU)
