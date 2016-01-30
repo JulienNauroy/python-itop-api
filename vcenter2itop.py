@@ -89,9 +89,7 @@ def get_os_version(os_family, os_version_name):
     if os_version is None:
         os_version = ItopapiOSVersion()
         os_version.name = os_version_name
-        os_version.osfamily_id = os_family.instance_id
-        os_version.osfamily_name = os_family.name
-        os_version.osfamily_id_friendlyname = os_family.friendlyname
+        os_version.set_osfamily(os_family)
         ret = os_version.save()
         itop_os_versions[(os_family.instance_id, os_version.name)] = os_version
         # print "Added new OS version %s" % os_version_name
@@ -204,9 +202,7 @@ def get_server_params(itop_server, vcenter_host, organization):
     os_family = get_os_family(product.name)
     if itop_server.osfamily_id != os_family.instance_id:
         has_changed = True
-        itop_server.osfamily_id = os_family.instance_id
-        itop_server.osfamily_id_friendlyname = os_family.friendlyname
-        itop_server.osfamily_name = os_family.name
+        itop_server.set_osfamily(os_family)
     # Set the OS version
     os_version = get_os_version(os_family, product.fullName)
     if itop_server.osversion_id != os_version.instance_id:
@@ -282,9 +278,7 @@ def get_vm_params(itop_vm, vcenter_vm, organization):
     # Set the organization
     itop_vm.set_organization(organization)
     # Set the OS family
-    itop_vm.osfamily_id = os_family.instance_id
-    itop_vm.osfamily_id_friendlyname = os_family.friendlyname
-    itop_vm.osfamily_name = os_family.name
+    itop_vm.set_osfamily(os_family)
     # Set the OS version
     itop_vm.osversion_id = os_version.instance_id
     itop_vm.osversion_id_friendlyname = os_version.friendlyname

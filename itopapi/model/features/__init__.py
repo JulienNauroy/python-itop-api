@@ -12,3 +12,4 @@ from itopapi.model.features.hasOrganization2 import HasOrganization2
 from itopapi.model.features.hasLocation import HasLocation
 from itopapi.model.features.hasBrand import HasBrand
 from itopapi.model.features.hasModel import HasModel
+from itopapi.model.features.hasOSFamily import HasOSFamily

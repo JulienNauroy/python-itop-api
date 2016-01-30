@@ -1,16 +1,17 @@
 # -*- coding: utf8 -*-fr
 
 """
-ItopapiOSVersion is an abstraction of Rack representation on iTop
+ItopapiOSVersion is an abstraction of an OSVersion representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype
+from itopapi.model.features.hasOSFamily import HasOSFamily
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiOSVersion(ItopapiPrototype):
+class ItopapiOSVersion(ItopapiPrototype, HasOSFamily):
 
     # Configuration specific to itop
     itop = {
@@ -19,7 +20,7 @@ class ItopapiOSVersion(ItopapiPrototype):
         # Define which fields to save when creating or updating from the python API
         'save': ['name'],
         'foreign_keys': [
-            {'id': 'osfamily_id', 'name': 'osfamily_name', 'table': 'OSFamily'},
+            HasOSFamily.foreign_key,
         ]
     }
 
@@ -42,15 +43,4 @@ class ItopapiOSVersion(ItopapiPrototype):
     """
     def __init__(self, data=None):
         super(ItopapiOSVersion, self).__init__(data)
-        # OSFamily this OSVersion is attached to
-        self.osfamily_id = None
-        self.osfamily_id_friendlyname = None
-        self.osfamily_name = None
 
-    def find_os_family(self):
-        """
-        Retrieve the ItopapiOSFamily corresponding to this server
-        """
-        if self.osfamily_id is not None:
-            return ItopapiPrototype.get_itop_class('OSFamily').find(self.osfamily_id)
-        return None
