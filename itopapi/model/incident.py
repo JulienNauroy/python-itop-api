@@ -7,12 +7,13 @@ ItopapiIncident is an abstraction of a Incident representation on iTop
 from itopapi.model.prototype import ItopapiPrototype
 from itopapi.model.features.hasOrganization import HasOrganization
 from itopapi.model.features.hasTeam import HasTeam
+from itopapi.model.features.hasAgent import HasAgent
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiIncident(ItopapiPrototype, HasOrganization, HasTeam):
+class ItopapiIncident(ItopapiPrototype, HasOrganization, HasTeam, HasAgent):
 
     # Configuration specific to itop
     itop = {
@@ -22,7 +23,7 @@ class ItopapiIncident(ItopapiPrototype, HasOrganization, HasTeam):
         'save': ['title', 'description', 'ref', 'start_date', 'end_date', 'close_date', 'last_update'],
         'foreign_keys': [
             HasOrganization.foreign_key,
-            {'id': 'agent_id', 'name': 'agent_name', 'table': 'Person'},
+            HasAgent.foreign_key,
             HasTeam.foreign_key,
         ],
         'list_types': {
@@ -58,10 +59,6 @@ class ItopapiIncident(ItopapiPrototype, HasOrganization, HasTeam):
         self.end_date = None
         self.close_date = None
         self.last_update = None
-
-        # Foreign key to a Person
-        self.agent_id = None
-        self.agent_name = None
 
         ##################################
         #             Lists              #
