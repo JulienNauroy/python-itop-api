@@ -12,12 +12,14 @@ from itopapi.model.features.hasModel import HasModel
 from itopapi.model.features.hasOSFamily import HasOSFamily
 from itopapi.model.features.hasOSVersion import HasOSVersion
 from itopapi.model.features.hasOSLicence import HasOSLicence
+from itopapi.model.features.hasRack import HasRack
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiServer(ItopapiPrototype, HasOrganization, HasLocation, HasBrand, HasModel, HasOSFamily, HasOSVersion, HasOSLicence):
+class ItopapiServer(ItopapiPrototype, HasOrganization, HasLocation, HasBrand, HasModel,
+                    HasOSFamily, HasOSVersion, HasOSLicence, HasRack):
     """
     ItopapiServers is an object that represents a Servers from iTop
     """
@@ -38,7 +40,7 @@ class ItopapiServer(ItopapiPrototype, HasOrganization, HasLocation, HasBrand, Ha
             HasOSFamily.foreign_key,
             HasOSVersion.foreign_key,
             HasOSLicence.foreign_key,
-            {'id': 'rack_id', 'name': 'rack_name', 'table': 'Rack'},
+            HasRack.foreign_key,
             {'id': 'enclosure_id', 'name': 'enclosure_name', 'table': 'Enclosure'},
             {'id': 'powerA_id', 'name': 'powerA_name', 'table': 'TODO'},
             {'id': 'powerB_id', 'name': 'powerB_name', 'table': 'TODO'},
@@ -73,13 +75,6 @@ class ItopapiServer(ItopapiPrototype, HasOrganization, HasLocation, HasBrand, Ha
         self.status = None
         # Server's business criticity. Values within [high, medium, low]
         self.business_criticity = None
-        # Server's rack id. Call findRack to get the full information or just use rack_id
-        # friendlyname and rack_name
-        self.rack_id = None
-        # Server's rack id's friendly name. Not sure the difference with rack_name
-        self.rack_id_friendlyname = None
-        # Server's rack name
-        self.rack_name = None
         # Server's enclosure (chassis) id. Call findEnclosure to get the full information or just
         # use enclosure_id_friendlyname and enclosure_name
         self.enclosure_id = None
@@ -199,14 +194,6 @@ class ItopapiServer(ItopapiPrototype, HasOrganization, HasLocation, HasBrand, Ha
         # Server's services list
         self.services_list = {}
 
-    def find_rack(self):
-        """
-        Retrieve the ItopapiRack corresponding to this server
-        """
-        if self.rack_id is not None:
-            return ItopapiPrototype.get_itop_class('Rack').find(self.rack_id)
-        return None
-
     def find_enclosure(self):
         """
         Retrieve the ItopapiEnclosure corresponding to this server
@@ -214,6 +201,7 @@ class ItopapiServer(ItopapiPrototype, HasOrganization, HasLocation, HasBrand, Ha
         if self.enclosure_id is not None:
             return ItopapiPrototype.get_itop_class('Enclosure').find(self.enclosure_id)
         return None
+
     def find_power_a(self):
         """
         Retrieve the ItopapiPowerA corresponding to this server

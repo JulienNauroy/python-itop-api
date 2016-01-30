@@ -9,12 +9,13 @@ from itopapi.model.features.hasOrganization import HasOrganization
 from itopapi.model.features.hasLocation import HasLocation
 from itopapi.model.features.hasBrand import HasBrand
 from itopapi.model.features.hasModel import HasModel
+from itopapi.model.features.hasRack import HasRack
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiEnclosure(ItopapiPrototype, HasOrganization, HasLocation, HasBrand, HasModel):
+class ItopapiEnclosure(ItopapiPrototype, HasOrganization, HasLocation, HasBrand, HasModel, HasRack):
 
     # Configuration specific to itop
     itop = {
@@ -28,7 +29,7 @@ class ItopapiEnclosure(ItopapiPrototype, HasOrganization, HasLocation, HasBrand,
             HasLocation.foreign_key,
             HasBrand.foreign_key,
             HasModel.foreign_key,
-            {'id': 'rack_id', 'name': 'rack_name', 'table': 'Rack'},
+            HasRack.foreign_key,
         ],
     }
 
@@ -55,13 +56,6 @@ class ItopapiEnclosure(ItopapiPrototype, HasOrganization, HasLocation, HasBrand,
         self.status = None
         # Enclosure's business criticity. Values within [high, medium, low]
         self.business_criticity = None
-        # Enclosure's rack id. Call findRack to get the full information or just use rack_id
-        # friendlyname and rack_name
-        self.rack_id = None
-        # Enclosure's rack id's friendly name. Not sure the difference with rack_name
-        self.rack_id_friendlyname = None
-        # Enclosure's rack name
-        self.rack_name = None
         # Rack units
         self.nb_u = None
         # Serial number
@@ -75,11 +69,3 @@ class ItopapiEnclosure(ItopapiPrototype, HasOrganization, HasLocation, HasBrand,
         # Server's end of warranty date
         self.end_of_warranty = None
         self.description = None
-
-    def find_rack(self):
-        """
-        Retrieve the ItopapiRack corresponding to this server
-        """
-        if self.rack_id is not None:
-            return ItopapiPrototype.get_itop_class('Rack').find(self.rack_id)
-        return None

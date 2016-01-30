@@ -15,4 +15,5 @@ from itopapi.model.features.hasModel import HasModel
 from itopapi.model.features.hasOSFamily import HasOSFamily
 from itopapi.model.features.hasOSVersion import HasOSVersion
 from itopapi.model.features.hasOSLicence import HasOSLicence
-from itopapi.model.features.hasVirtualHost import HasVirtualhost
+from itopapi.model.features.hasVirtualHost import HasVirtualHost
+from itopapi.model.features.hasRack import HasRack
