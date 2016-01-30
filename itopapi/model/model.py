@@ -5,12 +5,13 @@ ItopapiModel is an abstraction of Model representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype
+from itopapi.model.features.hasBrand import HasBrand
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiModel(ItopapiPrototype):
+class ItopapiModel(ItopapiPrototype, HasBrand):
 
     # Configuration specific to itop
     itop = {
@@ -19,7 +20,7 @@ class ItopapiModel(ItopapiPrototype):
         # Define which fields to save when creating or updating from the python API
         'save': ['name', 'type'],
         'foreign_keys': [
-            {'id': 'brand_id', 'name': 'brand_name', 'table': 'Brand'},
+            HasBrand.foreign_key,
         ]
     }
 
@@ -44,18 +45,7 @@ class ItopapiModel(ItopapiPrototype):
         super(ItopapiModel, self).__init__(data)
         # Physical devices using this brand
         self.physicaldevices_list = None
-        self.brand_id = None
-        self.brand_id_friendlyname = None
-        self.brand_name = None
-        # Type of item the Brand refers to. Values are within
+        # Type of item the Model refers to. Values are within
         # [DiskArray, Enclosure, IPPhone, MobilePhone, NAS, NetworkDevice, PC, PDU, Peripheral, Phone,
         # PowerSource, Printer, Rack, SANSwitch, Server, StorageSystem, Tablet, TapeLibrary]
         self.type = None
-
-    def find_brand(self):
-        """
-        Retrieve the ItopapiBrand corresponding to this server
-        """
-        if self.brand_id is not None:
-            return ItopapiPrototype.get_itop_class('Brand').find(self.brand_id)
-        return None

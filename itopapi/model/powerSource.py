@@ -7,12 +7,13 @@ ItopapiPowerSource is an abstraction of PowerSource representation on iTop
 from itopapi.model.prototype import ItopapiPrototype
 from itopapi.model.features.hasOrganization import HasOrganization
 from itopapi.model.features.hasLocation import HasLocation
+from itopapi.model.features.hasBrand import HasBrand
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiPowerSource(ItopapiPrototype, HasOrganization, HasLocation):
+class ItopapiPowerSource(ItopapiPrototype, HasOrganization, HasLocation, HasBrand):
 
     # Configuration specific to itop
     itop = {
@@ -24,7 +25,7 @@ class ItopapiPowerSource(ItopapiPrototype, HasOrganization, HasLocation):
         'foreign_keys': [
             HasOrganization.foreign_key,
             HasLocation.foreign_key,
-            {'id': 'brand_id', 'name': 'brand_name', 'table': 'Brand'},
+            HasBrand.foreign_key,
             {'id': 'model_id', 'name': 'model_name', 'table': 'Model'},
         ]
     }
@@ -53,9 +54,6 @@ class ItopapiPowerSource(ItopapiPrototype, HasOrganization, HasLocation):
         self.status = None
         # PowerSource's business criticity. Values within [high, medium, low]
         self.business_criticity = None
-        self.brand_id = None
-        self.brand_id_friendlyname = None
-        self.brand_name = None
         self.model_id = None
         self.model_id_friendlyname = None
         self.model_name = None
@@ -81,14 +79,6 @@ class ItopapiPowerSource(ItopapiPrototype, HasOrganization, HasLocation):
         self.tickets_list = {}
         self.providercontracts_list = {}
         self.pdus_list = {}
-
-    def find_brand(self):
-        """
-        Retrieve the ItopapiBrand corresponding to this instance
-        """
-        if self.brand_id is not None:
-            return ItopapiPrototype.get_itop_class('Brand').find(self.brand_id)
-        return None
 
     def find_model(self):
         """

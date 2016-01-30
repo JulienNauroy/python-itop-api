@@ -7,12 +7,13 @@ ItopapiServers is an abstraction of Rack representation on iTop
 from itopapi.model.prototype import ItopapiPrototype
 from itopapi.model.features.hasOrganization import HasOrganization
 from itopapi.model.features.hasLocation import HasLocation
+from itopapi.model.features.hasBrand import HasBrand
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiServer(ItopapiPrototype, HasOrganization, HasLocation):
+class ItopapiServer(ItopapiPrototype, HasOrganization, HasLocation, HasBrand):
     """
     ItopapiServers is an object that represents a Servers from iTop
     """
@@ -28,9 +29,9 @@ class ItopapiServer(ItopapiPrototype, HasOrganization, HasLocation):
         'foreign_keys': [
             HasOrganization.foreign_key,
             HasLocation.foreign_key,
+            HasBrand.foreign_key,
             {'id': 'rack_id', 'name': 'rack_name', 'table': 'Rack'},
             {'id': 'enclosure_id', 'name': 'enclosure_name', 'table': 'Enclosure'},
-            {'id': 'brand_id', 'name': 'brand_name', 'table': 'Brand'},
             {'id': 'model_id', 'name': 'model_name', 'table': 'Model'},
             {'id': 'osfamily_id', 'name': 'osfamily_name', 'table': 'OSFamily'},
             {'id': 'osversion_id', 'name': 'osversion_name', 'table': 'OSVersion'},
@@ -86,9 +87,6 @@ class ItopapiServer(ItopapiPrototype, HasOrganization, HasLocation):
         ##################################
         #  Properties/More Information   #
         ##################################
-        self.brand_id = None
-        self.brand_id_friendlyname = None
-        self.brand_name = None
 
         self.model_id = None
         self.model_id_friendlyname = None
@@ -227,14 +225,6 @@ class ItopapiServer(ItopapiPrototype, HasOrganization, HasLocation):
         """
         if self.enclosure_id is not None:
             return ItopapiPrototype.get_itop_class('Enclosure').find(self.enclosure_id)
-        return None
-
-    def find_brand(self):
-        """
-        Retrieve the ItopapiBrand corresponding to this server
-        """
-        if self.brand_id is not None:
-            return ItopapiPrototype.get_itop_class('Brand').find(self.brand_id)
         return None
 
     def find_model(self):
