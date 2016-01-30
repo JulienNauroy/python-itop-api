@@ -21,6 +21,7 @@ class HasOrganization2(object):
 
     def __init__(self):
         super(HasOrganization2, self).__init__()
+
         # Object's organization id. Call find_organization to get the full information or just use
         # org_id_friendlyname and organization_name
         self.org_id = None
