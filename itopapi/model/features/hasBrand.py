@@ -16,7 +16,7 @@ class HasBrand(object):
     """
 
     """ Configuration specific to itop """
-    foreign_key = {'id': 'location_id', 'name': 'location_name', 'table': 'Location'}
+    foreign_key = {'id': 'brand_id', 'name': 'brand_name', 'table': 'Brand'}
 
     def __init__(self):
         super(HasBrand, self).__init__()
@@ -34,7 +34,7 @@ class HasBrand(object):
         Retrieve the ItopapiBrand related to this instance
         """
         if self.brand_id is not None:
-            return ItopapiPrototype.get_itop_class('Brand').find(self.location_id)
+            return ItopapiPrototype.get_itop_class('Brand').find(self.brand_id)
         return None
 
     def set_brand(self, brand):
