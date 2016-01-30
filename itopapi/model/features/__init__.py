@@ -20,3 +20,4 @@ from itopapi.model.features.hasRack import HasRack
 from itopapi.model.features.hasEnclosure import HasEnclosure
 from itopapi.model.features.hasServer import HasServer
 from itopapi.model.features.hasFarm import HasFarm
+from itopapi.model.features.hasWebServer import HasWebServer

@@ -6,12 +6,13 @@ ItopapiWebApplication is an abstraction of Rack representation on iTop
 
 from itopapi.model.prototype import ItopapiPrototype
 from itopapi.model.features.hasOrganization import HasOrganization
+from itopapi.model.features.hasWebServer import HasWebServer
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiWebApplication(ItopapiPrototype, HasOrganization):
+class ItopapiWebApplication(ItopapiPrototype, HasOrganization, HasWebServer):
     """
     ItopapiWebApplication is an object that represents a WebApplication from iTop
     """
@@ -25,7 +26,7 @@ class ItopapiWebApplication(ItopapiPrototype, HasOrganization):
                  'move2production', 'description'],
         'foreign_keys': [
             HasOrganization.foreign_key,
-            {'id': 'webserver_id', 'name': 'webserver_name', 'table': 'WebServer'},
+            HasWebServer.foreign_key,
         ],
         'list_types': {
             'services_list': 'Service',
@@ -53,10 +54,6 @@ class ItopapiWebApplication(ItopapiPrototype, HasOrganization):
         ##################################
         # Properties/General Information #
         ##################################
-        # WebServer hosting the application
-        self.webserver_id = None
-        self.webserver_id_friendlyname = None
-        self.webserver_name = None
         # WebApplication's URL
         self.url = None
         # WebApplication's business criticity. Values within [high, medium, low]
@@ -101,11 +98,3 @@ class ItopapiWebApplication(ItopapiPrototype, HasOrganization):
         ##################################
         # WebApplication's services list
         self.services_list = {}
-
-    def find_web_server(self):
-        """
-        Retrieve the ItopapiWebServer corresponding to this WebApplication
-        """
-        if self.webserver_id is not None:
-            return ItopapiPrototype.get_itop_class('WebServer').find(self.webserver_id)
-        return None
