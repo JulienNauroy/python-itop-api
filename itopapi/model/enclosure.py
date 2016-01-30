@@ -8,12 +8,13 @@ from itopapi.model.prototype import ItopapiPrototype
 from itopapi.model.features.hasOrganization import HasOrganization
 from itopapi.model.features.hasLocation import HasLocation
 from itopapi.model.features.hasBrand import HasBrand
+from itopapi.model.features.hasModel import HasModel
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiEnclosure(ItopapiPrototype, HasOrganization, HasLocation, HasBrand):
+class ItopapiEnclosure(ItopapiPrototype, HasOrganization, HasLocation, HasBrand, HasModel):
 
     # Configuration specific to itop
     itop = {
@@ -26,8 +27,8 @@ class ItopapiEnclosure(ItopapiPrototype, HasOrganization, HasLocation, HasBrand)
             HasOrganization.foreign_key,
             HasLocation.foreign_key,
             HasBrand.foreign_key,
+            HasModel.foreign_key,
             {'id': 'rack_id', 'name': 'rack_name', 'table': 'Rack'},
-            {'id': 'model_id', 'name': 'model_name', 'table': 'Model'},
         ],
     }
 
@@ -61,9 +62,6 @@ class ItopapiEnclosure(ItopapiPrototype, HasOrganization, HasLocation, HasBrand)
         self.rack_id_friendlyname = None
         # Enclosure's rack name
         self.rack_name = None
-        self.model_id = None
-        self.model_id_friendlyname = None
-        self.model_name = None
         # Rack units
         self.nb_u = None
         # Serial number
@@ -84,12 +82,4 @@ class ItopapiEnclosure(ItopapiPrototype, HasOrganization, HasLocation, HasBrand)
         """
         if self.rack_id is not None:
             return ItopapiPrototype.get_itop_class('Rack').find(self.rack_id)
-        return None
-
-    def find_model(self):
-        """
-        Retrieve the ItopapiModel corresponding to this instance
-        """
-        if self.model_id is not None:
-            return ItopapiPrototype.get_itop_class('Model').find(self.model_id)
         return None

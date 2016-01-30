@@ -8,12 +8,13 @@ from itopapi.model.prototype import ItopapiPrototype
 from itopapi.model.features.hasOrganization import HasOrganization
 from itopapi.model.features.hasLocation import HasLocation
 from itopapi.model.features.hasBrand import HasBrand
+from itopapi.model.features.hasModel import HasModel
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiServer(ItopapiPrototype, HasOrganization, HasLocation, HasBrand):
+class ItopapiServer(ItopapiPrototype, HasOrganization, HasLocation, HasBrand, HasModel):
     """
     ItopapiServers is an object that represents a Servers from iTop
     """
@@ -30,9 +31,9 @@ class ItopapiServer(ItopapiPrototype, HasOrganization, HasLocation, HasBrand):
             HasOrganization.foreign_key,
             HasLocation.foreign_key,
             HasBrand.foreign_key,
+            HasModel.foreign_key,
             {'id': 'rack_id', 'name': 'rack_name', 'table': 'Rack'},
             {'id': 'enclosure_id', 'name': 'enclosure_name', 'table': 'Enclosure'},
-            {'id': 'model_id', 'name': 'model_name', 'table': 'Model'},
             {'id': 'osfamily_id', 'name': 'osfamily_name', 'table': 'OSFamily'},
             {'id': 'osversion_id', 'name': 'osversion_name', 'table': 'OSVersion'},
             {'id': 'oslicence_id', 'name': 'oslicence_name', 'table': 'OSLicence'},
@@ -225,14 +226,6 @@ class ItopapiServer(ItopapiPrototype, HasOrganization, HasLocation, HasBrand):
         """
         if self.enclosure_id is not None:
             return ItopapiPrototype.get_itop_class('Enclosure').find(self.enclosure_id)
-        return None
-
-    def find_model(self):
-        """
-        Retrieve the ItopapiModel corresponding to this server
-        """
-        if self.model_id is not None:
-            return ItopapiPrototype.get_itop_class('Model').find(self.model_id)
         return None
 
     def find_os_family(self):

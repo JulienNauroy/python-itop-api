@@ -125,9 +125,7 @@ def get_model(brand, model_name, model_type):
         itop_model = ItopapiModel()
         itop_model.name = model_name
         itop_model.type = model_type
-        itop_model.brand_id = brand.instance_id
-        itop_model.brand_id_friendlyname = brand.friendlyname
-        itop_model.brand_name = brand.name
+        itop_model.set_brand(brand)
         itop_model.save()
         itop_models[(brand.instance_id, model_name)] = itop_model
     return itop_model
@@ -220,16 +218,12 @@ def get_server_params(itop_server, vcenter_host, organization):
     itop_brand = get_brand(summary.hardware.vendor)
     if itop_server.brand_id != itop_brand.instance_id:
         has_changed = True
-        itop_server.brand_id = itop_brand.instance_id
-        itop_server.brand_id_friendlyname = itop_brand.friendlyname
-        itop_server.brand_name = itop_brand.name
+        itop_server.set_brand(itop_brand)
     # Set the model
     itop_model = get_model(itop_brand, summary.hardware.model, "Server")
     if itop_server.model_id != itop_model.instance_id:
         has_changed = True
-        itop_server.model_id = itop_model.instance_id
-        itop_server.model_id_friendlyname = itop_model.friendlyname
-        itop_server.model_name = itop_model.name
+        itop_server.set_model(itop_model)
     # Set other fields
     cpu_count = int(hardware.cpuInfo.numCpuCores * hardware.cpuInfo.numCpuPackages)
     if itop_server.name != vcenter_host.name \
