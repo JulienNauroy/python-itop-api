@@ -6,12 +6,13 @@ ItopapiIncident is an abstraction of a Incident representation on iTop
 
 from itopapi.model.prototype import ItopapiPrototype
 from itopapi.model.features.hasOrganization import HasOrganization
+from itopapi.model.features.hasTeam import HasTeam
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiIncident(ItopapiPrototype, HasOrganization):
+class ItopapiIncident(ItopapiPrototype, HasOrganization, HasTeam):
 
     # Configuration specific to itop
     itop = {
@@ -22,7 +23,7 @@ class ItopapiIncident(ItopapiPrototype, HasOrganization):
         'foreign_keys': [
             HasOrganization.foreign_key,
             {'id': 'agent_id', 'name': 'agent_name', 'table': 'Person'},
-            {'id': 'team_id', 'name': 'team_name', 'table': 'Team'},
+            HasTeam.foreign_key,
         ],
         'list_types': {
             'functionalcis_list': 'functionalci_id_finalclass_recall',
@@ -61,10 +62,6 @@ class ItopapiIncident(ItopapiPrototype, HasOrganization):
         # Foreign key to a Person
         self.agent_id = None
         self.agent_name = None
-
-        self.team_id = None
-        self.team_id_friendlyname = None
-        self.team_name = None
 
         ##################################
         #             Lists              #

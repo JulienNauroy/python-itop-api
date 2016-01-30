@@ -23,5 +23,6 @@ from itopapi.model.features.hasFarm import HasFarm
 from itopapi.model.features.hasWebServer import HasWebServer
 from itopapi.model.features.hasParentOrganization import HasParentOrganization
 from itopapi.model.features.hasDeliveryModel import HasDeliveryModel
-from itopapi.model.features.hasSoftwareLicence import HasSoftwareLicence
 from itopapi.model.features.hasSoftware import HasSoftware
+from itopapi.model.features.hasSoftwareLicence import HasSoftwareLicence
+from itopapi.model.features.hasTeam import HasTeam
