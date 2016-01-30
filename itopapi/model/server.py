@@ -11,12 +11,13 @@ from itopapi.model.features.hasBrand import HasBrand
 from itopapi.model.features.hasModel import HasModel
 from itopapi.model.features.hasOSFamily import HasOSFamily
 from itopapi.model.features.hasOSVersion import HasOSVersion
+from itopapi.model.features.hasOSLicence import HasOSLicence
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiServer(ItopapiPrototype, HasOrganization, HasLocation, HasBrand, HasModel, HasOSFamily, HasOSVersion):
+class ItopapiServer(ItopapiPrototype, HasOrganization, HasLocation, HasBrand, HasModel, HasOSFamily, HasOSVersion, HasOSLicence):
     """
     ItopapiServers is an object that represents a Servers from iTop
     """
@@ -36,9 +37,9 @@ class ItopapiServer(ItopapiPrototype, HasOrganization, HasLocation, HasBrand, Ha
             HasModel.foreign_key,
             HasOSFamily.foreign_key,
             HasOSVersion.foreign_key,
+            HasOSLicence.foreign_key,
             {'id': 'rack_id', 'name': 'rack_name', 'table': 'Rack'},
             {'id': 'enclosure_id', 'name': 'enclosure_name', 'table': 'Enclosure'},
-            {'id': 'oslicence_id', 'name': 'oslicence_name', 'table': 'OSLicence'},
             {'id': 'powerA_id', 'name': 'powerA_name', 'table': 'TODO'},
             {'id': 'powerB_id', 'name': 'powerB_name', 'table': 'TODO'},
         ],
@@ -92,10 +93,6 @@ class ItopapiServer(ItopapiPrototype, HasOrganization, HasLocation, HasBrand, Ha
         ##################################
 
         self.managementip = None
-
-        self.oslicence_id = None
-        self.oslicence_id_friendlyname = None
-        self.oslicence_name = None
 
         self.cpu = None
         self.ram = None
@@ -217,15 +214,6 @@ class ItopapiServer(ItopapiPrototype, HasOrganization, HasLocation, HasBrand, Ha
         if self.enclosure_id is not None:
             return ItopapiPrototype.get_itop_class('Enclosure').find(self.enclosure_id)
         return None
-
-    def find_os_licence(self):
-        """
-        Retrieve the ItopapiOSLicence corresponding to this server
-        """
-        if self.oslicence_id is not None:
-            return ItopapiPrototype.get_itop_class('OSLicence').find(self.osfamily_id)
-        return None
-
     def find_power_a(self):
         """
         Retrieve the ItopapiPowerA corresponding to this server

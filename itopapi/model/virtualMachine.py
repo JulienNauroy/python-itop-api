@@ -8,12 +8,13 @@ from itopapi.model.prototype import ItopapiPrototype
 from itopapi.model.features.hasOrganization import HasOrganization
 from itopapi.model.features.hasOSFamily import HasOSFamily
 from itopapi.model.features.hasOSVersion import HasOSVersion
+from itopapi.model.features.hasOSLicence import HasOSLicence
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiVirtualMachine(ItopapiPrototype, HasOrganization, HasOSFamily, HasOSVersion):
+class ItopapiVirtualMachine(ItopapiPrototype, HasOrganization, HasOSFamily, HasOSVersion, HasOSLicence):
 
     # Configuration specific to itop
     itop = {
@@ -26,8 +27,8 @@ class ItopapiVirtualMachine(ItopapiPrototype, HasOrganization, HasOSFamily, HasO
             HasOrganization.foreign_key,
             HasOSFamily.foreign_key,
             HasOSVersion.foreign_key,
+            HasOSLicence.foreign_key,
             {'id': 'virtualhost_id', 'name': 'virtualhost_name', 'table': 'VirtualHost'},
-            {'id': 'oslicence_id', 'name': 'oslicence_name', 'table': 'OSLicence'},
         ],
         'list_types': {
             'contacts_list': 'contact_id_finalclass_recall'
@@ -72,10 +73,6 @@ class ItopapiVirtualMachine(ItopapiPrototype, HasOrganization, HasOSFamily, HasO
         ##################################
 
         self.managementip = None
-
-        self.oslicence_id = None
-        self.oslicence_id_friendlyname = None
-        self.oslicence_name = None
 
         self.cpu = None
         self.ram = None
@@ -145,11 +142,3 @@ class ItopapiVirtualMachine(ItopapiPrototype, HasOrganization, HasOSFamily, HasO
         ##################################
         # VirtualMachine's services list
         self.services_list = {}
-
-    def find_os_licence(self):
-        """
-        Retrieve the ItopapiOSLicence corresponding to this server
-        """
-        if self.oslicence_id is not None:
-            return ItopapiPrototype.get_itop_class('OSLicence').find(self.osfamily_id)
-        return None

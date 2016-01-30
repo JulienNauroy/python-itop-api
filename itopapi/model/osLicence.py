@@ -41,7 +41,7 @@ class ItopapiOSLicence(ItopapiPrototype, HasOrganization, HasOSVersion):
         return ItopapiPrototype.find_all(ItopapiOSLicence)
 
     """
-    ItopapiOSLicence is an object that represents an OSLicence from iTop
+    ItopapiOSLicence is an object that represents an OSLicence (sic) from iTop
     """
     def __init__(self, data=None):
         super(ItopapiOSLicence, self).__init__(data)
