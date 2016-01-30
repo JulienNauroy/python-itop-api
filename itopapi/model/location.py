@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-fr
 
 """
-ItopapiLocation is a abstraction of a Location representation on iTop
+ItopapiLocation is an abstraction of a Location representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype

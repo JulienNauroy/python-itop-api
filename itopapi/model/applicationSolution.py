@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-fr
 # pylint: disable=invalid-name
 """
-ItopapiApplicationSolution is a abstraction of Application Solution representation on iTop
+ItopapiApplicationSolution is an abstraction of Application Solution representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype

@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-fr
 # pylint: disable=too-many-instance-attributes, invalid-name
 """
-ItopapiTeam is a abstraction of Team representation on iTop
+ItopapiTeam is an abstraction of Team representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype

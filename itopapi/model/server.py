@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-fr
 # pylint: disable=too-many-instance-attributes,invalid-name, too-many-statements
 """
-ItopapiServers is a abstraction of Rack representation on iTop
+ItopapiServers is an abstraction of Rack representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype, ItopapiUnimplementedMethod

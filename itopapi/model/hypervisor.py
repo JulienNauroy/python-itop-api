@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-fr
 
 """
-ItopapiHypervisor is a abstraction of a virtual servers Hypervisor representation on iTop
+ItopapiHypervisor is an abstraction of a virtual servers Hypervisor representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype

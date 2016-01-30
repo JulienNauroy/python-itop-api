@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-fr
 # pylint: disable=invalid-name
 """
-ItopapiOrganization is a abstraction of Organization representation on iTop
+ItopapiOrganization is an abstraction of Organization representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype

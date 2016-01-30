@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-fr
 
 """
-ItopapiPerson is a abstraction of a Person representation on iTop
+ItopapiPerson is an abstraction of a Person representation on iTop
 Note : Person has no finalclass and name. It complicates things...
 """
 

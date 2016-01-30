@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-fr
 
 """
-ItopapiOSFamily is a abstraction of Rack representation on iTop
+ItopapiOSFamily is an abstraction of Rack representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype

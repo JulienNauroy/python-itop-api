@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-fr
 
 """
-ItopapiBrand is a abstraction of Brand representation on iTop
+ItopapiBrand is an abstraction of Brand representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype

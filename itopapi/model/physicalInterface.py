@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-fr
 
 """
-ItopapiPhysicalInterface is a abstraction of PhysicalInterface representation on iTop
+ItopapiPhysicalInterface is an abstraction of PhysicalInterface representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype

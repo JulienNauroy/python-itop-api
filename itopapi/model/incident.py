@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-fr
 
 """
-ItopapiIncident is a abstraction of a Incident representation on iTop
+ItopapiIncident is an abstraction of a Incident representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype

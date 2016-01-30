@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-fr
 
 """
-ItopapiSubnet is a abstraction of Subnet representation on iTop
+ItopapiSubnet is an abstraction of Subnet representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype

@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-fr
 
 """
-ItopapiVLAN is a abstraction of VLAN representation on iTop
+ItopapiVLAN is an abstraction of VLAN representation on iTop
 Note : VLAN has no finalclass and name. It complicates things...
 """
 

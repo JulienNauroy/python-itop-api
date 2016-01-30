@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-fr
 
 """
-ItopapiService is a abstraction of Service representation on iTop
+ItopapiService is an abstraction of Service representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype

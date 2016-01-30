@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-fr
 
 """
-ItopapiFarm is a abstraction of a virtual servers farm representation on iTop
+ItopapiFarm is an abstraction of a virtual servers farm representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype

@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-fr
 
 """
-ItopapiPowerSource is a abstraction of PowerSource representation on iTop
+ItopapiPowerSource is an abstraction of PowerSource representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype

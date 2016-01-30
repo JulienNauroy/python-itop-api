@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-fr
 # pylint: disable=too-many-instance-attributes, invalid-name
 """
-ItopapiOtherSoftware is a abstraction of OtherSoftware representation on iTop
+ItopapiOtherSoftware is an abstraction of OtherSoftware representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype

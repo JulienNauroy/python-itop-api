@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-fr
 # pylint: disable=too-many-instance-attributes, invalid-name
 """
-ItopapiDBServer is a abstraction of DBServer representation on iTop
+ItopapiDBServer is an abstraction of DBServer representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype

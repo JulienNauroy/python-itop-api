@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-fr
 
 """
-ItopapiVirtualMachine is a abstraction of VLAN representation on iTop
+ItopapiVirtualMachine is an abstraction of VLAN representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype, ItopapiUnimplementedMethod

@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-fr
 
 """
-ItopapiModel is a abstraction of Model representation on iTop
+ItopapiModel is an abstraction of Model representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype
