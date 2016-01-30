@@ -39,7 +39,7 @@ class HasOSFamily(object):
 
     def set_osfamily(self, osfamily):
         """
-        Set the ItopapiOrganization parameters
+        Set the ItopapiFamily parameters
         """
         self.osfamily_id = osfamily.instance_id
         self.osfamily_id_friendlyname = osfamily.friendlyname

@@ -39,7 +39,7 @@ class HasOSLicence(object):
 
     def set_oslicence(self, oslicence):
         """
-        Set the ItopapiOrganization parameters
+        Set the ItopapiOSlicence parameters
         """
         self.oslicence_id = oslicence.instance_id
         self.oslicence_id_friendlyname = oslicence.friendlyname

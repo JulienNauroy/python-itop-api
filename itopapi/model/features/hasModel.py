@@ -39,7 +39,7 @@ class HasModel(object):
 
     def set_model(self, model):
         """
-        Set the ItopapiOrganization parameters
+        Set the ItopapiModel parameters
         """
         self.model_id = model.instance_id
         self.model_id_friendlyname = model.friendlyname

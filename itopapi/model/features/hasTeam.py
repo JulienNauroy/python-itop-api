@@ -39,7 +39,7 @@ class HasTeam(object):
 
     def set_team(self, team):
         """
-        Set the ItopapiOrganization parameters
+        Set the ItopapiTeam parameters
         """
         self.team_id = team.instance_id
         self.team_id_friendlyname = team.friendlyname

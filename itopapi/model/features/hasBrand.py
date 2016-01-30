@@ -39,7 +39,7 @@ class HasBrand(object):
 
     def set_brand(self, brand):
         """
-        Set the ItopapiOrganization parameters
+        Set the ItopapiBrand parameters
         """
         self.brand_id = brand.instance_id
         self.brand_id_friendlyname = brand.friendlyname

@@ -39,7 +39,7 @@ class HasRack(object):
 
     def set_rack(self, rack):
         """
-        Set the ItopapiOrganization parameters
+        Set the ItopapiRack parameters
         """
         self.rack_id = rack.instance_id
         self.rack_id_friendlyname = rack.friendlyname

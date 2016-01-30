@@ -39,7 +39,7 @@ class HasServer(object):
 
     def set_server(self, server):
         """
-        Set the ItopapiOrganization parameters
+        Set the ItopapiServer parameters
         """
         self.server_id = server.instance_id
         self.server_id_friendlyname = server.friendlyname

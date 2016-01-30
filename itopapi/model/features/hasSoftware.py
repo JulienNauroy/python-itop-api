@@ -39,7 +39,7 @@ class HasSoftware(object):
 
     def set_software(self, software):
         """
-        Set the ItopapiOrganization parameters
+        Set the ItopapiServer parameters
         """
         self.software_id = software.instance_id
         self.software_id_friendlyname = software.friendlyname

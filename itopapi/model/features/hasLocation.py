@@ -39,7 +39,7 @@ class HasLocation(object):
 
     def set_location(self, location):
         """
-        Set the ItopapiOrganization parameters
+        Set the ItopapiLocation parameters
         """
         self.location_id = location.instance_id
         self.location_id_friendlyname = location.friendlyname

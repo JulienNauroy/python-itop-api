@@ -39,7 +39,7 @@ class HasSoftwareLicence(object):
 
     def set_softwarelicence(self, softwarelicence):
         """
-        Set the ItopapiOrganization parameters
+        Set the ItopapiSoftwareLicence parameters
         """
         self.softwarelicence_id = softwarelicence.instance_id
         self.softwarelicence_id_friendlyname = softwarelicence.friendlyname

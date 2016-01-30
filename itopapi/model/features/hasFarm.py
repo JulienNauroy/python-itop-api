@@ -39,7 +39,7 @@ class HasFarm(object):
 
     def set_farm(self, farm):
         """
-        Set the ItopapiOrganization parameters
+        Set the ItopapiFarm parameters
         """
         self.farm_id = farm.instance_id
         self.farm_id_friendlyname = farm.friendlyname

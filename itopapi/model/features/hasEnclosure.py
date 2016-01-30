@@ -39,7 +39,7 @@ class HasEnclosure(object):
 
     def set_enclosure(self, enclosure):
         """
-        Set the ItopapiOrganization parameters
+        Set the ItopapiEnclosure parameters
         """
         self.enclosure_id = enclosure.instance_id
         self.enclosure_id_friendlyname = enclosure.friendlyname

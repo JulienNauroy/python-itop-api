@@ -39,7 +39,7 @@ class HasWebServer(object):
 
     def set_webserver(self, webserver):
         """
-        Set the ItopapiOrganization parameters
+        Set the ItopapiWebServer parameters
         """
         self.webserver_id = webserver.instance_id
         self.webserver_id_friendlyname = webserver.friendlyname

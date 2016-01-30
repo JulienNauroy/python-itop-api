@@ -36,7 +36,7 @@ class HasAgent(object):
 
     def set_agent(self, agent):
         """
-        Set the ItopapiOrganization parameters
+        Set the ItopapiPerson parameters
         """
         self.agent_id = agent.instance_id
         self.agent_name = agent.name

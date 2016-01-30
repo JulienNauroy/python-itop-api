@@ -39,7 +39,7 @@ class HasOSVersion(object):
 
     def set_osversion(self, osversion):
         """
-        Set the ItopapiOrganization parameters
+        Set the ItopapiOSVersion parameters
         """
         self.osversion_id = osversion.instance_id
         self.osversion_id_friendlyname = osversion.friendlyname

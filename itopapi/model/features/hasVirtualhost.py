@@ -39,7 +39,7 @@ class HasVirtualHost(object):
 
     def set_virtualhost(self, virtualhost):
         """
-        Set the ItopapiOrganization parameters
+        Set the ItopapiVirtualHost parameters
         """
         self.virtualhost_id = virtualhost.instance_id
         self.virtualhost_id_friendlyname = virtualhost.friendlyname

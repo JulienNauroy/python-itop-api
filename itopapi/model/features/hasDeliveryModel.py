@@ -39,7 +39,7 @@ class HasDeliveryModel(object):
 
     def set_deliverymodel(self, deliverymodel):
         """
-        Set the ItopapiOrganization parameters
+        Set the ItopapiDeliveryModel parameters
         """
         self.deliverymodel_id = deliverymodel.instance_id
         self.deliverymodel_id_friendlyname = deliverymodel.friendlyname
