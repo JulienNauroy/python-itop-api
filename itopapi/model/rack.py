@@ -6,12 +6,13 @@ ItopapiRack is an abstraction of Rack representation on iTop
 
 from itopapi.model.prototype import ItopapiPrototype
 from itopapi.model.features.hasOrganization import HasOrganization
+from itopapi.model.features.hasLocation import HasLocation
 
 __version__ = '1.0'
 __authors__ = ['Guillaume Philippon <guillaume.philippon@lal.in2p3.fr>', 'Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiRack(ItopapiPrototype, HasOrganization):
+class ItopapiRack(ItopapiPrototype, HasOrganization, HasLocation):
     """
     ItopapiRack is an object that represents a Rack from iTop
     """
@@ -25,7 +26,7 @@ class ItopapiRack(ItopapiPrototype, HasOrganization):
                  'serialnumber', 'asset_number', 'move2production', 'purchase_date', 'end_of_warranty', 'description'],
         'foreign_keys': [
             HasOrganization.foreign_key,
-            {'id': 'location_id', 'name': 'location_name', 'table': 'Location'},
+            HasLocation.foreign_key,
         ],
         'list_types': {
             'contacts_list': 'contact_id_finalclass_recall'
@@ -56,13 +57,6 @@ class ItopapiRack(ItopapiPrototype, HasOrganization):
         self.status = None
         # Rack's business criticity. Values within [high, medium, low]
         self.business_criticity = None
-        # Rack's location id. Call find_location to get the full information or just use location_id
-        # _friendlyname and location_name
-        self.location_id = None
-        # Rack's location id's friendly name. Not sure the difference with location_name
-        self.location_id_friendlyname = None
-        # Rack's location name
-        self.location_name = None
         # Rack's height in "rack units"
         self.nb_u = None
         # Rack's serial number
@@ -124,11 +118,3 @@ class ItopapiRack(ItopapiPrototype, HasOrganization):
         self.applicationsolution_list = None
         self.softwares_list = None
         self.logicalvolumes_list = None
-
-    def find_location(self):
-        """
-        Retrieve the ItopapiLocation related to this instance
-        """
-        if self.location_id is not None:
-            return ItopapiPrototype.get_itop_class('Location').find(self.location_id)
-        return None

@@ -6,12 +6,13 @@ ItopapiPowerSource is an abstraction of PowerSource representation on iTop
 
 from itopapi.model.prototype import ItopapiPrototype
 from itopapi.model.features.hasOrganization import HasOrganization
+from itopapi.model.features.hasLocation import HasLocation
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiPowerSource(ItopapiPrototype, HasOrganization):
+class ItopapiPowerSource(ItopapiPrototype, HasOrganization, HasLocation):
 
     # Configuration specific to itop
     itop = {
@@ -22,7 +23,7 @@ class ItopapiPowerSource(ItopapiPrototype, HasOrganization):
                  'move2production', 'purchase_date', 'end_of_warranty', 'description'],
         'foreign_keys': [
             HasOrganization.foreign_key,
-            {'id': 'location_id', 'name': 'location_name', 'table': 'Location'},
+            HasLocation.foreign_key,
             {'id': 'brand_id', 'name': 'brand_name', 'table': 'Brand'},
             {'id': 'model_id', 'name': 'model_name', 'table': 'Model'},
         ]
@@ -52,13 +53,6 @@ class ItopapiPowerSource(ItopapiPrototype, HasOrganization):
         self.status = None
         # PowerSource's business criticity. Values within [high, medium, low]
         self.business_criticity = None
-        # PowerSource's location id. Call find_location to get the full information or just use
-        # location_id_friendlyname and location_name
-        self.location_id = None
-        # PowerSource's location id's friendly name. Not sure the difference with location_name
-        self.location_id_friendlyname = None
-        # PowerSource's location name
-        self.location_name = None
         self.brand_id = None
         self.brand_id_friendlyname = None
         self.brand_name = None
@@ -87,14 +81,6 @@ class ItopapiPowerSource(ItopapiPrototype, HasOrganization):
         self.tickets_list = {}
         self.providercontracts_list = {}
         self.pdus_list = {}
-
-    def find_location(self):
-        """
-        Retrieve the ItopapiLocation related to this instance
-        """
-        if self.location_id is not None:
-            return ItopapiPrototype.get_itop_class('Location').find(self.location_id)
-        return None
 
     def find_brand(self):
         """

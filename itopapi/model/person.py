@@ -7,12 +7,13 @@ Note : Person has no finalclass and name. It complicates things...
 
 from itopapi.model.prototype import ItopapiPrototype
 from itopapi.model.features.hasOrganization import HasOrganization
+from itopapi.model.features.hasLocation import HasLocation
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiPerson(ItopapiPrototype, HasOrganization):
+class ItopapiPerson(ItopapiPrototype, HasOrganization, HasLocation):
 
     # Configuration specific to itop
     itop = {
@@ -23,7 +24,7 @@ class ItopapiPerson(ItopapiPrototype, HasOrganization):
                  'email', 'mobile_phone', 'phone', 'notify', 'employee_number', 'status'],
         'foreign_keys': [
             HasOrganization.foreign_key,
-            {'id': 'location_id', 'name': 'location_name', 'table': 'Location'},
+            HasLocation.foreign_key,
             {'id': 'manager_id', 'name': 'manager_name', 'table': 'Person'},
         ],
         'list_types': {
@@ -56,13 +57,6 @@ class ItopapiPerson(ItopapiPrototype, HasOrganization):
         ##################################
         self.contact_id = None
         self.contact_name = None
-        # Person's location id. Call find_location to get the full information or just use
-        # location_id_friendlyname and location_name
-        self.location_id = None
-        # Person's location id's friendly name. Not sure the difference with location_name
-        self.location_id_friendlyname = None
-        # Person's location name
-        self.location_name = None
         self.manager_id = None,
         self.manager_id_friendlyname = None,
         self.manager_name = None,
@@ -82,11 +76,3 @@ class ItopapiPerson(ItopapiPrototype, HasOrganization):
         self.tickets_list = None
         self.tickets_list = None
         self.tickets_list = None
-
-    def find_location(self):
-        """
-        Retrieve the ItopapiLocation related to this instance
-        """
-        if self.location_id is not None:
-            return ItopapiPrototype.get_itop_class('Location').find(self.location_id)
-        return None

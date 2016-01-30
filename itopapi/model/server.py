@@ -6,12 +6,13 @@ ItopapiServers is an abstraction of Rack representation on iTop
 
 from itopapi.model.prototype import ItopapiPrototype
 from itopapi.model.features.hasOrganization import HasOrganization
+from itopapi.model.features.hasLocation import HasLocation
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiServer(ItopapiPrototype, HasOrganization):
+class ItopapiServer(ItopapiPrototype, HasOrganization, HasLocation):
     """
     ItopapiServers is an object that represents a Servers from iTop
     """
@@ -26,7 +27,7 @@ class ItopapiServer(ItopapiPrototype, HasOrganization):
                  'purchase_date', 'end_of_warranty', 'description'],
         'foreign_keys': [
             HasOrganization.foreign_key,
-            {'id': 'location_id', 'name': 'location_name', 'table': 'Location'},
+            HasLocation.foreign_key,
             {'id': 'rack_id', 'name': 'rack_name', 'table': 'Rack'},
             {'id': 'enclosure_id', 'name': 'enclosure_name', 'table': 'Enclosure'},
             {'id': 'brand_id', 'name': 'brand_name', 'table': 'Brand'},
@@ -67,13 +68,6 @@ class ItopapiServer(ItopapiPrototype, HasOrganization):
         self.status = None
         # Server's business criticity. Values within [high, medium, low]
         self.business_criticity = None
-        # Server's location id. Call find_location to get the full information or just use
-        # location_id_friendlyname and location_name
-        self.location_id = None
-        # Server's location id's friendly name. Not sure the difference with location_name
-        self.location_id_friendlyname = None
-        # Server's location name
-        self.location_name = None
         # Server's rack id. Call findRack to get the full information or just use rack_id
         # friendlyname and rack_name
         self.rack_id = None
@@ -225,14 +219,6 @@ class ItopapiServer(ItopapiPrototype, HasOrganization):
         """
         if self.rack_id is not None:
             return ItopapiPrototype.get_itop_class('Rack').find(self.rack_id)
-        return None
-
-    def find_location(self):
-        """
-        Retrieve the ItopapiLocation related to this instance
-        """
-        if self.location_id is not None:
-            return ItopapiPrototype.get_itop_class('Location').find(self.location_id)
         return None
 
     def find_enclosure(self):
