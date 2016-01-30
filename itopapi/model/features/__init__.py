@@ -21,3 +21,5 @@ from itopapi.model.features.hasEnclosure import HasEnclosure
 from itopapi.model.features.hasServer import HasServer
 from itopapi.model.features.hasFarm import HasFarm
 from itopapi.model.features.hasWebServer import HasWebServer
+from itopapi.model.features.hasParentOrganization import HasParentOrganization
+from itopapi.model.features.hasDeliveryModel import HasDeliveryModel

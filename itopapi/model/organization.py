@@ -6,11 +6,14 @@ ItopapiOrganization is an abstraction of Organization representation on iTop
 
 from itopapi.model.prototype import ItopapiPrototype
 from itopapi.model.deliveryModel import ItopapiDeliveryModel
+from itopapi.model.features.hasParentOrganization import HasParentOrganization
+from itopapi.model.features.hasDeliveryModel import HasDeliveryModel
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
-class ItopapiOrganization(ItopapiPrototype):
+
+class ItopapiOrganization(ItopapiPrototype, HasParentOrganization, HasDeliveryModel):
 
     # Configuration specific to itop
     itop = {
@@ -19,8 +22,8 @@ class ItopapiOrganization(ItopapiPrototype):
         # Define which fields to save when creating or updating from the python API
         'save': ['name', 'code', 'status'],
         'foreign_keys': [
-            {'id': 'parent_id', 'name': 'parent_name', 'table': 'Organization'},
-            {'id': 'deliverymodel_id', 'name': 'deliverymodel_name', 'table': 'DeliveryModel'},
+            HasParentOrganization.foreign_key,
+            HasDeliveryModel.foreign_key,
         ]
     }
 
@@ -47,27 +50,3 @@ class ItopapiOrganization(ItopapiPrototype):
         self.code = None
         # Application Solution's status. Values within [inactive, active]
         self.status = None
-        # Parent information
-        self.parent_id = None
-        self.parent_name = None
-        self.parent_id_friendlyname = None
-        # Delivery model
-        self.deliverymodel_id = None
-        self.deliverymodel_name = None
-        self.deliverymodel_id_friendlyname = None
-
-    def find_parent(self):
-        """
-        Retrieve the parent ItopapiOrganization
-        """
-        if self.parent_id is not None:
-            return ItopapiOrganization.find(self.parent_id)
-        return None
-
-    def find_delivery_model(self):
-        """
-        Retrieve the ItopapiDeliveryModel associated with this entry
-        """
-        if self.deliverymodel_id is not None:
-            return ItopapiDeliveryModel.find(self.deliverymodel_id)
-        return None
