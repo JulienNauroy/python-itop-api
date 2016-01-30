@@ -7,12 +7,13 @@ ItopapiWebServer is an abstraction of Rack representation on iTop
 from itopapi.model.prototype import ItopapiPrototype, ItopapiUnimplementedMethod
 from itopapi.model.features.hasOrganization import HasOrganization
 from itopapi.model.features.hasSoftwareLicence import HasSoftwareLicence
+from itopapi.model.features.hasSoftware import HasSoftware
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiWebServer(ItopapiPrototype, HasOrganization, HasSoftwareLicence):
+class ItopapiWebServer(ItopapiPrototype, HasOrganization, HasSoftwareLicence, HasSoftware):
     """
     ItopapiWebServer is an object that represents a WebServer from iTop
     """
@@ -26,7 +27,7 @@ class ItopapiWebServer(ItopapiPrototype, HasOrganization, HasSoftwareLicence):
         'foreign_keys': [
             HasOrganization.foreign_key,
             {'id': 'system_id', 'name': 'system_id_friendlyname', 'table': 'Server'},
-            {'id': 'software_id', 'name': 'software_name', 'table': 'Software'},
+            HasSoftware.foreign_key,
             HasSoftwareLicence.foreign_key,
         ],
         'list_types': {
@@ -63,10 +64,6 @@ class ItopapiWebServer(ItopapiPrototype, HasOrganization, HasSoftwareLicence):
         self.system_id_finalclass_recall = None
         self.system_id_friendlyname = None
         self.system_name = None
-        # Web server's software
-        self.software_id = None
-        self.software_id_friendlyname = None
-        self.software_name = None
         # Web server's path ?
         self.path = None
         # WebServer's move to production date
@@ -108,14 +105,5 @@ class ItopapiWebServer(ItopapiPrototype, HasOrganization, HasSoftwareLicence):
         """
         if self.system_id is not None:
             # TODO define System
-            raise ItopapiUnimplementedMethod()
-        return None
-
-    def find_software(self):
-        """
-        Retrieve the Software corresponding to this WebServer
-        """
-        if self.software_id is not None:
-            # TODO define Software
             raise ItopapiUnimplementedMethod()
         return None
