@@ -244,11 +244,9 @@ def get_hypervisor_params(itop_hypervisor, itop_server):
     itop_hypervisor.server_id_friendlyname = itop_server.friendlyname
     itop_hypervisor.server_name = itop_server.name
     # Set the farm if possible
-    farm = host_to_farm.get(itop_server.name)
-    if farm is not None:
-        itop_hypervisor.farm_id = farm.instance_id
-        itop_hypervisor.farm_id_friendlyname = farm.friendlyname
-        itop_hypervisor.farm_name = farm.name
+    itop_farm = host_to_farm.get(itop_server.name)
+    if itop_farm is not None:
+        itop_hypervisor.set_farm(itop_farm)
     # Set other fields
     itop_hypervisor.name = itop_server.name
 
