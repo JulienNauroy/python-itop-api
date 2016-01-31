@@ -5,13 +5,14 @@ ItopapiOSVersion is an abstraction of an OSVersion representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype
+from itopapi.model.typology import ItopapiTypology
 from itopapi.model.features.hasOSFamily import HasOSFamily
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiOSVersion(ItopapiPrototype, HasOSFamily):
+class ItopapiOSVersion(ItopapiTypology, HasOSFamily):
 
     # Configuration specific to itop
     itop = {
@@ -44,3 +45,6 @@ class ItopapiOSVersion(ItopapiPrototype, HasOSFamily):
     def __init__(self, data=None):
         super(ItopapiOSVersion, self).__init__(data)
 
+
+# Register as a subclass of Typology
+ItopapiTypology.register(ItopapiOSVersion)

@@ -5,6 +5,7 @@ ItopapiHypervisor is an abstraction of a virtual servers Hypervisor representati
 """
 
 from itopapi.model.prototype import ItopapiPrototype
+from itopapi.model.virtualHost import ItopapiVirtualHost
 from itopapi.model.features.hasOrganization import HasOrganization
 from itopapi.model.features.hasServer import HasServer
 from itopapi.model.features.hasFarm import HasFarm
@@ -13,7 +14,7 @@ __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiHypervisor(ItopapiPrototype, HasOrganization, HasFarm):
+class ItopapiHypervisor(ItopapiVirtualHost, HasOrganization, HasFarm):
 
     # Configuration specific to itop
     itop = {
@@ -69,3 +70,7 @@ class ItopapiHypervisor(ItopapiPrototype, HasOrganization, HasFarm):
         self.documents_list = None
         self.contacts_list = None
         self.logicalvolumes_list = None
+
+
+# Register as a subclass of VirtualHost
+ItopapiVirtualHost.register(ItopapiHypervisor)

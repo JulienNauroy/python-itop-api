@@ -23,6 +23,8 @@ class HasManager(object):
 
         # Object's manager id. Call find_manager to get the full information or just use manager_name
         self.manager_id = None
+        # Object's manager id's friendly name. Not sure the difference with manager_name
+        self.manager_id_friendlyname = None
         # Object's manager name
         self.manager_name = None
 
@@ -39,4 +41,5 @@ class HasManager(object):
         Set the ItopapiPerson parameters
         """
         self.manager_id = manager.instance_id
+        self.manager_id_friendlyname = manager.friendlyname
         self.manager_name = manager.name

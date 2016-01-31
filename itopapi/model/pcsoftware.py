@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-fr
 # pylint: disable=too-many-instance-attributes, invalid-name
 """
-ItopapiOtherSoftware is an abstraction of OtherSoftware representation on iTop
+ItopapiPCSoftware is an abstraction of PCSoftware representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype
@@ -14,15 +14,15 @@ __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiOtherSoftware(ItopapiSoftwareInstance, HasOrganization, HasSoftwareLicence, HasSoftware):
+class ItopapiPCSoftware(ItopapiSoftwareInstance, HasOrganization, HasSoftwareLicence, HasSoftware):
     """
-    ItopapiOtherSoftware is an object that represents a OtherSoftware from iTop
+    ItopapiPCSoftware is an object that represents a PCSoftware from iTop
     """
 
     """ Configuration specific to itop """
     itop = {
         # Name of the class in Itop
-        'name': 'OtherSoftware',
+        'name': 'PCSoftware',
         # Define which fields to save when creating or updating from the python API
         'save': ['move2production', 'description', 'status', 'name', 'business_criticity', 'path'],
         'foreign_keys': [
@@ -37,33 +37,33 @@ class ItopapiOtherSoftware(ItopapiSoftwareInstance, HasOrganization, HasSoftware
 
     @staticmethod
     def find(key):
-        """ Retrieve one or more instance of OtherSoftware with the given key or criteria """
-        return ItopapiPrototype.find(ItopapiOtherSoftware, key)
+        """ Retrieve one or more instance of PCSoftware with the given key or criteria """
+        return ItopapiPrototype.find(ItopapiPCSoftware, key)
 
     @staticmethod
     def find_by_name(name):
-        return ItopapiPrototype.find_by_name(ItopapiOtherSoftware, name)
+        return ItopapiPrototype.find_by_name(ItopapiPCSoftware, name)
 
     @staticmethod
     def find_all():
         """ Retrieve all instance of Rack """
-        return ItopapiPrototype.find_all(ItopapiOtherSoftware)
+        return ItopapiPrototype.find_all(ItopapiPCSoftware)
 
     def __init__(self, data=None):
-        super(ItopapiOtherSoftware, self).__init__(data)
+        super(ItopapiPCSoftware, self).__init__(data)
 
         ##################################
         #           Properties           #
         ##################################
-        # OtherSoftware's status. Values within [implementation, obsolete, production, stock]
+        # PCSoftware's status. Values within [implementation, obsolete, production, stock]
         self.status = None
-        # OtherSoftware's business criticity. Values within [high, medium, low]
+        # PCSoftware's business criticity. Values within [high, medium, low]
         self.business_criticity = None
-        # OtherSoftware's path ?
+        # PCSoftware's path ?
         self.path = None
-        # OtherSoftware's description, as a free text
+        # PCSoftware's description, as a free text
         self.description = None
-        # OtherSoftware's move to production date
+        # PCSoftware's move to production date
         self.move2production = None
 
         ##################################
@@ -79,5 +79,5 @@ class ItopapiOtherSoftware(ItopapiSoftwareInstance, HasOrganization, HasSoftware
 
 
 # Register as a subclass of SoftwareInstance
-ItopapiSoftwareInstance.register(ItopapiOtherSoftware)
+ItopapiSoftwareInstance.register(ItopapiPCSoftware)
 

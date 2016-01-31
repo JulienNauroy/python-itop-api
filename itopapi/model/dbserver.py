@@ -5,7 +5,7 @@ ItopapiDBServer is an abstraction of DBServer representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype
-from itopapi.model.othersoftware import ItopapiOtherSoftware
+from itopapi.model.softwareInstance import ItopapiSoftwareInstance
 from itopapi.model.features.hasOrganization import HasOrganization
 from itopapi.model.features.hasSoftware import HasSoftware
 from itopapi.model.features.hasSoftwareLicence import HasSoftwareLicence
@@ -14,7 +14,7 @@ __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiDBServer(ItopapiOtherSoftware, HasOrganization):
+class ItopapiDBServer(ItopapiSoftwareInstance, HasOrganization):
     """
     ItopapiDBServer is an object that represents a DBServer from iTop
     It has the same attributes as ItopapiOtherSoftware
@@ -52,3 +52,7 @@ class ItopapiDBServer(ItopapiOtherSoftware, HasOrganization):
 
     def __init__(self, data=None):
         super(ItopapiDBServer, self).__init__(data)
+
+
+# Register as a subclass of SoftwareInstance
+ItopapiSoftwareInstance.register(ItopapiDBServer)

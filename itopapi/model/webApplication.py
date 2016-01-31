@@ -5,6 +5,7 @@ ItopapiWebApplication is an abstraction of Rack representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype
+from itopapi.model.functionalCI import ItopapiFunctionalCI
 from itopapi.model.features.hasOrganization import HasOrganization
 from itopapi.model.features.hasWebServer import HasWebServer
 
@@ -12,7 +13,7 @@ __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiWebApplication(ItopapiPrototype, HasOrganization, HasWebServer):
+class ItopapiWebApplication(ItopapiFunctionalCI, HasOrganization, HasWebServer):
     """
     ItopapiWebApplication is an object that represents a WebApplication from iTop
     """
@@ -22,8 +23,7 @@ class ItopapiWebApplication(ItopapiPrototype, HasOrganization, HasWebServer):
         # Name of the class in Itop
         'name': 'WebApplication',
         # Define which fields to save when creating or updating from the python API
-        'save': ['name', 'url', 'business_criticity',
-                 'move2production', 'description'],
+        'save': ['name', 'url', 'business_criticity', 'move2production', 'description'],
         'foreign_keys': [
             HasOrganization.foreign_key,
             HasWebServer.foreign_key,
@@ -98,3 +98,7 @@ class ItopapiWebApplication(ItopapiPrototype, HasOrganization, HasWebServer):
         ##################################
         # WebApplication's services list
         self.services_list = {}
+
+
+# Register as a subclass of FunctionalCI
+ItopapiFunctionalCI.register(ItopapiWebApplication)

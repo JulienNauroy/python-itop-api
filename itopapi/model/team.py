@@ -2,16 +2,18 @@
 # pylint: disable=too-many-instance-attributes, invalid-name
 """
 ItopapiTeam is an abstraction of Team representation on iTop
+It inherits from ItopapiContact
 """
 
 from itopapi.model.prototype import ItopapiPrototype
+from itopapi.model.contact import ItopapiContact
 from itopapi.model.features.hasOrganization import HasOrganization
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiTeam(ItopapiPrototype, HasOrganization):
+class ItopapiTeam(ItopapiContact, HasOrganization):
     """
     ItopapiTeam is an object that represents a Team from iTop
     """
@@ -62,3 +64,6 @@ class ItopapiTeam(ItopapiPrototype, HasOrganization):
         self.cis_list = None
         self.tickets_list = None
         self.persons_list = None
+
+# Register as a subclass of Contact
+ItopapiContact.register(ItopapiTeam)

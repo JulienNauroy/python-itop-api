@@ -151,7 +151,6 @@ class ItopapiPrototype(object):
                 object_class = ItopapiPrototype.get_itop_class(data['objects'][information]['class'])
             except UnknownItopClass as e:
                 pass
-            # TODO find the proper object class if any
             obj = object_class({})
             obj.instance_id = data['objects'][information]['key']
             # update all the object's fields with the following line

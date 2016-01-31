@@ -5,13 +5,14 @@ ItopapiFarm is an abstraction of a virtual servers farm representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype
+from itopapi.model.virtualHost import ItopapiVirtualHost
 from itopapi.model.features.hasOrganization import HasOrganization
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiFarm(ItopapiPrototype, HasOrganization):
+class ItopapiFarm(ItopapiVirtualHost, HasOrganization):
 
     # Configuration specific to itop
     itop = {
@@ -65,3 +66,7 @@ class ItopapiFarm(ItopapiPrototype, HasOrganization):
         self.logicalvolumes_list = None
         self.hypervisor_list = None
         self.virtualmachine_list = None
+
+
+# Register as a subclass of VirtualHost
+ItopapiVirtualHost.register(ItopapiFarm)

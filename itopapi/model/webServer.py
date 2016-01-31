@@ -1,10 +1,11 @@
 # -*- coding: utf8 -*-fr
 # pylint: disable=too-many-instance-attributes,invalid-name, too-many-statements
 """
-ItopapiWebServer is an abstraction of Rack representation on iTop
+ItopapiWebServer is an abstraction of WebServer representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype, ItopapiUnimplementedMethod
+from itopapi.model.softwareInstance import ItopapiSoftwareInstance
 from itopapi.model.features.hasOrganization import HasOrganization
 from itopapi.model.features.hasSoftwareLicence import HasSoftwareLicence
 from itopapi.model.features.hasSoftware import HasSoftware
@@ -13,7 +14,7 @@ __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiWebServer(ItopapiPrototype, HasOrganization, HasSoftwareLicence, HasSoftware):
+class ItopapiWebServer(ItopapiSoftwareInstance, HasOrganization, HasSoftwareLicence, HasSoftware):
     """
     ItopapiWebServer is an object that represents a WebServer from iTop
     """
@@ -107,3 +108,7 @@ class ItopapiWebServer(ItopapiPrototype, HasOrganization, HasSoftwareLicence, Ha
             # TODO define System
             raise ItopapiUnimplementedMethod()
         return None
+
+
+# Register as a subclass of SoftwareInstance
+ItopapiSoftwareInstance.register(ItopapiWebServer)

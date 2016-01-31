@@ -5,12 +5,13 @@ ItopapiOSFamily is an abstraction of Rack representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype
+from itopapi.model.typology import ItopapiTypology
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiOSFamily(ItopapiPrototype):
+class ItopapiOSFamily(ItopapiTypology):
 
     # Configuration specific to itop
     itop = {
@@ -40,3 +41,7 @@ class ItopapiOSFamily(ItopapiPrototype):
     """
     def __init__(self, data=None):
         super(ItopapiOSFamily, self).__init__(data)
+
+
+# Register as a subclass of Typology
+ItopapiTypology.register(ItopapiOSFamily)

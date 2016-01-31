@@ -2,10 +2,11 @@
 
 """
 ItopapiPerson is an abstraction of a Person representation on iTop
-Note : Person has no finalclass and name. It complicates things...
+It inherits from ItopapiContact
 """
 
 from itopapi.model.prototype import ItopapiPrototype
+from itopapi.model.contact import ItopapiContact
 from itopapi.model.features.hasOrganization import HasOrganization
 from itopapi.model.features.hasLocation import HasLocation
 from itopapi.model.features.hasManager import HasManager
@@ -14,14 +15,14 @@ __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiPerson(ItopapiPrototype, HasOrganization, HasLocation, HasManager):
+class ItopapiPerson(ItopapiContact, HasOrganization, HasLocation, HasManager):
 
     # Configuration specific to itop
     itop = {
         # Name of the class in Itop
         'name': 'Person',
         # Define which fields to save when creating or updating from the python API
-        'save': ['contact_id', 'contact_name', 'function', 'first_name', 'name',
+        'save': ['name', 'contact_id', 'contact_name', 'function', 'first_name',
                  'email', 'mobile_phone', 'phone', 'notify', 'employee_number', 'status'],
         'foreign_keys': [
             HasOrganization.foreign_key,
@@ -71,3 +72,6 @@ class ItopapiPerson(ItopapiPrototype, HasOrganization, HasLocation, HasManager):
         self.tickets_list = None
         self.cis_list = None
         self.team_list = None
+
+# Register as a subclass of Contact
+ItopapiContact.register(ItopapiPerson)

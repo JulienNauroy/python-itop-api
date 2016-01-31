@@ -5,12 +5,13 @@ ItopapiBrand is an abstraction of Brand representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype
+from itopapi.model.typology import ItopapiTypology
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiBrand(ItopapiPrototype):
+class ItopapiBrand(ItopapiTypology):
 
     # Configuration specific to itop
     itop = {
@@ -40,5 +41,10 @@ class ItopapiBrand(ItopapiPrototype):
     """
     def __init__(self, data=None):
         super(ItopapiBrand, self).__init__(data)
+
         # Physical devices using this brand
         self.physicaldevices_list = None
+
+
+# Register as a subclass of Typology
+ItopapiTypology.register(ItopapiBrand)

@@ -5,6 +5,7 @@ ItopapiRack is an abstraction of Rack representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype
+from itopapi.model.physicalDevice import ItopapiPhysicalDevice
 from itopapi.model.features.hasOrganization import HasOrganization
 from itopapi.model.features.hasLocation import HasLocation
 
@@ -12,7 +13,7 @@ __version__ = '1.0'
 __authors__ = ['Guillaume Philippon <guillaume.philippon@lal.in2p3.fr>', 'Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiRack(ItopapiPrototype, HasOrganization, HasLocation):
+class ItopapiRack(ItopapiPhysicalDevice, HasOrganization, HasLocation):
     """
     ItopapiRack is an object that represents a Rack from iTop
     """
@@ -118,3 +119,6 @@ class ItopapiRack(ItopapiPrototype, HasOrganization, HasLocation):
         self.applicationsolution_list = None
         self.softwares_list = None
         self.logicalvolumes_list = None
+
+# Register as a subclass of PhysicalDevice
+ItopapiPhysicalDevice.register(ItopapiRack)

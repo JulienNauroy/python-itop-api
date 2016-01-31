@@ -5,6 +5,7 @@ ItopapiServers is an abstraction of Rack representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype
+from itopapi.model.datacenterDevice import ItopapiDatacenterDevice
 from itopapi.model.features.hasOrganization import HasOrganization
 from itopapi.model.features.hasLocation import HasLocation
 from itopapi.model.features.hasBrand import HasBrand
@@ -19,7 +20,7 @@ __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiServer(ItopapiPrototype, HasOrganization, HasLocation, HasBrand, HasModel,
+class ItopapiServer(ItopapiDatacenterDevice, HasOrganization, HasLocation, HasBrand, HasModel,
                     HasOSFamily, HasOSVersion, HasOSLicence, HasRack, HasEnclosure):
     """
     ItopapiServers is an object that represents a Servers from iTop
@@ -142,3 +143,6 @@ class ItopapiServer(ItopapiPrototype, HasOrganization, HasLocation, HasBrand, Ha
         if self.powerB_id is not None:
             return ItopapiPrototype.get_itop_class('PowerSource').find(self.powerB_id)
         return None
+
+# Register as a subclass of Datacenter Device
+ItopapiDatacenterDevice.register(ItopapiServer)

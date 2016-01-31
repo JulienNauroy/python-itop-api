@@ -5,13 +5,14 @@ ItopapiModel is an abstraction of Model representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype
+from itopapi.model.typology import ItopapiTypology
 from itopapi.model.features.hasBrand import HasBrand
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiModel(ItopapiPrototype, HasBrand):
+class ItopapiModel(ItopapiTypology, HasBrand):
 
     # Configuration specific to itop
     itop = {
@@ -49,3 +50,7 @@ class ItopapiModel(ItopapiPrototype, HasBrand):
         # [DiskArray, Enclosure, IPPhone, MobilePhone, NAS, NetworkDevice, PC, PDU, Peripheral, Phone,
         # PowerSource, Printer, Rack, SANSwitch, Server, StorageSystem, Tablet, TapeLibrary]
         self.type = None
+
+
+# Register as a subclass of Typology
+ItopapiTypology.register(ItopapiModel)

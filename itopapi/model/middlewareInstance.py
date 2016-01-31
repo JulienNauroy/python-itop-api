@@ -1,79 +1,76 @@
 # -*- coding: utf8 -*-fr
 # pylint: disable=invalid-name
 """
-ItopapiApplicationSolution is an abstraction of Application Solution representation on iTop
+ItopapiMiddlewareInstance is an abstraction of Middleware Instance representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype
 from itopapi.model.functionalCI import ItopapiFunctionalCI
 from itopapi.model.features.hasOrganization import HasOrganization
+from itopapi.model.features.hasMiddleware import HasMiddleware
 
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiApplicationSolution(ItopapiFunctionalCI, HasOrganization):
+class ItopapiMiddlewareInstance(ItopapiFunctionalCI, HasOrganization, HasMiddleware):
 
     # Configuration specific to itop
     itop = {
         # Name of the class in Itop
-        'name': 'ApplicationSolution',
+        'name': 'MiddlewareInstance',
         # Define which fields to save when creating or updating from the python API
-        'save': ['name', 'status', 'business_criticity', 'move2production', 'description', 'redundancy'],
+        'save': ['name', 'business_criticity', 'move2production', 'description'],
         'foreign_keys': [
             HasOrganization.foreign_key,
+            HasMiddleware.foreign_key,
         ],
         'list_types': {
-            'functionalcis_list': 'functionalci_id_finalclass_recall',
             'contacts_list': 'contact_id_finalclass_recall'
         },
     }
 
     @staticmethod
     def find(key):
-        """ Retrieve one or more instance of ApplicationSolution with the given key or criteria """
-        return ItopapiPrototype.find(ItopapiApplicationSolution, key)
+        """ Retrieve one or more instance of MiddlewareInstance with the given key or criteria """
+        return ItopapiPrototype.find(ItopapiMiddlewareInstance, key)
 
     @staticmethod
     def find_by_name(name):
-        return ItopapiPrototype.find_by_name(ItopapiApplicationSolution, name)
+        return ItopapiPrototype.find_by_name(ItopapiMiddlewareInstance, name)
 
     @staticmethod
     def find_all():
-        """ Retrieve all instance of ApplicationSolution """
-        return ItopapiPrototype.find_all(ItopapiApplicationSolution)
+        """ Retrieve all instance of MiddlewareInstance """
+        return ItopapiPrototype.find_all(ItopapiMiddlewareInstance)
 
     """
-    ItopapiApplicationSolution is an object that represents an Application Solution from iTop
+    ItopapiMiddlewareInstance is an object that represents an Middleware Instance from iTop
     """
     def __init__(self, data=None):
-        super(ItopapiApplicationSolution, self).__init__(data)
+        super(ItopapiMiddlewareInstance, self).__init__(data)
         ##################################
         #           Properties           #
         ##################################
-        # Application Solution's status. Values within [inactive, active]
-        self.status = None
-        # Application Solution's business criticity. Values within [high, medium, low]
+        # Middleware Instance's business criticity. Values within [high, medium, low]
         self.business_criticity = None
-        # Application Solution's move to production date
+        # Middleware Instance's move to production date
         self.move2production = None
-        # Application Solution's description, as a free text
+        # Middleware Instance's description, as a free text
         self.description = None
-        self.redundancy = None
         ##################################
         #             Lists              #
         ##################################
-        self.functionalcis_list = None
+        # One with an s, one without. Because why not?
+        self.applicationsolution_list = None
         self.documents_list = None
         self.softwares_list = None
-        self.applicationsolution_list = None
         self.tickets_list = None
-        self.businessprocess_list = None
         self.services_list = None
         self.contacts_list = None
         self.providercontracts_list = None
 
 
 # Register as a subclass of FunctionalCI
-ItopapiFunctionalCI.register(ItopapiApplicationSolution)
+ItopapiFunctionalCI.register(ItopapiMiddlewareInstance)

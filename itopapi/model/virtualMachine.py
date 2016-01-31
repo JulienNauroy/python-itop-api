@@ -1,10 +1,11 @@
 # -*- coding: utf8 -*-fr
 
 """
-ItopapiVirtualMachine is an abstraction of VLAN representation on iTop
+ItopapiVirtualMachine is an abstraction of a VirtualMachine representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype
+from itopapi.model.virtualDevice import ItopapiVirtualDevice
 from itopapi.model.features.hasOrganization import HasOrganization
 from itopapi.model.features.hasOSFamily import HasOSFamily
 from itopapi.model.features.hasOSVersion import HasOSVersion
@@ -15,7 +16,7 @@ __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiVirtualMachine(ItopapiPrototype, HasOrganization, HasOSFamily, HasOSVersion, HasOSLicence, HasVirtualHost):
+class ItopapiVirtualMachine(ItopapiVirtualDevice, HasOrganization, HasOSFamily, HasOSVersion, HasOSLicence, HasVirtualHost):
 
     # Configuration specific to itop
     itop = {
@@ -89,3 +90,7 @@ class ItopapiVirtualMachine(ItopapiPrototype, HasOrganization, HasOSFamily, HasO
         self.providercontracts_list = {}
         # VirtualMachine's services list
         self.services_list = {}
+
+
+# Register as a subclass of VirtualDevice
+ItopapiVirtualDevice.register(ItopapiVirtualMachine)

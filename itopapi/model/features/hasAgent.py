@@ -23,6 +23,8 @@ class HasAgent(object):
 
         # Object's agent id. Call find_agent to get the full information or just use agent_name
         self.agent_id = None
+        # Object's agent id's friendly name. Not sure the difference with agent_name
+        self.agent_id_friendlyname = None
         # Object's agent name
         self.agent_name = None
 
@@ -39,4 +41,5 @@ class HasAgent(object):
         Set the ItopapiPerson parameters
         """
         self.agent_id = agent.instance_id
+        self.agent_id_friendlyname = agent.friendlyname
         self.agent_name = agent.name
