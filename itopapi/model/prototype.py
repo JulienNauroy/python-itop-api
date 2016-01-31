@@ -144,7 +144,15 @@ class ItopapiPrototype(object):
 
         objects = []
         for information in data['objects']:
-            obj = itop_class({})
+            # If the class is provided in the returned object, use it, else ise itop_class
+            # Sometimes itop_class is a generic type (e.g. Contact) and instances are a specific class (e.g. Person)
+            object_class = itop_class
+            try:
+                object_class = ItopapiPrototype.get_itop_class(data['objects'][information]['class'])
+            except UnknownItopClass as e:
+                pass
+            # TODO find the proper object class if any
+            obj = object_class({})
             obj.instance_id = data['objects'][information]['key']
             # update all the object's fields with the following line
             obj.__dict__.update(data['objects'][information]['fields'])
