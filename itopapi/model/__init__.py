@@ -16,6 +16,7 @@ from itopapi.model.team import ItopapiTeam
 from itopapi.model.functionalCI import ItopapiFunctionalCI
 from itopapi.model.physicalDevice import ItopapiPhysicalDevice
 from itopapi.model.rack import ItopapiRack
+from itopapi.model.enclosure import ItopapiEnclosure
 from itopapi.model.connectableCI import ItopapiConnectableCI
 from itopapi.model.datacenterDevice import ItopapiDatacenterDevice
 from itopapi.model.server import ItopapiServer
@@ -44,15 +45,17 @@ from itopapi.model.osFamily import ItopapiOSFamily
 from itopapi.model.osVersion import ItopapiOSVersion
 from itopapi.model.brand import ItopapiBrand
 from itopapi.model.model import ItopapiModel
-
-
-# TODO Check inheritance
+from itopapi.model.networkInterface import ItopapiNetworkInterface
+from itopapi.model.ipInterface import ItopapiIPInterface
+from itopapi.model.physicalInterface import ItopapiPhysicalInterface
+from itopapi.model.logicalInterface import ItopapiLogicalInterface
+from itopapi.model.fiberChannelInterface import ItopapiFiberChannelInterface
+from itopapi.model.powerConnection import ItopapiPowerConnection
 from itopapi.model.powerSource import ItopapiPowerSource
+from itopapi.model.pdu import ItopapiPDU
+from itopapi.model.service import ItopapiService
 from itopapi.model.vlan import ItopapiVLAN
 from itopapi.model.subnet import ItopapiSubnet
-from itopapi.model.physicalInterface import ItopapiPhysicalInterface
-from itopapi.model.service import ItopapiService
-from itopapi.model.enclosure import ItopapiEnclosure
 from itopapi.model.incident import ItopapiIncident
 
 # TODO partial list of missing classes, with no particular order and along with their inheritance hierarchy :
@@ -66,20 +69,30 @@ from itopapi.model.incident import ItopapiIncident
 #   SANSwitch
 #   TapeLibrary
 #   NAS
-# ConnectableCI (defined)
-#   Enclosure
-#   PowerConnection
-#       PowerSource
-#       PDU
 # Patch
 #   OSPatch
 #   SoftwarePatch
-# Typology (defined
+# Typology (defined)
 #   DocumentType
 #   ContactType
 #   NetworkDeviceType
 #   IOSVersion
 #   ContractType
+# Group
+# Contract
+#   CustomerContract
+#   ProviderContract
+# ServiceFamily
+# Service
+# ServiceSubcategory
+# SLA
+# SLT
+# DeliveryModel
+# Contract
+#   CustomerContract
+#   ProviderContract
+# Tape
+# NASFileSystem
+# LogicalVolume
 
-# Peripheral, MobilePhone, Printer, PC, Phone, IPPhone,
-# Tablet, TapeLibrary, SANSwitchNAS, PDU, DatabaseSchema
+# Peripheral, MobilePhone, Printer, PC, Phone, IPPhone, Tablet, TapeLibrary, SANSwitchNAS

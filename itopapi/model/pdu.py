@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-fr
 
 """
-ItopapiPowerSource is an abstraction of PowerSource representation on iTop
+ItopapiPDU is an abstraction of PDU representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype
@@ -10,17 +10,19 @@ from itopapi.model.features.hasOrganization import HasOrganization
 from itopapi.model.features.hasLocation import HasLocation
 from itopapi.model.features.hasBrand import HasBrand
 from itopapi.model.features.hasModel import HasModel
+from itopapi.model.features.hasRack import HasRack
+from itopapi.model.features.hasPowerStart import HasPowerStart
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiPowerSource(ItopapiPowerConnection, HasOrganization, HasLocation, HasBrand, HasModel):
+class ItopapiPDU(ItopapiPowerConnection, HasOrganization, HasLocation, HasBrand, HasModel, HasRack, HasPowerStart):
 
     # Configuration specific to itop
     itop = {
         # Name of the class in Itop
-        'name': 'PowerSource',
+        'name': 'PDU',
         # Define which fields to save when creating or updating from the python API
         'save': ['name', 'status', 'business_criticity', 'serialnumber', 'asset_number',
                  'move2production', 'purchase_date', 'end_of_warranty', 'description'],
@@ -29,32 +31,33 @@ class ItopapiPowerSource(ItopapiPowerConnection, HasOrganization, HasLocation, H
             HasLocation.foreign_key,
             HasBrand.foreign_key,
             HasModel.foreign_key,
+            HasPowerStart.foreign_key,
         ]
     }
 
     @staticmethod
     def find(key):
-        """ Retrieve one or more instance of PowerSource with the given key or criteria """
-        return ItopapiPrototype.find(ItopapiPowerSource, key)
+        """ Retrieve one or more instance of PDU with the given key or criteria """
+        return ItopapiPrototype.find(ItopapiPDU, key)
 
     @staticmethod
     def find_by_name(name):
-        return ItopapiPrototype.find_by_name(ItopapiPowerSource, name)
+        return ItopapiPrototype.find_by_name(ItopapiPDU, name)
 
     @staticmethod
     def find_all():
-        """ Retrieve all instance of PowerSource """
-        return ItopapiPrototype.find_all(ItopapiPowerSource)
+        """ Retrieve all instance of PDU """
+        return ItopapiPrototype.find_all(ItopapiPDU)
 
     """
-    ItopapiPowerSource is an object that represents a PowerSource from iTop
+    ItopapiPDU is an object that represents a PDU from iTop
     """
     def __init__(self, data=None):
-        super(ItopapiPowerSource, self).__init__(data)
+        super(ItopapiPDU, self).__init__(data)
 
-        # PowerSource's status. Values within [implementation, obsolete, production, stock]
+        # PDU's status. Values within [implementation, obsolete, production, stock]
         self.status = None
-        # PowerSource's business criticity. Values within [high, medium, low]
+        # PDU's business criticity. Values within [high, medium, low]
         self.business_criticity = None
         # Serial number
         self.serialnumber = None

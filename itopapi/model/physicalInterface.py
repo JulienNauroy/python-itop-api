@@ -5,12 +5,13 @@ ItopapiPhysicalInterface is an abstraction of PhysicalInterface representation o
 """
 
 from itopapi.model.prototype import ItopapiPrototype
+from itopapi.model.ipInterface import ItopapiIPInterface
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiPhysicalInterface(ItopapiPrototype):
+class ItopapiPhysicalInterface(ItopapiIPInterface):
 
     # Configuration specific to itop
     itop = {
@@ -19,8 +20,7 @@ class ItopapiPhysicalInterface(ItopapiPrototype):
         # Define which fields to save when creating or updating from the python API
         'save': ['name', 'ipaddress', 'macaddress', 'comment', 'ipgateway', 'ipmask', 'speed'],
         'foreign_keys': [
-            # TODO the table is not necessarily a server, it is defined by connectableci_id_finalclass_recall
-            {'id': 'connectableci_id', 'name': 'connectableci_name', 'table': 'Server'},
+            {'id': 'connectableci_id', 'name': 'connectableci_name', 'table': 'ConnectableCI'},
             # TODO good for fetching, but not for saving since there is no "name" and "finalclass" in this list!
             # Find a solution
             # {'id': 'vlan_id', 'name': 'vlan_tag', 'table': 'VLAN'},
@@ -66,3 +66,7 @@ class ItopapiPhysicalInterface(ItopapiPrototype):
         self.speed = None
         # List of vlans for the PhysicalInterface
         self.vlans_list = None
+
+
+# Register as a subclass of IPInterface
+ItopapiIPInterface.register(ItopapiPhysicalInterface)
