@@ -9,12 +9,13 @@ from itopapi.model.softwareInstance import ItopapiSoftwareInstance
 from itopapi.model.features.hasOrganization import HasOrganization
 from itopapi.model.features.hasSoftwareLicence import HasSoftwareLicence
 from itopapi.model.features.hasSoftware import HasSoftware
+from itopapi.model.features.hasSystem import HasSystem
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiMiddleware(ItopapiSoftwareInstance, HasOrganization, HasSoftwareLicence, HasSoftware):
+class ItopapiMiddleware(ItopapiSoftwareInstance, HasOrganization, HasSoftwareLicence, HasSoftware, HasSystem):
     """
     ItopapiMiddleware is an object that represents a Middleware from iTop
     """
@@ -29,6 +30,7 @@ class ItopapiMiddleware(ItopapiSoftwareInstance, HasOrganization, HasSoftwareLic
             HasOrganization.foreign_key,
             HasSoftware.foreign_key,
             HasSoftwareLicence.foreign_key,
+            HasSystem.foreign_key,
         ],
         'list_types': {
             'contacts_list': 'contact_id_finalclass_recall'

@@ -9,12 +9,13 @@ from itopapi.model.softwareInstance import ItopapiSoftwareInstance
 from itopapi.model.features.hasOrganization import HasOrganization
 from itopapi.model.features.hasSoftwareLicence import HasSoftwareLicence
 from itopapi.model.features.hasSoftware import HasSoftware
+from itopapi.model.features.hasSystem import HasSystem
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiWebServer(ItopapiSoftwareInstance, HasOrganization, HasSoftwareLicence, HasSoftware):
+class ItopapiWebServer(ItopapiSoftwareInstance, HasOrganization, HasSoftwareLicence, HasSoftware, HasSystem):
     """
     ItopapiWebServer is an object that represents a WebServer from iTop
     """
@@ -27,9 +28,9 @@ class ItopapiWebServer(ItopapiSoftwareInstance, HasOrganization, HasSoftwareLice
         'save': ['name', 'status', 'business_criticity', 'path', 'move2production', 'description'],
         'foreign_keys': [
             HasOrganization.foreign_key,
-            {'id': 'system_id', 'name': 'system_id_friendlyname', 'table': 'Server'},
             HasSoftware.foreign_key,
             HasSoftwareLicence.foreign_key,
+            HasSystem.foreign_key,
         ],
         'list_types': {
             'contacts_list': 'contact_id_finalclass_recall'
@@ -99,15 +100,6 @@ class ItopapiWebServer(ItopapiSoftwareInstance, HasOrganization, HasSoftwareLice
         self.providercontracts_list = {}
         # WebServer's services list
         self.services_list = {}
-
-    def find_system(self):
-        """
-        Retrieve the System (Server or VirtualMachine) corresponding to this WebServer
-        """
-        if self.system_id is not None:
-            # TODO define System
-            raise ItopapiUnimplementedMethod()
-        return None
 
 
 # Register as a subclass of SoftwareInstance
