@@ -37,3 +37,4 @@ from itopapi.model.features.hasSystem import HasSystem
 from itopapi.model.features.hasTapeLibrary import HasTapeLibrary
 from itopapi.model.features.hasServiceFamily import HasServiceFamily
 from itopapi.model.features.hasConnectableCI import HasConnectableCI
+from itopapi.model.features.hasVLAN import HasVLAN

@@ -22,9 +22,6 @@ class ItopapiPhysicalInterface(ItopapiIPInterface, HasConnectableCI):
         'save': ['name', 'ipaddress', 'macaddress', 'comment', 'ipgateway', 'ipmask', 'speed'],
         'foreign_keys': [
             HasConnectableCI.foreign_key,
-            # TODO good for fetching, but not for saving since there is no "name" and "finalclass" in this list!
-            # Find a solution
-            # {'id': 'vlan_id', 'name': 'vlan_tag', 'table': 'VLAN'},
         ],
         'list_types': {'vlans_list': 'VLAN'},
     }
@@ -48,11 +45,6 @@ class ItopapiPhysicalInterface(ItopapiIPInterface, HasConnectableCI):
     """
     def __init__(self, data=None):
         super(ItopapiPhysicalInterface, self).__init__(data)
-        # CI the Physical Interface is connected to
-        self.connectableci_name = None
-        self.connectableci_id = None
-        self.connectableci_id_friendlyname = None
-        self.connectableci_id_finalclass_recall = None
         # IP address of the PhysicalInterface
         self.ipaddress = None
         # MAC address of the PhysicalInterface
