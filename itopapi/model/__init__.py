@@ -63,9 +63,13 @@ from itopapi.model.powerConnection import ItopapiPowerConnection
 from itopapi.model.powerSource import ItopapiPowerSource
 from itopapi.model.pdu import ItopapiPDU
 from itopapi.model.service import ItopapiService
+from itopapi.model.serviceFamily import ItopapiServiceFamily
 from itopapi.model.vlan import ItopapiVLAN
 from itopapi.model.subnet import ItopapiSubnet
 from itopapi.model.tape import ItopapiTape
+from itopapi.model.patch import ItopapiPatch
+from itopapi.model.osPatch import ItopapiOSPatch
+from itopapi.model.softwarePatch import ItopapiSoftwarePatch
 from itopapi.model.incident import ItopapiIncident
 
 # TODO partial list of missing classes, with no particular order and along with their inheritance hierarchy :
@@ -73,15 +77,10 @@ from itopapi.model.incident import ItopapiIncident
 #   DocumentFile
 #   DocumentNote
 #   DocumentWeb
-# Patch
-#   OSPatch
-#   SoftwarePatch
 # Group
 # Contract
 #   CustomerContract
 #   ProviderContract
-# ServiceFamily
-# Service
 # ServiceSubcategory
 # SLA
 # SLT

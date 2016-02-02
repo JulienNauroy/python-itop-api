@@ -6,12 +6,13 @@ ItopapiService is an abstraction of Service representation on iTop
 
 from itopapi.model.prototype import ItopapiPrototype
 from itopapi.model.features.hasOrganization import HasOrganization
+from itopapi.model.features.hasServiceFamily import HasServiceFamily
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiService(ItopapiPrototype, HasOrganization):
+class ItopapiService(ItopapiPrototype, HasOrganization, HasServiceFamily):
 
     # Configuration specific to itop
     itop = {
@@ -21,7 +22,7 @@ class ItopapiService(ItopapiPrototype, HasOrganization):
         'save': ['name', 'description', 'status'],
         'foreign_keys': [
             HasOrganization.foreign_key,
-            {'id': 'servicefamily_id', 'name': 'servicefamily_name', 'table': 'ServiceFamily'},
+            HasServiceFamily.foreign_key,
         ],
         'list_types': {
             'functionalcis_list': 'functionalci_id_finalclass_recall',
@@ -48,10 +49,6 @@ class ItopapiService(ItopapiPrototype, HasOrganization):
     """
     def __init__(self, data=None):
         super(ItopapiService, self).__init__(data)
-        # Service Family
-        self.servicefamily_id = None
-        self.servicefamily_id_friendlyname = None
-        self.servicefamily_name = None
         # Description
         self.description = None
         # Service's status. Values within [implementation, obsolete, production]

@@ -6,12 +6,13 @@ ItopapiPhysicalInterface is an abstraction of PhysicalInterface representation o
 
 from itopapi.model.prototype import ItopapiPrototype
 from itopapi.model.ipInterface import ItopapiIPInterface
+from itopapi.model.features.hasConnectableCI import HasConnectableCI
 
 __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiPhysicalInterface(ItopapiIPInterface):
+class ItopapiPhysicalInterface(ItopapiIPInterface, HasConnectableCI):
 
     # Configuration specific to itop
     itop = {
@@ -20,7 +21,7 @@ class ItopapiPhysicalInterface(ItopapiIPInterface):
         # Define which fields to save when creating or updating from the python API
         'save': ['name', 'ipaddress', 'macaddress', 'comment', 'ipgateway', 'ipmask', 'speed'],
         'foreign_keys': [
-            {'id': 'connectableci_id', 'name': 'connectableci_name', 'table': 'ConnectableCI'},
+            HasConnectableCI.foreign_key,
             # TODO good for fetching, but not for saving since there is no "name" and "finalclass" in this list!
             # Find a solution
             # {'id': 'vlan_id', 'name': 'vlan_tag', 'table': 'VLAN'},
