@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-fr
 
 """
-ItopapiEnclosure is an abstraction of Rack representation on iTop
+ItopapiEnclosure is an abstraction of Enclosure representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype

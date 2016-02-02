@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-fr
 
 """
-ItopapiOSFamily is an abstraction of OSFamily representation on iTop
+ItopapiContactType is an abstraction of ContactType representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype
@@ -11,12 +11,12 @@ __version__ = '1.0'
 __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 
-class ItopapiOSFamily(ItopapiTypology):
+class ItopapiContactType(ItopapiTypology):
 
     # Configuration specific to itop
     itop = {
         # Name of the class in Itop
-        'name': 'OSFamily',
+        'name': 'ContactType',
         # Define which fields to save when creating or updating from the python API
         'save': ['name'],
         'foreign_keys': []
@@ -24,24 +24,24 @@ class ItopapiOSFamily(ItopapiTypology):
 
     @staticmethod
     def find(key):
-        """ Retrieve one or more instance of OSFamily with the given key or criteria """
-        return ItopapiPrototype.find(ItopapiOSFamily, key)
+        """ Retrieve one or more instance of ContactType with the given key or criteria """
+        return ItopapiPrototype.find(ItopapiContactType, key)
 
     @staticmethod
     def find_by_name(name):
-        return ItopapiPrototype.find_by_name(ItopapiOSFamily, name)
+        return ItopapiPrototype.find_by_name(ItopapiContactType, name)
 
     @staticmethod
     def find_all():
-        """ Retrieve all instance of OSFamily """
-        return ItopapiPrototype.find_all(ItopapiOSFamily)
+        """ Retrieve all instance of ContactType """
+        return ItopapiPrototype.find_all(ItopapiContactType)
 
     """
-    ItopapiOSFamily is an object that represents an OS Family from iTop
+    ItopapiContactType is an object that represents an ContactType from iTop
     """
     def __init__(self, data=None):
-        super(ItopapiOSFamily, self).__init__(data)
+        super(ItopapiContactType, self).__init__(data)
 
 
 # Register as a subclass of Typology
-ItopapiTypology.register(ItopapiOSFamily)
+ItopapiTypology.register(ItopapiContactType)

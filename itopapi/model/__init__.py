@@ -20,6 +20,8 @@ from itopapi.model.enclosure import ItopapiEnclosure
 from itopapi.model.connectableCI import ItopapiConnectableCI
 from itopapi.model.datacenterDevice import ItopapiDatacenterDevice
 from itopapi.model.server import ItopapiServer
+from itopapi.model.sanSwitch import ItopapiSANSwitch
+from itopapi.model.tapeLibrary import ItopapiTapeLibrary
 from itopapi.model.applicationSolution import ItopapiApplicationSolution
 from itopapi.model.businessProcess import ItopapiBusinessProcess
 from itopapi.model.softwareInstance import ItopapiSoftwareInstance
@@ -43,8 +45,13 @@ from itopapi.model.softwareLicence import ItopapiSoftwareLicence
 from itopapi.model.typology import ItopapiTypology
 from itopapi.model.osFamily import ItopapiOSFamily
 from itopapi.model.osVersion import ItopapiOSVersion
+from itopapi.model.contactType import ItopapiContactType
+from itopapi.model.contractType import ItopapiContractType
+from itopapi.model.documentType import ItopapiDocumentType
 from itopapi.model.brand import ItopapiBrand
+from itopapi.model.iosVersion import ItopapiIOSVersion
 from itopapi.model.model import ItopapiModel
+from itopapi.model.networkDeviceType import ItopapiNetworkDeviceType
 from itopapi.model.networkInterface import ItopapiNetworkInterface
 from itopapi.model.ipInterface import ItopapiIPInterface
 from itopapi.model.physicalInterface import ItopapiPhysicalInterface
@@ -56,6 +63,7 @@ from itopapi.model.pdu import ItopapiPDU
 from itopapi.model.service import ItopapiService
 from itopapi.model.vlan import ItopapiVLAN
 from itopapi.model.subnet import ItopapiSubnet
+from itopapi.model.tape import ItopapiTape
 from itopapi.model.incident import ItopapiIncident
 
 # TODO partial list of missing classes, with no particular order and along with their inheritance hierarchy :
@@ -66,18 +74,10 @@ from itopapi.model.incident import ItopapiIncident
 # DatacenterDevice (defined)
 #   NetworkDevice
 #   StorageSystem
-#   SANSwitch
-#   TapeLibrary
 #   NAS
 # Patch
 #   OSPatch
 #   SoftwarePatch
-# Typology (defined)
-#   DocumentType
-#   ContactType
-#   NetworkDeviceType
-#   IOSVersion
-#   ContractType
 # Group
 # Contract
 #   CustomerContract
@@ -91,7 +91,6 @@ from itopapi.model.incident import ItopapiIncident
 # Contract
 #   CustomerContract
 #   ProviderContract
-# Tape
 # NASFileSystem
 # LogicalVolume
 

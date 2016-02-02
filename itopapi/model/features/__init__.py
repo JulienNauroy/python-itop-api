@@ -34,3 +34,4 @@ from itopapi.model.features.hasVirtualMachine import HasVirtualMachine
 from itopapi.model.features.hasDatacenterDevice import HasDatacenterDevice
 from itopapi.model.features.hasPowerStart import HasPowerStart
 from itopapi.model.features.hasSystem import HasSystem
+from itopapi.model.features.hasTapeLibrary import HasTapeLibrary

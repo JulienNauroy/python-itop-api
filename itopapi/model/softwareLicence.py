@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-fr
 
 """
-ItopapiSoftwareLicence is an abstraction of Rack representation on iTop
+ItopapiSoftwareLicence is an abstraction of SoftwareLicence representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype

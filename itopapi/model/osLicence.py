@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-fr
 
 """
-ItopapiOSLicence is an abstraction of Rack representation on iTop
+ItopapiOSLicence is an abstraction of OSLicence representation on iTop
 """
 
 from itopapi.model.prototype import ItopapiPrototype
