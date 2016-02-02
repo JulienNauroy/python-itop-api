@@ -12,7 +12,7 @@ __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 class HasManager(object):
     """
-    HasOrganization represents the organization attached to some top-level objects.
+    HasManager represents the Manager attached to some top-level objects.
     """
 
     """ Configuration specific to itop """

@@ -12,7 +12,7 @@ __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 class HasSoftwareLicence(object):
     """
-    HasOrganization represents the organization attached to some top-level objects.
+    HasSoftwareLicence represents the SoftwareLicence attached to some top-level objects.
     """
 
     """ Configuration specific to itop """

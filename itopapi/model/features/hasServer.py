@@ -12,7 +12,7 @@ __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 class HasServer(object):
     """
-    HasOrganization represents the organization attached to some top-level objects.
+    HasServer represents the Server attached to some top-level objects.
     """
 
     """ Configuration specific to itop """

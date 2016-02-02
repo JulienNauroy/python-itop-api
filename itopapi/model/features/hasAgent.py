@@ -12,7 +12,7 @@ __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 class HasAgent(object):
     """
-    HasOrganization represents the organization attached to some top-level objects.
+    HasAgent represents the Agent attached to some top-level objects.
     """
 
     """ Configuration specific to itop """

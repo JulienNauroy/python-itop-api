@@ -12,7 +12,7 @@ __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 class HasVirtualHost(object):
     """
-    HasOrganization represents the organization attached to some top-level objects.
+    HasVirtualHost represents the VirtualHost attached to some top-level objects.
     """
 
     """ Configuration specific to itop """

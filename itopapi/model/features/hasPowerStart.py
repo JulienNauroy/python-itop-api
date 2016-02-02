@@ -12,7 +12,7 @@ __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 class HasPowerStart(object):
     """
-    HasOrganization represents the organization attached to some top-level objects.
+    HasPowerStart represents the PowerConnection attached to some top-level objects.
     """
 
     """ Configuration specific to itop """

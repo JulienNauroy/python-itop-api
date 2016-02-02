@@ -12,7 +12,7 @@ __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 class HasOSVersion(object):
     """
-    HasOrganization represents the organization attached to some top-level objects.
+    HasOSVersion represents the OSVersion attached to some top-level objects.
     """
 
     """ Configuration specific to itop """

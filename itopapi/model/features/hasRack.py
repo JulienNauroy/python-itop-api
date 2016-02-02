@@ -12,7 +12,7 @@ __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 class HasRack(object):
     """
-    HasOrganization represents the organization attached to some top-level objects.
+    HasRack represents the Rack attached to some top-level objects.
     """
 
     """ Configuration specific to itop """

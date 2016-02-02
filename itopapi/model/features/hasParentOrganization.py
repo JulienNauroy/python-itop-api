@@ -12,7 +12,7 @@ __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 class HasParentOrganization(object):
     """
-    HasOrganization represents the organization attached to some top-level objects.
+    HasParentOrganization represents the ParentOrganization attached to some top-level objects.
     """
 
     """ Configuration specific to itop """

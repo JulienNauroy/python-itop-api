@@ -12,7 +12,7 @@ __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 class HasPowerB(object):
     """
-    HasOrganization represents the organization attached to some top-level objects.
+    HasPowerB represents the Power attached to some top-level objects.
     """
 
     """ Configuration specific to itop """

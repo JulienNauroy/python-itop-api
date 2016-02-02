@@ -13,7 +13,9 @@ __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 class HasOrganization2(object):
     """
-    HasOrganization represents the organization attached to some top-level objects.
+    HasOrganization2 represents the Organization attached to some top-level objects.
+    It is nearly a duplicate of HasOrganization with org_name instead of organization_name
+    because of iTop's poor naming conventions.
     """
 
     """ Configuration specific to itop """

@@ -12,7 +12,7 @@ __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 class HasFarm(object):
     """
-    HasOrganization represents the organization attached to some top-level objects.
+    HasFarm represents the Farm attached to some top-level objects.
     """
 
     """ Configuration specific to itop """

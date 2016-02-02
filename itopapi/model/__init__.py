@@ -22,6 +22,7 @@ from itopapi.model.datacenterDevice import ItopapiDatacenterDevice
 from itopapi.model.server import ItopapiServer
 from itopapi.model.sanSwitch import ItopapiSANSwitch
 from itopapi.model.tapeLibrary import ItopapiTapeLibrary
+from itopapi.model.storageSystem import ItopapiStorageSystem
 from itopapi.model.applicationSolution import ItopapiApplicationSolution
 from itopapi.model.businessProcess import ItopapiBusinessProcess
 from itopapi.model.softwareInstance import ItopapiSoftwareInstance
@@ -52,6 +53,7 @@ from itopapi.model.brand import ItopapiBrand
 from itopapi.model.iosVersion import ItopapiIOSVersion
 from itopapi.model.model import ItopapiModel
 from itopapi.model.networkDeviceType import ItopapiNetworkDeviceType
+from itopapi.model.nas import ItopapiNAS
 from itopapi.model.networkInterface import ItopapiNetworkInterface
 from itopapi.model.ipInterface import ItopapiIPInterface
 from itopapi.model.physicalInterface import ItopapiPhysicalInterface
@@ -71,10 +73,6 @@ from itopapi.model.incident import ItopapiIncident
 #   DocumentFile
 #   DocumentNote
 #   DocumentWeb
-# DatacenterDevice (defined)
-#   NetworkDevice
-#   StorageSystem
-#   NAS
 # Patch
 #   OSPatch
 #   SoftwarePatch

@@ -12,7 +12,7 @@ __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 class HasOSFamily(object):
     """
-    HasOrganization represents the organization attached to some top-level objects.
+    HasOSFamily represents the OSFamily attached to some top-level objects.
     """
 
     """ Configuration specific to itop """

@@ -12,7 +12,7 @@ __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 class HasTapeLibrary(object):
     """
-    HasOrganization represents the organization attached to some top-level objects.
+    HasTapeLibrary represents the TapeLibrary attached to some top-level objects.
     """
 
     """ Configuration specific to itop """

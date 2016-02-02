@@ -12,7 +12,7 @@ __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 class HasBrand(object):
     """
-    HasOrganization represents the organization attached to some top-level objects.
+    HasBrand represents the Brand attached to some top-level objects.
     """
 
     """ Configuration specific to itop """

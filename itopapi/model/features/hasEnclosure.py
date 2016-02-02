@@ -12,7 +12,7 @@ __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 class HasEnclosure(object):
     """
-    HasOrganization represents the organization attached to some top-level objects.
+    HasEnclosure represents the Enclosure attached to some top-level objects.
     """
 
     """ Configuration specific to itop """

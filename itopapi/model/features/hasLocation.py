@@ -12,7 +12,7 @@ __authors__ = ['Julien Nauroy <julien.nauroy@u-psud.fr>']
 
 class HasLocation(object):
     """
-    HasOrganization represents the organization attached to some top-level objects.
+    HasLocation represents the Location attached to some top-level objects.
     """
 
     """ Configuration specific to itop """
